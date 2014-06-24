@@ -35,17 +35,28 @@
     <div class="collapse navbar-collapse" id="header-collapse">
         <ul class="nav navbar-nav">
             <li><a href="<?php echo URL; ?>">首頁</a></li>
-            <li><a href="">關於學會</a></li>
+            <li><a href="<?php echo URL; ?>about/">關於學會</a></li>
             <li><a href="">學會活動</a></li>
             <li><a href="">精彩回顧</a></li>
-            <li><a href="">iStudy Project</a></li>
+            <li><a href="<?php echo URL; ?>istudy/">iStudy Project</a></li>
             <li><a href="">公開資訊</a></li>
-            <li><a href="">問題聯繫</a></li>
+            <li><a href="https://www.facebook.com/messages/147429552025011" target="_blank">問題聯繫</a></li>
         </ul>
-        <ul class="nav navbar-nav navbar-right" id="fblog">
+        <ul class="nav navbar-nav navbar-right" id="fblogo">
             <li><a href="https://www.facebook.com/yzueesa" target="_blank"><span class="fblogo"></span></a></li>
         </ul>
     </div>
+</div>
+<div id="photoslide" class="carousel slide" data-ride="carousel">
 
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner ">
+        <div class="item active">
+            <img src="<?php echo URL; ?>public/img/test/banner.png">
+        </div>
 </div>
 <!-- header -->

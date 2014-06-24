@@ -4,7 +4,6 @@
     <ol class="carousel-indicators">
         <li data-target="#photoslide" data-slide-to="0" class="active"></li>
         <li data-target="#photoslide" data-slide-to="1"></li>
-
     </ol>
 
     <!-- Wrapper for slides -->
@@ -26,20 +25,18 @@
             </div>
         </div>
 
+    </div>
 </div>
 
 <div class="container">
     <div class="row">
         <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-            <img data-src="holder.js/300x200" alt="...">
-            <div class="caption">
-                <h3></h3>
-                <p>...</p>
-                <p><a href="">More...</p>
-            </div>
+                <img data-src="holder.js/300x200" alt="...">
+                <div class="caption">
+                    <h3></h3>
+                    <p>...</p>
+                    <p><a href="">More...</p>
+                </div>
         </div>
     </div>
-</div>
-
 </div>

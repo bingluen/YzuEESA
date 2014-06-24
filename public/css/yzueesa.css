@@ -5,7 +5,14 @@
     position: relative;
     width: 100%;
 }
-#ContentEntire
+
+.carousel-inner-nonhomepage
+{
+    height: 15%;
+}
+
+
+#main
 {
     height: auto;
     margin: 0 auto;
@@ -13,6 +20,7 @@
     position: relative;
     z-index: 2;
 }
+/*
 #ContentMenu
 {
     float: left;
@@ -21,6 +29,7 @@
     position: relative;
     width: 200px;
 }
+*/
 #Content
 {
     float: right;
@@ -30,6 +39,7 @@
     right: 10%;
     width: 60%;
 }
+/*
 .Content-text
 {
     font-size: 16px;
@@ -133,6 +143,7 @@
 {
     width: 280px;
 }
+*/
 .glyphicon
 {
     font-family: 'Glyphicons Halflings' !important;
@@ -186,6 +197,7 @@
     text-shadow: 2px 2px 3px #000;
     z-index: 10;
 }
+/*
 .dl-horizontal>dd
 {
     margin-bottom: 15px;
@@ -203,6 +215,7 @@
         webkit-box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     }
 }
+*/
 body
 {
 }
@@ -223,6 +236,7 @@ h2
         min-height: 10px;
         right: 3%;
     }
+    /*
     #ContentMenu
     {
         left: 3%;
@@ -237,6 +251,13 @@ h2
     #about-text
     {
         margin-bottom: 0px;
+    }
+    */
+    .fblogo {
+        background: url('../img/fb/FB-f-Logo__white_50.png');
+        width: 50px;
+        height: 50px;
+        display: inline-block;
     }
     h2
     {
@@ -269,6 +290,13 @@ h2
         border-radius: 0px;
         opacity: 1;
     }
+    .fblogo {
+        background: url('../img/fb/FB-f-Logo__white_29.png');
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+    }
+    /*
     #ContentEntire
     {
         padding-right: 3%;
@@ -287,6 +315,7 @@ h2
         padding-right: 3%;
         width: 100%;
     }
+    */
     .carousel-caption > h1
     {
         font-size: 20px;
@@ -324,4 +353,23 @@ h2
     {
         bottom: 20px;
     }
+    .fblogo {
+        background: url('../img/fb/FB-f-Logo__white_29.png');
+        width: 29px;
+        height: 29px;
+        display: inline-block;
+    }
+}
+
+#fblogo {
+    margin-right: 0px !important;
+    margin-bottom: -7px !important;
+    margin-top: -7px !important;
+    padding: 0px !important;
+}
+
+@media (min-width: 1024px) {
+  .navbar-toggle {
+    display: none !important;
+  }
 }
