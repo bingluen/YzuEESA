@@ -10,6 +10,7 @@
     <script src="<?php echo URL; ?>public/js/jquery-1.10.2.js"></script>
     <!--<script src="<?php echo URL; ?>public/js/jquery-ui-1.10.4.min.js"></script>-->
     <script src="<?php echo URL; ?>public/js/bootstrap.min.js"></script>
+    <script src="<?php echo URL; ?>public/js/icheck.min.js"></script>
     <!-- our JavaScript -->
     <!-- css -->
     <link rel="stylesheet" href="<?php echo URL; ?>public/css/bootstrap.min.css">
@@ -36,10 +37,10 @@
         <ul class="nav navbar-nav">
             <li><a href="<?php echo URL; ?>">首頁</a></li>
             <li><a href="<?php echo URL; ?>about/">關於學會</a></li>
-            <li><a href="">學會活動</a></li>
-            <li><a href="">精彩回顧</a></li>
+            <li><a href="<?php echo URL; ?>active/">學會活動</a></li>
+            <li><a href="<?php echo URL; ?>photo/">精彩回顧</a></li>
             <li><a href="<?php echo URL; ?>istudy/">iStudy Project</a></li>
-            <li><a href="">公開資訊</a></li>
+            <li><a href="<?php echo URL; ?>information/">公開資訊</a></li>
             <li><a href="https://www.facebook.com/messages/147429552025011" target="_blank">問題聯繫</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right" id="fblogo">

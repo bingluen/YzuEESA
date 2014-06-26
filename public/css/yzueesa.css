@@ -1,3 +1,6 @@
+/*
+--------------global css ----------------
+*/
 #photoslide
 {
     margin: 0 auto;
@@ -11,22 +14,6 @@
     height: 15%;
 }
 
-
-#main
-{
-    height: auto;
-    margin: 0 auto;
-    margin-top: 40px;
-    position: relative;
-    z-index: 2;
-}
-#Content
-{
-    margin-bottom: 30px;
-    margin-left: 5px;
-    position: relative;
-    width: 80%;
-}
 .glyphicon
 {
     font-family: 'Glyphicons Halflings' !important;
@@ -80,13 +67,35 @@
     text-shadow: 2px 2px 3px #000;
     z-index: 10;
 }
+
 body
 {
 }
+
 h2
 {
     margin-top: 0px;
 }
+
+#fblogo
+{
+    margin-right: 0px !important;
+    margin-bottom: -7px !important;
+    margin-top: -7px !important;
+    padding: 0px !important;
+}
+
+#Content
+{
+    margin-bottom: 30px;
+    position: relative;
+    width: 100%;
+}
+
+/*
+--------------max width ----------------
+*/
+
 @media screen and (max-width:1200px)
 {
     .navbar
@@ -110,6 +119,7 @@ h2
     {
         margin-top: 0;
     }
+
 }
 @media screen and (max-width:850px)
 {
@@ -161,6 +171,55 @@ h2
         margin-top: 10px;
     }
 }
+
+@media screen and (max-width: 767px)
+{
+    .sidebar-fixed
+    {
+        display: none;
+    }
+
+    .main-content-with-sidebar
+    {
+        margin: auto;
+        width: 80%;
+        font-size: 35px;
+    }
+}
+
+@media screen and (max-width: 567px)
+{
+    h1 small,
+    h2 small,
+    h3 small,
+    h4 small,
+    h5 small,
+    h6 small,
+    .h1 small,
+    .h2 small,
+    .h3 small,
+    .h4 small,
+    .h5 small,
+    .h6 small,
+    h1 .small,
+    h2 .small,
+    h3 .small,
+    h4 .small,
+    h5 .small,
+    h6 .small,
+    .h1 .small,
+    .h2 .small,
+    .h3 .small,
+    .h4 .small,
+    .h5 .small,
+    .h6 .small {
+        display: block;
+    }
+}
+
+/*
+--------------min width ----------------
+*/
 @media screen and (min-width:768px)
 {
     .carousel-control .glyphicons-chevron-left,.carousel-control .glyphicons-chevron-right,.carousel-control .icon-prev,.carousel-control .icon-next
@@ -187,18 +246,78 @@ h2
         height: 29px;
         display: inline-block;
     }
+    #Content
+    {
+        margin-bottom: 30px;
+        position: relative;
+        width: 90%;
+    }
+
+    .main-content-with-sidebar
+    {
+        float: right;
+        margin-bottom: 30px;
+        margin-left: 5px;
+        position: relative;
+        width: 65%;
+    }
+
+    .sidebar-fixed
+    {
+        float: left;
+        margin-left: 15px;
+        margin-right: 15px;
+        position: fixed;
+        width: 200px;
+        display: block;
+    }
 }
 
-#fblogo {
-    margin-right: 0px !important;
-    margin-bottom: -7px !important;
-    margin-top: -7px !important;
-    padding: 0px !important;
+@media screen and (min-width: 850px)
+{
+    .sidebar-fixed
+    {
+        float: left;
+        left: 5%;
+        margin-right: 15px;
+        position: fixed;
+        width: 200px;
+        display: block;
+    }
 }
 
-@media (min-width: 1024px) {
+@media screen and (min-width: 1024px)
+{
   .navbar-toggle {
     display: none !important;
   }
 }
 
+@media screen and (min-width: 1200px)
+{
+    .sidebar-fixed
+    {
+        float: left;
+        left: 10%;
+        margin-right: 15px;
+        position: fixed;
+        width: 15%;
+        display: block;
+    }
+}
+
+/* ------------- 圖片固定比例自動裁剪 ------------- */
+.img-cut-32
+{
+    max-width: 100%;
+    height: 0;
+    padding-bottom: 66%;
+    background-color:#FFF;
+    overflow: hidden;
+}
+
+.img-cut img
+{
+    max-width: 100%;
+    vertical-align : middle;
+}
