@@ -1,3 +1,6 @@
+<?php
+@session_start();
+?>
 <ul class="nav nav-tabs">
   <li class="active"><a href="#Main">2014北電杯</a></li>
   <li><a href="#RegInfo">報名資料</a></li>
@@ -6,3 +9,10 @@
 </ul>
 <div id="data-content">
 <div>
+<script>
+$(document).ready(
+    function() {
+
+    }
+);
+</script>

@@ -3,6 +3,7 @@
 class webMan extends Controller {
     private function displayEventMan($eventName) {
         $content = fread(fopen('application/views/eventMan/'.$eventName.'.php', 'r'), filesize('application/views/eventMan/'.$eventName.'.php'));
+        $content += ""
         echo json_encode($content);
     }
 
@@ -34,6 +35,7 @@ class webMan extends Controller {
         $log['ip'] = $this->getIP();
         $log['messages'] = 'read eventMan page';
         $log['time'] = date('Y-m-d H:i:s');
+        $log['type'] = 'event';
         require 'application/views/eventMan/index.php';
         $this->savelog($log);
     }
@@ -51,6 +53,7 @@ class webMan extends Controller {
                 );
             } else {
                 echo "error";
+                $log['type'] = 'error';
                 $log['messages'] = 'login fail: login data is empty!';
                 $this->savelog($log);
                 exit;
@@ -59,20 +62,27 @@ class webMan extends Controller {
             $loginResult = $loginModel->checkUser($loginData);
             if($loginResult === true) {
                 $log['messages'] = 'login eventMan success';
+                $log['type'] = 'successLogin';
                 $this->savelog($log);
+                $_SESSION['username'] = $loginData['username'];
                 $_SESSION['token'] = md5(time().$loginData['username'].$loginData['password']);
                 if($eventName != 0) {
                     $this->displayEventMan($eventName);
                 }
             } else if($loginResult == "sql inject") {
                 $log['messages'] = 'Caution: SQL injection attack. Login data format is incorrect , include special character. It probably is SQL injection attack.';
+                $log['type'] = 'attack';
                 $this->savelog($log);
                 echo json_encode('<div class="alert alert-danger" id="login-error"><strong>登入錯誤 未授權存取!</strong></div>');
+                exit;
             } else if($loginResult == "does not exit account"){
+                $log['type'] = 'error';
                 $log['messages'] = 'login fail: account *'. $loginData['username'] .'* not exit.';
                 $this->savelog($log);
                 echo json_encode('<div class="alert alert-danger" id="login-error"><strong>登入錯誤 未授權存取!</strong></div>');
+                exit;
             } else if($loginResult == "wrong password") {
+                $log['type'] = 'wrong pw';
                 $log['messages'] = 'login fail: account *'. $loginData['username'] .'* login with wrong password. It probably is ID theft.';
                 $this->savelog($log);
             }

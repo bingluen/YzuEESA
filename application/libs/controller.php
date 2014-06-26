@@ -49,4 +49,9 @@ class Controller
         // return new model (and pass the database connection to the model)
         return new $model_name($this->db);
     }
+
+    public function loadView($view_name , $data = NULL)
+    {
+        require 'application/views/'.$view_name.'.php';
+    }
 }

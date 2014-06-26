@@ -1,5 +1,5 @@
 <?php
-
+@session_start();
 class logModel
 {
     /**
@@ -19,9 +19,16 @@ class logModel
      * how to use more than one model in a controller (see application/controller/songs.php for more)
      */
     public function writeLog($logData) {
-        $sql = "INSERT INTO `log` (time, ip, page, messages) VALUES(?, ?, ?, ?);";
+        $sql = "INSERT INTO `log` (time, ip, page, messages, type) VALUES(?, ?, ?, ?, ?);";
         $query = $this->db->prepare($sql);
-        $result = $query->execute(array($logData['time'], $logData['ip'], $logData['page'], $logData['messages']));
+        $result = $query->execute(array($logData['time'], $logData['ip'], $logData['page'], $logData['messages'], $logData['type']));
+
+        if($logData['type'] == 'successLogin') {
+            $sql = "UPDATE `eventManager` SET `lastLogin` = ?, `lastIp` = ?, `token` = ? WHERE `account` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($logData['time'], $logData['ip'], $_SESSION['token'], $_SESSION['username']));
+        }
+
         if($result)
             return true;
         return false;

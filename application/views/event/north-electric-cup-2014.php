@@ -170,7 +170,7 @@
     </div>
 </div>
 
-    
+
 <script>
     $(function () {
         $('#photoslide').carousel();
