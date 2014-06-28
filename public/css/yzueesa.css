@@ -89,9 +89,26 @@ h2
 {
     margin-bottom: 30px;
     position: relative;
-    width: 100%;
+    width: 90%;
 }
-
+/*
+--------------- event ----------------
+*/
+#EventMain
+{
+    margin-bottom: 30px;
+    position: relative;
+    left: 5%;
+    height: auto;
+    z-index: 2;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 40px;
+}
+.eventContentTitle
+{
+    margin-top: 0px;
+}
 /*
 --------------max width ----------------
 */
@@ -305,6 +322,7 @@ h2
         display: block;
     }
 }
+
 
 /* ------------- 圖片固定比例自動裁剪 ------------- */
 .img-cut-32

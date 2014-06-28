@@ -34,11 +34,11 @@
 
     <div class="collapse navbar-collapse" id="header-collapse">
         <ul class="nav navbar-nav">
-            <li><a id="bar-index" href="#photoslide">首頁</a></li>
-            <li><a id="bar-info" href="#info">比賽資訊</a></li>
-            <li><a id="bar-trans" href="#trans">交通方式</a></li>
-            <li><a id="bar-join" href="#join">線上報名</a></li>
-            <li><a id="bar-schedule" href="#schedule">比賽賽程</a></li>
+            <li><a id="bar-index" href="#photoslide" >首頁</a></li>
+            <li><a id="bar-info" href="#info" data-offset="70px">比賽資訊</a></li>
+            <li><a id="bar-trans" href="#trans" data-offset="70px">交通方式</a></li>
+            <li><a id="bar-join" href="#join" data-offset="70px">線上報名</a></li>
+            <li><a id="bar-schedule" href="#schedule" data-offset="70px">比賽賽程</a></li>
             <li><a id="bar-live" href="#live">即時賽況</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right" id="fblogo">
@@ -60,7 +60,7 @@
     <div class="carousel-inner">
 
         <div class="item active">
-            <img src="<?php echo URL; ?>public/img/">
+            <img src="<?php echo URL; ?>public/img/test/1.png">
             <div class="carousel-caption">
                 <h1></h1>
                 <h4></h4>
@@ -68,7 +68,7 @@
         </div>
 
         <div class="item">
-            <img src="<?php echo URL; ?>public/img/">
+            <img src="<?php echo URL; ?>public/img/test/2.png">
             <div class="carousel-caption">
                 <h1></h1>
                 <h4></h4>
@@ -78,11 +78,10 @@
     </div>
 </div>
 
-<div id="main">
-    <div id="Content">
-        <div class="container">
+<div id="Content">
+    <div id="EventMain">
             <div id="info">
-                <h3 class="page-header">比賽資訊</h2>
+                <h3 class="eventContentTitle">比賽資訊</h2>
                 <p>test</p>
                 <p>test</p>
                 <p>test</p>
@@ -99,7 +98,7 @@
                 <p>test</p>
             </div>
             <div id="trans">
-                <h3 class="page-header">交通方式</h2>
+                <h3 class="eventContentTitle">交通方式</h2>
                 <p>test</p>
                 <p>test</p>
                 <p>test</p>
@@ -116,7 +115,7 @@
                 <p>test</p>
             </div>
             <div id="join">
-                <h3 class="page-header">線上報名</h2>
+                <h3 class="eventContentTitle">線上報名</h2>
                 <p>test</p>
                 <p>test</p>
                 <p>test</p>
@@ -133,7 +132,7 @@
                 <p>test</p>
             </div>
             <div id="schedule">
-                <h3>比賽賽程</h2>
+                <h3 class="eventContentTitle">比賽賽程</h2>
                 <p>test</p>
                 <p>test</p>
                 <p>test</p>
@@ -150,7 +149,7 @@
                 <p>test</p>
             </div>
             <div id="live">
-                <h3 class="page-header">即時賽況</h2>
+                <h3 class="eventContentTitle">即時賽況</h2>
                 <p>test</p>
                 <p>test</p>
                 <p>test</p>
@@ -166,17 +165,21 @@
                 <p>test</p>
                 <p>test</p>
             </div>
-        </div>
     </div>
 </div>
+<footer>
+    主辦單位：元智大學電機系學會
+</footer>
 
 
 <script>
     $(function () {
+        var offsetHeight = 70;
         $('#photoslide').carousel();
         $('body').scrollspy({
             target: '.navbar'
         });
+
         $('#bar-brand').click(function () {
             $('html,body').animate({
                 scrollTop: $('#photoslide').offset().top
@@ -189,27 +192,27 @@
         });
         $('#bar-info').click(function () {
             $('html,body').animate({
-                scrollTop: $('#info').offset().top
+                scrollTop: $('#info').offset().top-offsetHeight
             }, 1000);
         });
         $('#bar-trans').click(function () {
             $('html,body').animate({
-                scrollTop: $('#trans').offset().top
+                scrollTop: $('#trans').offset().top-offsetHeight
             }, 1000);
         });
         $('#bar-schedule').click(function () {
             $('html,body').animate({
-                scrollTop: $('#schedule').offset().top
+                scrollTop: $('#schedule').offset().top-offsetHeight
             }, 1000);
         });
         $('#bar-join').click(function () {
             $('html,body').animate({
-                scrollTop: $('#join').offset().top
+                scrollTop: $('#join').offset().top-offsetHeight
             }, 1000);
         });
         $('#bar-live').click(function () {
             $('html,body').animate({
-                scrollTop: $('#live').offset().top
+                scrollTop: $('#live').offset().top-offsetHeight
             }, 1000);
         });
         $(document).ready(function () {
