@@ -37,7 +37,7 @@
         <ul class="nav navbar-nav">
             <li><a href="<?php echo URL; ?>">首頁</a></li>
             <li><a href="<?php echo URL; ?>about/">關於學會</a></li>
-            <li><a href="<?php echo URL; ?>active/">學會活動</a></li>
+            <li><a href="<?php echo URL; ?>activities/">學會活動</a></li>
             <li><a href="<?php echo URL; ?>photo/">精彩回顧</a></li>
             <li><a href="<?php echo URL; ?>istudy/">iStudy Project</a></li>
             <li><a href="<?php echo URL; ?>information/">公開資訊</a></li>

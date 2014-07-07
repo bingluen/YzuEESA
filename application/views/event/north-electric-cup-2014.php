@@ -34,11 +34,11 @@
 
     <div class="collapse navbar-collapse" id="header-collapse">
         <ul class="nav navbar-nav">
-            <li><a id="bar-index" href="#photoslide" >首頁</a></li>
-            <li><a id="bar-info" href="#info" data-offset="70px">比賽資訊</a></li>
-            <li><a id="bar-trans" href="#trans" data-offset="70px">交通方式</a></li>
-            <li><a id="bar-join" href="#join" data-offset="70px">線上報名</a></li>
-            <li><a id="bar-schedule" href="#schedule" data-offset="70px">比賽賽程</a></li>
+            <li><a id="bar-index" href="#photoslide">首頁</a></li>
+            <li><a id="bar-info" href="#info">比賽資訊</a></li>
+            <li><a id="bar-trans" href="#trans">交通方式</a></li>
+            <li><a id="bar-join" href="#join">線上報名</a></li>
+            <li><a id="bar-schedule" href="#schedule">比賽賽程</a></li>
             <li><a id="bar-live" href="#live">即時賽況</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right" id="fblogo">
@@ -81,95 +81,52 @@
 <div id="Content">
     <div id="EventMain">
             <div id="info">
+                <br><br><br>
                 <h3 class="eventContentTitle">比賽資訊</h2>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
+                    <hr>
+                    <div class="Event-Content-Text">
+                        <p>test</p>
+                    </div>
             </div>
             <div id="trans">
+                <br><br><br>
                 <h3 class="eventContentTitle">交通方式</h2>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
+                    <hr>
+                    <div class="Event-Content-Text">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m10!1m3!1d3616.8790575477515!2d121.26443342208597!3d24.970229141700823!2m1!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34681f5490d43fcd%3A0x186eb5a7e52b332b!2z5YWD5pm65aSn5a24!5e0!3m2!1szh-TW!2s!4v1403949325039" width="600" height="450" frameborder="0" style="border:0"></iframe>
+                        <p>test</p>
+                    </div>
             </div>
             <div id="join">
+                <br><br><br>
                 <h3 class="eventContentTitle">線上報名</h2>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
+                    <hr>
+                    <div class="Event-Content-Text">
+                        <p>test</p>
+                    </div>
             </div>
             <div id="schedule">
+                <br><br><br>
                 <h3 class="eventContentTitle">比賽賽程</h2>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
+                    <hr>
+                    <div class="Event-Content-Text">
+                        <p>test</p>
+                    </div>
             </div>
             <div id="live">
+                <br><br><br>
                 <h3 class="eventContentTitle">即時賽況</h2>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
+                    <hr>
+                    <div class="Event-Content-Text">
+                        <p>test</p>
+                    </div>
             </div>
     </div>
 </div>
-<footer>
-    主辦單位：元智大學電機系學會
-</footer>
+<div class="footer text-center">
+    主辦單位：元智大學電機工程學系103級系學會<br>
+    協辦單位：
+</div>
 
 
 <script>
@@ -192,27 +149,27 @@
         });
         $('#bar-info').click(function () {
             $('html,body').animate({
-                scrollTop: $('#info').offset().top-offsetHeight
+                scrollTop: $('#info').offset().top
             }, 1000);
         });
         $('#bar-trans').click(function () {
             $('html,body').animate({
-                scrollTop: $('#trans').offset().top-offsetHeight
+                scrollTop: $('#trans').offset().top
             }, 1000);
         });
         $('#bar-schedule').click(function () {
             $('html,body').animate({
-                scrollTop: $('#schedule').offset().top-offsetHeight
+                scrollTop: $('#schedule').offset().top
             }, 1000);
         });
         $('#bar-join').click(function () {
             $('html,body').animate({
-                scrollTop: $('#join').offset().top-offsetHeight
+                scrollTop: $('#join').offset().top
             }, 1000);
         });
         $('#bar-live').click(function () {
             $('html,body').animate({
-                scrollTop: $('#live').offset().top-offsetHeight
+                scrollTop: $('#live').offset().top
             }, 1000);
         });
         $(document).ready(function () {
