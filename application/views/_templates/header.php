@@ -38,8 +38,7 @@
             <li><a href="<?php echo URL; ?>">首頁</a></li>
             <li><a href="<?php echo URL; ?>about/">關於學會</a></li>
             <li><a href="<?php echo URL; ?>activities/">學會活動</a></li>
-            <li><a href="<?php echo URL; ?>photo/">精彩回顧</a></li>
-            <li><a href="<?php echo URL; ?>istudy/">iStudy Project</a></li>
+            <li><a href="<?php echo URL; ?>istudy/">iStudy</a></li>
             <li><a href="<?php echo URL; ?>information/">公開資訊</a></li>
             <li><a href="https://www.facebook.com/messages/147429552025011" target="_blank">問題聯繫</a></li>
         </ul>
