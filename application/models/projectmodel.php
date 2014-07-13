@@ -22,12 +22,21 @@ class ProjectModel
         try {
             $sql = "INSERT INTO `cf_project` (project_name, project_host, project_time) VALUES(?, ?, ?);";
             $query = $this->db->prepare($sql);
-            $result = $query->execute(array($data['project_name'], $data['project_host'], $data['project_time']));
+            $query->execute(array($data['project_name'], $data['project_host'], $data['project_time']));
         } catch(Exception $e) {
             return $e->getMessage();
         }
 
-        return true;
+        try {
+            $sql = "SELECT LAST_INSERT_ID()";
+            $query = $this->db->prepare($sql);
+            $query->execute();
+            $result = $query->fetch();
+        } catch(Exception $e) {
+            return $e->getMessage();
+        }
+
+        return $result;
     }
 
     function updateProject($data) {

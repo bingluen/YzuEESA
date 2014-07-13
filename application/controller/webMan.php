@@ -60,17 +60,22 @@ class webMan extends Controller
                 $data['project_name'] = $_POST['name'];
                 $data['project_time'] = date('Y-m-d H:i:s');
 
-                // 檢查資料庫有沒有工人資料，如果沒有，不能指定為負責人
-                if(!$WorkerModel->checkWorkerExist($data['project_host'])) {
-                    echo json_encode('資料庫沒有這個工人資料，不能指定為負責人，要先新增工人才可以喔～');
+                // 檢查資料庫有沒有工人資料，如果沒有或有人同名同姓，不能指定為負責人
+                try {
+                    $WorkerModel->checkWorkerExist($data['project_host'])
+                } catch {
+                    if($e->getCode() == 1)
+                        echo json_encode('資料庫沒有這個工人資料，不能指定為負責人，要先新增工人才可以喔～');
+                    else
+                        echo json_encode($e->getMessage());
                     exit;
                 }
 
-                //新增project
-                $ProjectModel->addProject($data);
+                //新增project，並回傳project id值
+                $projectId = $ProjectModel->addProject($data);
+
                 //增加該工人權限
-
-
+                $WorkerModel->setWorkerProject($data['project_host'], $projectId);
             }
 
             //呈現頁面

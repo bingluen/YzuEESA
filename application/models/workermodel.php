@@ -29,7 +29,10 @@ class ProjectModel
         }
 
         if($result->count === '0')
-            return false;
+            throw new Exception('沒有這個工人啦！', 1);
+
+        if($result->count > 1)
+            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式指定", 2);
 
         return true;
     }
@@ -46,10 +49,10 @@ class ProjectModel
         }
 
         if(count($result->auth) === '0')
-            throw new Exception('沒有這個工人啦！')
+            throw new Exception('沒有這個工人啦！', 1)
 
         if(count($result->auth) > 1)
-            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式指定");
+            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式指定", 2);
 
         $auth = $result->auth;
 
@@ -61,6 +64,14 @@ class ProjectModel
         }
 
         //回存權限
+
+        try {
+            $sql = "UPDATE `cf_worker` SET `woker_project` = ? WHERE `worker_name` = ? OR `worker_username` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($auth, $worker, $worker));
+        } catch(Exception $e) {
+               return $e->getMessage();
+        }
     }
 }
 ?>
