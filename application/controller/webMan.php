@@ -16,6 +16,7 @@ class webMan extends Controller
         }
         // Loading Model
         $ProjectModel = $this->loadModel('projectmodel');
+        $WorkerModel = $this->loadModel('workermodel');
 
         if($page === 'Project') {
             if($action == 0) {
@@ -44,6 +45,32 @@ class webMan extends Controller
                     echo json_encode('已經刪除'.$doDelete['deleted'].'筆資料, '.$doDelete['notDelete'].'筆刪除失敗。');
                     exit;
                 }
+            }
+
+            if($action === 'insert') {
+                //先過濾資料 ？
+                /*
+                $insertData = array('host' => $_POST['host'], 'projectName' => $_POST['name']);
+                if(preg_match('/[[:cntrl:][:punct:][:space:]]/', $insertData))
+                    echo json_encode('資料中有特殊文字符號')
+                */
+
+                //從post收資料
+                $data['project_host'] = $_POST['host'];
+                $data['project_name'] = $_POST['name'];
+                $data['project_time'] = date('Y-m-d H:i:s');
+
+                // 檢查資料庫有沒有工人資料，如果沒有，不能指定為負責人
+                if(!$WorkerModel->checkWorkerExist($data['project_host'])) {
+                    echo json_encode('資料庫沒有這個工人資料，不能指定為負責人，要先新增工人才可以喔～');
+                    exit;
+                }
+
+                //新增project
+                $ProjectModel->addProject($data);
+                //增加該工人權限
+
+
             }
 
             //呈現頁面

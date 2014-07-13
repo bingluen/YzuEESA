@@ -43,6 +43,9 @@
                 <?php } ?>
             </tbody>
         </table>
+        <div class="text-left">
+            <button id="project-add-btn" type="button" class="btn btn-sm btn-primary">新增一個計畫</button>
+        </div>
         <div class="text-right">
             所有選取的Project
             <button id="project-doing-btn" type="button" class="btn btn-sm btn-info">設定為進行中</button>
@@ -50,9 +53,65 @@
             <button id="project-delete-btn" type="button" class="btn btn-sm btn-danger">刪除</button>
         </div>
 </div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">新增計畫</h4>
+            </div>
+            <div class="modal-body">
+                <p><input id="add_project_name" class="form-control" type="text" placeholder="請輸入計畫名稱"></p>
+                <p><input id="add_host" class="form-control" type="text" placeholder="請輸負責人"></p>
+                <div class="alert alert-danger" id="projectAdd-error">
+                    <button type="button" class="close" id="close_error_message">×</button>
+                    <strong>新增失敗 :</strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="do-projectAdd" type="button" class="btn btn-primary">新增計畫</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
 $(document).ready(
     function() {
+        $('#close_error_message').click(
+            function() {
+                $('#projectAdd-error').hide();
+            });
+        $('#projectAdd-error').hide();
+
+        $('#do-projectAdd').click(
+            function() {
+                $.ajax({
+                    url: 'insert',
+                    dataType: 'json',
+                    type: 'post',
+                    data: {
+                        name: $('#add_project_name').val(),
+                        host: $('#add_host').val()
+                    },
+                    success: function(response) {
+                        if(response === 'success')
+                            window.location.reload();
+                        else {
+                            $('#projectAdd-error').append(response);
+                            $('#projectAdd-error').show();
+                        }
+                    },
+                    error: function (response) {
+                        console.log('response is not json');
+                        console.log(response);
+                    }
+                });
+        });
+
+
         $('#project-doing-btn').click(
             function () {
                 var selected = new Array();
