@@ -1,0 +1,44 @@
+<div class="main-content-with-sidebar">
+    <h3>所有活動</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>活動名稱</th>
+                    <th>狀態</th>
+                    <th>總召</th>
+                    <th>新增時間</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    <h3>所有計畫</h3>
+    <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>計畫名稱</th>
+                    <th>狀態</th>
+                    <th>負責人</th>
+                    <th>新增時間</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+</div>
