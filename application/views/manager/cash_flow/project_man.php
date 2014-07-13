@@ -32,13 +32,70 @@
                 </tr>
             </thead>
             <tbody>
+                <?php foreach($data['project'] as $project) { ?>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><input class="checkbox" type="checkbox" name="project-select" value="<?=$project->project_id;?>"></td>
+                    <td><?=$project->project_name;?></td>
+                    <td><?=($project->project_status === 'T')? '進行中':'已結案';?></td>
+                    <td><?=$project->project_host;?></td>
+                    <td><?=$project->project_time;?></td>
                 </tr>
+                <?php } ?>
             </tbody>
         </table>
+        <div class="text-right">
+            所有選取的Project
+            <button id="project-doing-btn" type="button" class="btn btn-sm btn-info">設定為進行中</button>
+            <button id="project-finish-btn" type="button" class="btn btn-sm btn-warning">設定為已結案</button>
+            <button id="project-delete-btn" type="button" class="btn btn-sm btn-danger">刪除</button>
+        </div>
 </div>
+<script>
+$(document).ready(
+    function() {
+        $('#project-doing-btn').click(
+            function () {
+                var selected = new Array();
+                $('input[name="project-select"]:checked').each(function(i) { selected[i] = this.value; });
+                $.ajax({
+                    url: 'update',
+                    dataType: 'json',
+                    type: 'post',
+                    data: {
+                        target: selected,
+                        status: 'T'
+                    },
+                    success: function(response) {
+                        window.location.reload();
+                    },
+                    error: function (response) {
+                        console.log('response is not json');
+                        console.log(response);
+                    }
+                });
+            });
+
+        $('#project-finish-btn').click(
+            function () {
+                var selected = new Array();
+                $('input[name="project-select"]:checked').each(function(i) { selected[i] = this.value; });
+                $.ajax({
+                    url: 'update',
+                    dataType: 'json',
+                    type: 'post',
+                    data: {
+                        target: selected,
+                        status: 'F'
+                    },
+                    success: function(response) {
+                        window.location.reload();
+                    },
+                    error: function (response) {
+                        console.log('response is not json');
+                        console.log(response);
+                    }
+                });
+            });
+    }
+);
+</script>
