@@ -94,26 +94,24 @@ class ProjectModel
             }
 
             if($result->count === '0') {
-                if($deleteList != '')
-                    $deleteList = $deleteList.', ';
-                $deleteList = $deleteList . $project_id;
+                $deleteList[]= $project_id;
                 $deleteCount++;
             } else {
-                if($not_delete != '')
-                    $not_delete = $not_delete.', ';
-                $not_delete = $not_delete . $project_id;
+                $not_delete[] = $project_id;
                 $notDeleteCount++;
             }
         }
 
-        //若無則進行刪除
 
-        try {
-            $sql = "DELETE FROM `cf_project` WHERE `project_id` = ?;";
-            $query = $this->db->prepare($sql);
-            $query->execute(array($deleteList));
-        } catch(Exception $e) {
-                return $e->getMessage();
+        //若無則進行刪除
+        foreach ($deleteList as $deleteItem) {
+            try {
+                $sql = "DELETE FROM `cf_project` WHERE `project_id` = ?;";
+                $query = $this->db->prepare($sql);
+                $query->execute(array($deleteItem));
+            } catch(Exception $e) {
+                    return $e->getMessage();
+            }
         }
 
         $execute_result['deleted'] = $deleteCount;
@@ -131,7 +129,6 @@ class ProjectModel
         } catch(Expection $e) {
             return $e->getMessage();
         }
-
         return $result;
     }
 }

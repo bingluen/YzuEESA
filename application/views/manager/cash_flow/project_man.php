@@ -66,7 +66,7 @@
                 <p><input id="add_host" class="form-control" type="text" placeholder="請輸負責人"></p>
                 <div class="alert alert-danger" id="projectAdd-error">
                     <button type="button" class="close" id="close_error_message">×</button>
-                    <strong>新增失敗 :</strong>
+                    <strong>新增失敗 :</strong><div id='error-message-here'></div
                 </div>
             </div>
             <div class="modal-footer">
@@ -86,6 +86,11 @@ $(document).ready(
             });
         $('#projectAdd-error').hide();
 
+        $('#project-add-btn').click(
+            function () {
+                $('#myModal').modal('show');
+            });
+
         $('#do-projectAdd').click(
             function() {
                 $.ajax({
@@ -100,7 +105,8 @@ $(document).ready(
                         if(response === 'success')
                             window.location.reload();
                         else {
-                            $('#projectAdd-error').append(response);
+                            $('#error-message-here').empty();
+                            $('#error-message-here').append(response);
                             $('#projectAdd-error').show();
                         }
                     },

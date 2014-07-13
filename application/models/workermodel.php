@@ -1,5 +1,5 @@
 <?php
-class ProjectModel
+class WorkerModel
 {
     /**
      * Every model needs a database connection, passed to the model
@@ -37,10 +37,9 @@ class ProjectModel
         return true;
     }
 
-    function setWorkerProject($woker, $project) {
-        //先把工人原本的權限拉出來
+    function getWorkerID($worker) {
         try {
-            $sql = "SELECT `woker_project` AS auth FROM `cf_worker` WHERE `worker_name` = ? OR `worker_username` = ?;";
+            $sql = "SELECT `worker_id` FROM `cf_worker` WHERE `worker_name` = ? OR `worker_username` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($worker, $worker));
             $result = $query->fetchAll();
@@ -48,13 +47,46 @@ class ProjectModel
                return $e->getMessage();
         }
 
-        if(count($result->auth) === '0')
-            throw new Exception('沒有這個工人啦！', 1)
+        if(count($result) === '0')
+            throw new Exception('沒有這個工人啦！', 1);
 
-        if(count($result->auth) > 1)
+        if(count($result) > 1)
+            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式查詢", 2);
+
+        return $result[0]->worker_id;
+    }
+
+    function getWorkerName($worker) {
+        try {
+            $sql = "SELECT `worker_name` FROM `cf_worker` WHERE `worker_id` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($worker));
+            $result = $query->fetch();
+        } catch(Exception $e) {
+               return $e->getMessage();
+        }
+
+        return $result->worker_name;
+    }
+
+    function setWorkerProject($worker, $project) {
+        //先把工人原本的權限拉出來
+        try {
+            $sql = "SELECT `woker_project` AS auth FROM `cf_worker` WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($worker, $worker, $worker));
+            $result = $query->fetchAll();
+        } catch(Exception $e) {
+               return $e->getMessage();
+        }
+
+        if(count($result) === 0)
+            throw new Exception('沒有這個工人啦！', 1);
+
+        if(count($result) > 1)
             throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式指定", 2);
 
-        $auth = $result->auth;
+        $auth = $result[0]->auth;
 
         //修改權限
         foreach ($project as $auth_key) {
@@ -66,9 +98,9 @@ class ProjectModel
         //回存權限
 
         try {
-            $sql = "UPDATE `cf_worker` SET `woker_project` = ? WHERE `worker_name` = ? OR `worker_username` = ?;";
+            $sql = "UPDATE `cf_worker` SET `woker_project` = ? WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
             $query = $this->db->prepare($sql);
-            $query->execute(array($auth, $worker, $worker));
+            $query->execute(array($auth, $worker, $worker, $worker));
         } catch(Exception $e) {
                return $e->getMessage();
         }
