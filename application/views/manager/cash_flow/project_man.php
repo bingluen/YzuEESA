@@ -96,6 +96,29 @@ $(document).ready(
                     }
                 });
             });
+
+        $('#project-delete-btn').click(
+            function () {
+                var selected = new Array();
+                $('input[name="project-select"]:checked').each(function(i) { selected[i] = this.value; });
+                $.ajax({
+                    url: 'delete',
+                    dataType: 'json',
+                    type: 'post',
+                    data: {
+                        target: selected
+                    },
+                    success: function(response) {
+                        alert(response+'若刪除失敗，表示該計畫下有支出項目。');
+
+                        window.location.reload();
+                    },
+                    error: function (response) {
+                        console.log('response is not json');
+                        console.log(response);
+                    }
+                });
+            });
     }
 );
 </script>

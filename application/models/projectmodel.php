@@ -70,19 +70,47 @@ class ProjectModel
     function deleteProject($data) {
 
         //先檢查金流系統中有沒有該筆計畫的帳目
+        $deleteList = '';
+        $deleteCount = 0;
+        $not_delete = '';
+        $notDeleteCount = 0;
         foreach($data as $project_id) {
+            try {
+                $sql = "SELECT COUNT(*) AS count FROM `cf_items` WHERE `items_project` = ?;";
+                $query = $this->db->prepare($sql);
+                $query->execute(array($project_id));
+                $result = $query->fetch();
+            } catch(Exception $e) {
+                    return $e->getMessage();
+            }
 
+            if($result->count === '0') {
+                if($deleteList != '')
+                    $deleteList = $deleteList.', ';
+                $deleteList = $deleteList . $project_id;
+                $deleteCount++;
+            } else {
+                if($not_delete != '')
+                    $not_delete = $not_delete.', ';
+                $not_delete = $not_delete . $project_id;
+                $notDeleteCount++;
+            }
         }
 
         //若無則進行刪除
+
         try {
             $sql = "DELETE FROM `cf_project` WHERE `project_id` = ?;";
             $query = $this->db->prepare($sql);
-            $result = $query->execute($deleteList);
+            $query->execute(array($deleteList));
         } catch(Exception $e) {
                 return $e->getMessage();
         }
 
+        $execute_result['deleted'] = $deleteCount;
+        $execute_result['notDelete'] = $notDeleteCount;
+        $execute_result['result'] = true;
+        return $execute_result;
     }
 
     function getProject() {

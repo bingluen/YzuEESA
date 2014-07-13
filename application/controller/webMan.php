@@ -35,6 +35,17 @@ class webMan extends Controller
                 }
             }
 
+            if($action === 'delete') {
+                foreach($_POST['target'] as $target) {
+                    $delete[] = $target;
+                }
+                $doDelete = $ProjectModel->deleteProject($delete);
+                if($doDelete['result']) {
+                    echo json_encode('已經刪除'.$doDelete['deleted'].'筆資料, '.$doDelete['notDelete'].'筆刪除失敗。');
+                    exit;
+                }
+            }
+
             //呈現頁面
             $this->loadView('_templates/header_man');
             $this->loadView('manager/cash_flow/project_man', $data);
