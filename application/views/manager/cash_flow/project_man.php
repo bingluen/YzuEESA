@@ -43,11 +43,9 @@
                 <?php } ?>
             </tbody>
         </table>
-        <div class="text-left">
-            <button id="project-add-btn" type="button" class="btn btn-sm btn-primary">新增一個計畫</button>
-        </div>
         <div class="text-right">
-            所有選取的Project
+            <button id="project-add-btn" type="button" class="btn btn-sm btn-primary">新增一個計畫</button>
+                或是   所有選取的Project
             <button id="project-doing-btn" type="button" class="btn btn-sm btn-info">設定為進行中</button>
             <button id="project-finish-btn" type="button" class="btn btn-sm btn-warning">設定為已結案</button>
             <button id="project-delete-btn" type="button" class="btn btn-sm btn-danger">刪除</button>

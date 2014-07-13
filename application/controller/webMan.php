@@ -17,6 +17,7 @@ class webMan extends Controller
         // Loading Model
         $ProjectModel = $this->loadModel('projectmodel');
         $WorkerModel = $this->loadModel('workermodel');
+        $ItemsModel = $this->loadModel('itemsmodel');
 
         if($page === 'Project') {
             if($action == 0) {
@@ -103,6 +104,53 @@ class webMan extends Controller
             $this->loadView('manager/cash_flow/project_man', $data);
             $this->loadView('_templates/footer_man');
         }
+
+        if($page === 'Items') {
+            if($action == 0) {
+                //step1 先拉回project
+                $data['project'] = $ProjectModel->getProject();
+                //把負責人名字拉回來
+                for($i = 0;$i < count($data['project']);$i++) {
+                    $data['project'][$i]->project_host = $WorkerModel->getWorkerName($data['project'][$i]->project_host);
+                }
+
+                //拉回item
+                for($i = 0;$i < count($data['project']);$i++) {
+                    $data['items'][$data['project'][$i]->project_id] = $ItemsModel->getItems($data['project'][$i]->project_id);
+
+                    //把item裡面工人名子找回來
+                    for($j = 0;$j <count($data['items'][$data['project'][$i]->project_id]);$j++) {
+                        $data['items'][$data['project'][$i]->project_id][$j]->items_applicant = $WorkerModel->getWorkerName($data['items'][$data['project'][$i]->project_id][$j]->items_applicant);
+                    }
+
+                    //若有人審核了，順便把審核人的名字找回來
+                    for($j = 0;$j <count($data['items'][$data['project'][$i]->project_id]) && $data['items'][$data['project'][$i]->project_id][$j]->items_reviewer != NULL;$j++) {
+                        $data['items'][$data['project'][$i]->project_id][$j]->items_reviewer = $WorkerModel->getWorkerName($data['items'][$data['project'][$i]->project_id][$j]->items_reviewer);
+                    }
+                }
+            }
+
+            if($action === 'pass') {
+                foreach($_POST['target'] as $target) {
+                    $update[]= array(
+                        'items_id' => $target,
+                        'items_status' => $_POST['status'],
+                        'items_reviewer' => $_POST['reviewer'],
+                        'items_rev_time' => date('Y-m-d H:i:s'));
+                }
+                if($ItemsModel->updateItems($update)) {
+                    echo json_encode('success');
+                }
+                exit;
+            }
+
+            //呈現頁面
+            $this->loadView('_templates/header_man');
+            $this->loadView('manager/cash_flow/items_man', $data);
+            $this->loadView('_templates/footer_man');
+        }
+
+
     }
 
 }

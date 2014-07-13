@@ -20,7 +20,7 @@ class WorkerModel
 
     function checkWorkerExist($worker) {
         try {
-            $sql = "SELECT COUNT(*) AS count FROM `cf_worker` WHERE `worker_name` = ? OR `worker_username` = ?;";
+            $sql = "SELECT COUNT(*) AS count FROM `worker` WHERE `worker_name` = ? OR `worker_username` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($worker, $worker));
             $result = $query->fetch();
@@ -39,7 +39,7 @@ class WorkerModel
 
     function getWorkerID($worker) {
         try {
-            $sql = "SELECT `worker_id` FROM `cf_worker` WHERE `worker_name` = ? OR `worker_username` = ?;";
+            $sql = "SELECT `worker_id` FROM `worker` WHERE `worker_name` = ? OR `worker_username` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($worker, $worker));
             $result = $query->fetchAll();
@@ -58,7 +58,7 @@ class WorkerModel
 
     function getWorkerName($worker) {
         try {
-            $sql = "SELECT `worker_name` FROM `cf_worker` WHERE `worker_id` = ?;";
+            $sql = "SELECT `worker_name` FROM `worker` WHERE `worker_id` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($worker));
             $result = $query->fetch();
@@ -72,7 +72,7 @@ class WorkerModel
     function setWorkerProject($worker, $project) {
         //先把工人原本的權限拉出來
         try {
-            $sql = "SELECT `woker_project` AS auth FROM `cf_worker` WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
+            $sql = "SELECT `woker_project` AS auth FROM `worker` WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($worker, $worker, $worker));
             $result = $query->fetchAll();
@@ -98,7 +98,7 @@ class WorkerModel
         //回存權限
 
         try {
-            $sql = "UPDATE `cf_worker` SET `woker_project` = ? WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
+            $sql = "UPDATE `worker` SET `woker_project` = ? WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($auth, $worker, $worker, $worker));
         } catch(Exception $e) {
