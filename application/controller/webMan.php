@@ -150,7 +150,32 @@ class webMan extends Controller
             $this->loadView('_templates/footer_man');
         }
 
+        if($page === 'worker') {
+            if($action == 0) {
+                //列出工人
+                $data['workerList'] = $WorkerModel->getWorkerList();
+                for($i = 0;$i < count($data['workerList']);$i++) {
 
+
+                    //拉回Project Name
+                    $projectKey = explode($data['workerList'][$i]->woker_project, ', ');
+                    $projectName = '';
+                    foreach ($projectKey as $key ) {
+                        if($projectName != '')
+                            $projectName = $projectName . ', ';
+                        $projectName = $projectName . $ProjectModel->getProjectName($key);
+                    }
+
+                    //回填Project Name
+                    $data['workerList'][$i]->woker_project = $projectName;
+                }
+            }
+
+            //呈現頁面
+            $this->loadView('_templates/header_man');
+            $this->loadView('manager/cash_flow/worker_man', $data);
+            $this->loadView('_templates/footer_man');
+        }
     }
 
 }

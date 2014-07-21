@@ -70,7 +70,7 @@ class WorkerModel
     }
 
     function setWorkerProject($worker, $project) {
-        //先把工人原本的權限拉出來
+        //先把工人原本負責的projct拉出來
         try {
             $sql = "SELECT `woker_project` AS auth FROM `worker` WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
             $query = $this->db->prepare($sql);
@@ -104,6 +104,19 @@ class WorkerModel
         } catch(Exception $e) {
                return $e->getMessage();
         }
+    }
+
+    function getWorkerList() {
+        try {
+            $sql = "SELECT * FROM `worker`;";
+            $query = $this->db->prepare($sql);
+            $query->execute();
+            $result = $query->fetchAll();
+        } catch(Expection $e) {
+            return $e->getMessage();
+        }
+
+        return $result
     }
 }
 ?>

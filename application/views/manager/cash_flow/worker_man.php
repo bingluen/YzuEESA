@@ -4,6 +4,7 @@
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>等級</th>
                     <th>姓名</th>
                     <th>帳號</th>
                     <th>所屬活動/計畫</th>
@@ -11,13 +12,16 @@
                 </tr>
             </thead>
             <tbody>
+                <?php foreach ($data['workerList'] as $workerList) { ?>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><?=$worerList->worker_id;?></td>
+                    <td><?=$worerList->worker_level;?></td>
+                    <td><?=$worerList->worker_name;?></td>
+                    <td><?=$worerList->worker_username;?></td>
+                    <td><?=$worerList->woker_project;?></td>
+                    <td><?=$worerList->worker_lastlogin;?></td>
                 </tr>
+                <?php } ?>
             </tbody>
         </table>
 </div>
