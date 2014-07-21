@@ -1,3 +1,4 @@
+
 <div class="main-content-with-sidebar">
     <h3>工人名單</h3>
         <table class="table">
@@ -14,12 +15,12 @@
             <tbody>
                 <?php foreach ($data['workerList'] as $workerList) { ?>
                 <tr>
-                    <td><?=$worerList->worker_id;?></td>
-                    <td><?=$worerList->worker_level;?></td>
-                    <td><?=$worerList->worker_name;?></td>
-                    <td><?=$worerList->worker_username;?></td>
-                    <td><?=$worerList->woker_project;?></td>
-                    <td><?=$worerList->worker_lastlogin;?></td>
+                    <td></td>
+                    <td><?=$workerList->worker_level;?></td>
+                    <td><?=$workerList->worker_name;?></td>
+                    <td><?=$workerList->worker_username;?></td>
+                    <td><?=$workerList->woker_project;?></td>
+                    <td><?=$workerList->worker_lastlogin;?></td>
                 </tr>
                 <?php } ?>
             </tbody>

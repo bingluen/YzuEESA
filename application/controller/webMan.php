@@ -150,25 +150,35 @@ class webMan extends Controller
             $this->loadView('_templates/footer_man');
         }
 
-        if($page === 'worker') {
+        if($page === 'Worker') {
             if($action == 0) {
                 //列出工人
                 $data['workerList'] = $WorkerModel->getWorkerList();
+
+
                 for($i = 0;$i < count($data['workerList']);$i++) {
 
 
                     //拉回Project Name
-                    $projectKey = explode($data['workerList'][$i]->woker_project, ', ');
+                    $projectKey = explode(',', $data['workerList'][$i]->woker_project);
+                    for ($j = 0; $j < count($projectKey);$j++) {
+                      $projectKey[$j] = str_replace(' ', '', $projectKey[$j]);
+                    }
+
                     $projectName = '';
-                    foreach ($projectKey as $key ) {
-                        if($projectName != '')
+
+                    foreach ($projectKey as $key) {
+                        if($name = $ProjectModel->getProjectName($key)) {
+                            if($projectName != '')
                             $projectName = $projectName . ', ';
-                        $projectName = $projectName . $ProjectModel->getProjectName($key);
+                            $projectName = $projectName.$name;
+                        }
                     }
 
                     //回填Project Name
                     $data['workerList'][$i]->woker_project = $projectName;
                 }
+
             }
 
             //呈現頁面

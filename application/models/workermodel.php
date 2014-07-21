@@ -116,7 +116,7 @@ class WorkerModel
             return $e->getMessage();
         }
 
-        return $result
+        return $result;
     }
 }
 ?>

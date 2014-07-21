@@ -136,13 +136,14 @@ class ProjectModel
         try {
             $sql = "SELECT `project_name` FROM `cf_project` WHERE `project_id` = ?;";
             $query = $this->db->prepare($sql);
-            $query->execute($id);
+            $query->execute(array($id));
             $result = $query->fetch();
         } catch(Expection $e) {
             return $e->getMessage();
         }
-
-        return $result;
+        if($result)
+            return $result->project_name;
+        return false;
     }
 }
 ?>
