@@ -64,7 +64,7 @@
                 <p><input id="add_host" class="form-control" type="text" placeholder="請輸負責人"></p>
                 <div class="alert alert-danger" id="projectAdd-error">
                     <button type="button" class="close" id="close_error_message">×</button>
-                    <strong>新增失敗 :</strong><div id='error-message-here'></div
+                    <strong>新增失敗 :</strong><div id='error-message-here'></div>
                 </div>
             </div>
             <div class="modal-footer">

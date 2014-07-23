@@ -11,6 +11,7 @@
     <!--<script src="<?php echo URL; ?>public/js/jquery-ui-1.10.4.min.js"></script>-->
     <script src="<?php echo URL; ?>public/js/bootstrap.min.js"></script>
     <script src="<?php echo URL; ?>public/js/icheck.min.js"></script>
+    <script src="<?php echo URL; ?>public/js/jquery-md5.js"></script>
     <!-- our JavaScript -->
     <!-- css -->
     <link rel="stylesheet" href="<?php echo URL; ?>public/css/bootstrap.min.css">

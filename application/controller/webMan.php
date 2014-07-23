@@ -160,7 +160,7 @@ class webMan extends Controller
 
 
                     //拉回Project Name
-                    $projectKey = explode(',', $data['workerList'][$i]->woker_project);
+                    $projectKey = explode(',', $data['workerList'][$i]->worker_project);
                     for ($j = 0; $j < count($projectKey);$j++) {
                       $projectKey[$j] = str_replace(' ', '', $projectKey[$j]);
                     }
@@ -176,9 +176,74 @@ class webMan extends Controller
                     }
 
                     //回填Project Name
-                    $data['workerList'][$i]->woker_project = $projectName;
+                    $data['workerList'][$i]->worker_project = $projectName;
                 }
 
+            }
+
+            if($action === 'delete') {
+                foreach($_POST['target'] as $target) {
+                    $delete[] = $target;
+                }
+                $doDelete = $WorkerModel->deleteWorker($delete);
+                if($doDelete['result']) {
+                    echo json_encode('已經刪除'.$doDelete['deleted'].'筆資料, '.$doDelete['notDelete'].'筆刪除失敗。');
+                    exit;
+                }
+            }
+
+            if($action === 'disable') {
+                foreach ($_POST['target'] as $target) {
+                    $disable[] = array(
+                        'worker_id' => $target,
+                        'worker_level' => 0);
+                }
+                $doDisable = $WorkerModel->updateWorker($disable);
+
+                if($doDisable) {
+                    echo json_encode('已經將所選取工人帳號停權。');
+                    exit;
+                }
+            }
+
+            if($action === 'addWorker') {
+
+                //收資料
+                $workerData['worker_name'] = $_POST['name'];
+                $workerData['worker_username'] = $_POST['username'];
+                $workerData['worker_password'] = $_POST['password'];
+                $workerData['worker_level'] = $_POST['level'];
+
+                //新增工人
+                try {
+                    $WorkerModel->addWorker($workerData);
+                } catch (Exception $e) {
+                    echo json_encode($e->getMessage());
+                    exit;
+                }
+
+                echo json_encode('success');
+                exit;
+            }
+
+            if($action === 'editWorker') {
+                if(isset($_POST['doing'])) {
+                    if($_POST['doing'] === 'getDetail' && isset($_POST['userid'])) {
+                        try {
+                            $data = $WorkerModel->getWorkerDetail($_POST['userid']);
+                            $detail = array(
+                                'worker_name' => $data->worker_name,
+                                'worker_username' => $data->worker_username,
+                                'worker_level' => $data->worker_level,
+                                'worker_project' => $data->worker_project);
+                        } catch(Expection $e) {
+                            echo json_encode($e->getMessage());
+                            exit;
+                        }
+                        echo json_encode($detail);
+                    }
+                }
+                exit;
             }
 
             //呈現頁面

@@ -72,7 +72,7 @@ class WorkerModel
     function setWorkerProject($worker, $project) {
         //先把工人原本負責的projct拉出來
         try {
-            $sql = "SELECT `woker_project` AS auth FROM `worker` WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
+            $sql = "SELECT `worker_project` AS auth FROM `worker` WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($worker, $worker, $worker));
             $result = $query->fetchAll();
@@ -98,7 +98,7 @@ class WorkerModel
         //回存權限
 
         try {
-            $sql = "UPDATE `worker` SET `woker_project` = ? WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
+            $sql = "UPDATE `worker` SET `worker_project` = ? WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($auth, $worker, $worker, $worker));
         } catch(Exception $e) {
@@ -108,13 +108,141 @@ class WorkerModel
 
     function getWorkerList() {
         try {
-            $sql = "SELECT * FROM `worker`;";
+            $sql = "SELECT `worker_id`, `worker_level`, `worker_name`, `worker_username`, `worker_project`, `worker_lastlogin` FROM `worker`;";
             $query = $this->db->prepare($sql);
             $query->execute();
             $result = $query->fetchAll();
         } catch(Expection $e) {
             return $e->getMessage();
         }
+
+        return $result;
+    }
+
+    function deleteWorker($data) {
+
+        //先檢查金流系統中有沒有該工人申請的資料
+        $deleteList = '';
+        $deleteCount = 0;
+        $not_delete = '';
+        $notDeleteCount = 0;
+        foreach($data as $items_id) {
+            try {
+                $sql = "SELECT COUNT(*) AS count FROM `cf_items` WHERE `items_applicant` = ?;";
+                $query = $this->db->prepare($sql);
+                $query->execute(array($items_id));
+                $result = $query->fetch();
+            } catch(Exception $e) {
+                    return $e->getMessage();
+            }
+
+            if($result->count === '0') {
+                $deleteList[]= $items_id;
+                $deleteCount++;
+            } else {
+                $not_delete[] = $items_id;
+                $notDeleteCount++;
+            }
+        }
+
+
+        //若無則進行刪除
+        if($deleteCount > 0) {
+            foreach ($deleteList as $deleteItem) {
+                try {
+                    $sql = "DELETE FROM `worker` WHERE `worker_id` = ?;";
+                    $query = $this->db->prepare($sql);
+                    $query->execute(array($deleteItem));
+                } catch(Exception $e) {
+                        return $e->getMessage();
+                }
+            }
+        }
+
+        $execute_result['deleted'] = $deleteCount;
+        $execute_result['notDelete'] = $notDeleteCount;
+        $execute_result['result'] = true;
+        return $execute_result;
+    }
+
+    function updateWorker($data) {
+        foreach ($data as $worker) {
+            $param = '';
+            $param_val = '';
+
+            if(isset($worker['worker_level'])) {
+                $param = $param.'`worker_level` = ?';
+                $param_val[] = $worker['worker_level'];
+            }
+
+            if(isset($worker['worker_name'])) {
+                $param = $param.'`worker_name` = ?';
+                $param_val[] = $worker['worker_name'];
+            }
+
+            if(isset($worker['worker_password'])) {
+                $param = $param.'`worker_password` = ?';
+                $param_val[] = $worker['worker_password'];
+            }
+
+            if(isset($worker['worker_project'])) {
+                $param = $param.'`worker_project` = ?';
+                $param_val[] = $worker['worker_project'];
+            }
+
+            $param_val[] = $worker['worker_id'];
+
+            try {
+                $sql = "UPDATE `worker` SET $param WHERE `worker_id` = ?;";
+                $query = $this->db->prepare($sql);
+                $result = $query->execute($param_val);
+            } catch(Exception $e) {
+                return $e->getMessage();
+            }
+        }
+
+        return true;
+    }
+
+    function addWorker($data) {
+        //先檢查帳號有沒有重複
+        try {
+            $sql = "SELECT `worker_name` AS name FROM `worker` WHERE `worker_username` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($data['worker_username']));
+            $result = $query->fetchAll();
+        } catch(Exception $e) {
+               return $e->getMessage();
+        }
+
+        //已經有人用了，回傳資訊
+        if(count($result) > 0)
+            throw new Exception("工人".$result[0]->name."已經使用了這個帳號，請換一個", 3);
+
+        //新增工人
+        try {
+            $sql = "INSERT INTO `worker` (worker_level, worker_name, worker_username, worker_password) VALUES(?, ?, ?, ?);";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($data['worker_level'], $data['worker_name'], $data['worker_username'], $data['worker_password']));
+        } catch(Exception $e) {
+               return $e->getMessage();
+        }
+
+        return true;
+    }
+
+    function getWorkerDetail($id) {
+        try {
+            $sql = "SELECT `worker_level`, `worker_name`, `worker_username`, `worker_project` FROM `worker` WHERE `worker_id` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($id));
+            $result = $query->fetch();
+        } catch(Expection $e) {
+            return $e->getMessage();
+        }
+
+        if(count($result) == 0)
+            throw new Exception("沒有此工人資料", 4);
 
         return $result;
     }

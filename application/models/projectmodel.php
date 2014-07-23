@@ -104,15 +104,18 @@ class ProjectModel
 
 
         //若無則進行刪除
-        foreach ($deleteList as $deleteItem) {
-            try {
-                $sql = "DELETE FROM `cf_project` WHERE `project_id` = ?;";
-                $query = $this->db->prepare($sql);
-                $query->execute(array($deleteItem));
-            } catch(Exception $e) {
-                    return $e->getMessage();
+        if($deleteCount > 0) {
+            foreach ($deleteList as $deleteItem) {
+                try {
+                    $sql = "DELETE FROM `cf_project` WHERE `project_id` = ?;";
+                    $query = $this->db->prepare($sql);
+                    $query->execute(array($deleteItem));
+                } catch(Exception $e) {
+                        return $e->getMessage();
+                }
             }
         }
+
 
         $execute_result['deleted'] = $deleteCount;
         $execute_result['notDelete'] = $notDeleteCount;
