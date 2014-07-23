@@ -171,21 +171,29 @@ class WorkerModel
             $param_val = '';
 
             if(isset($worker['worker_level'])) {
+                if($param != '')
+                    $param = $param.', ';
                 $param = $param.'`worker_level` = ?';
                 $param_val[] = $worker['worker_level'];
             }
 
             if(isset($worker['worker_name'])) {
+                if($param != '')
+                    $param = $param.', ';
                 $param = $param.'`worker_name` = ?';
                 $param_val[] = $worker['worker_name'];
             }
 
             if(isset($worker['worker_password'])) {
+                if($param != '')
+                    $param = $param.', ';
                 $param = $param.'`worker_password` = ?';
                 $param_val[] = $worker['worker_password'];
             }
 
             if(isset($worker['worker_project'])) {
+                if($param != '')
+                    $param = $param.', ';
                 $param = $param.'`worker_project` = ?';
                 $param_val[] = $worker['worker_project'];
             }

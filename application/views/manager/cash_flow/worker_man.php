@@ -71,7 +71,6 @@
             </div>
             <div class="modal-body">
                 <input id="edit_worker_id" class="form-control" type="hidden">
-
                 <p>
                     <label for="edit_worker_name" class="control-label">名稱</label>
                     <input id="edit_worker_name" class="form-control" type="text">
@@ -90,6 +89,13 @@
                 <p>
                     <label for="edit_worker_level" class="control-label">權限</label>
                     <input id="edit_worker_level" class="form-control" type="number">
+                </p>
+
+                <p>
+                    <label for="edit_worker_level" class="control-label">所屬計畫/活動</label>
+                    <h4 id="workerEdit_project">
+
+                    </h4>
                 </p>
 
                 <div class="alert alert-danger" id="workerEdit-error">
@@ -131,6 +137,17 @@ $(document).ready(
                         $('#edit_worker_name').attr('value', response['worker_name']);
                         $('#edit_worker_username').attr('value', response['worker_username']);
                         $('#edit_worker_level').attr('value', response['worker_level']);
+                        $('#workerEdit_project').empty();
+
+                        console.log(response['worker_project']);
+                        if(response['worker_project'] != '') {
+                            for (var project in response['worker_project']) {
+                                $('#workerEdit_project').append(
+                                    '<span class="label label-default">'+response['worker_project'][project]['project_name']+'</span>'
+                                    +'<input id="workerEdit_project" name="workerEdit_project" type="hidden" value="'+response['worker_project'][project]['project_id']+'">');
+                            }
+                        }
+
                         $('#editWorkerModal').modal('show');
                     }
                 });
@@ -139,15 +156,22 @@ $(document).ready(
 
         $('#do-workerEdit').click(
             function() {
+                //決定要不要變更密碼
+                var passwordChange = '';
+                if($('#edit_worker_password').val() == '')
+                    passwordChange = false;
+                else
+                    passwordChange = $.md5($('#edit_worker_password').val());
+
                 $.ajax({
-                    url: 'addWorker',
+                    url: 'editWorker',
                     dataType: 'json',
                     type: 'post',
                     data: {
-                        doing: 'updateWorker'
-                        id: $('#edit_worker_id').val(),
+                        doing: 'updateWorker',
+                        userid: $('#edit_worker_id').val(),
                         name: $('#edit_worker_name').val(),
-                        password: $.md5($('#edit_worker_password').val()),
+                        password: passwordChange,
                         level: $('#edit_worker_level').val()
                     },
                     success: function(response) {

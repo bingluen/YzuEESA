@@ -231,16 +231,47 @@ class webMan extends Controller
                     if($_POST['doing'] === 'getDetail' && isset($_POST['userid'])) {
                         try {
                             $data = $WorkerModel->getWorkerDetail($_POST['userid']);
-                            $detail = array(
-                                'worker_name' => $data->worker_name,
-                                'worker_username' => $data->worker_username,
-                                'worker_level' => $data->worker_level,
-                                'worker_project' => $data->worker_project);
                         } catch(Expection $e) {
                             echo json_encode($e->getMessage());
                             exit;
                         }
+
+                        $detail = array(
+                            'worker_name' => $data->worker_name,
+                            'worker_username' => $data->worker_username,
+                            'worker_level' => $data->worker_level);
+
+                        if($data->worker_project != '')
+                        {
+                            //剖析project id
+                            $projectKey = explode(',', $data->worker_project);
+                            for($j = 0; $j < count($projectKey);$j++) {
+                                $projectKey[$j] = str_replace(' ', '', $projectKey[$j]);
+                            }
+
+                            foreach ($projectKey as $key) {
+                                if($name = $ProjectModel->getProjectName($key)) {
+                                    $detail['worker_project'][$i]['project_id'] = $key;
+                                    $detail['worker_project'][$i]['project_name'] = $name;
+                                }
+                            }
+                        }
+
                         echo json_encode($detail);
+                    }
+                    if($_POST['doing'] === 'updateWorker' && isset($_POST['userid'])) {
+                        $data = array(
+                            'worker_id' => $_POST['userid'],
+                            'worker_name' => $_POST['name'],
+                            'worker_level' => $_POST['level']);
+                        if($_POST['password'] != 'false')
+                            $data['worker_password'] = $_POST['password'];
+
+                        $executeR = $WorkerModel->updateWorker(array($data));
+                        if($executeR === true)
+                            echo json_encode('success');
+                        else
+                            echo json_encode($executeR);
                     }
                 }
                 exit;
