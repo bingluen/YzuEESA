@@ -131,6 +131,18 @@ h6 .small,
     color: #BEBEBE !important;
 }
 /*
+--------------- Manage ----------------
+*/
+#login-page {
+    width: 500px;
+    height: 450px;
+    position: absolute;     /*絕對位置*/
+    top: 50%;               /*從上面開始算，下推 50% (一半) 的位置*/
+    left: 50%;              /*從左邊開始算，右推 50% (一半) 的位置*/
+    margin-left: -250px;
+    margin-top: -225px;
+}
+/*
 --------------- event ----------------
 */
 #EventMain

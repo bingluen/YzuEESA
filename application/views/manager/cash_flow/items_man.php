@@ -3,7 +3,7 @@
     <?php
     $first = true;
     foreach ($data['project'] as $project) { ?>
-        <div class="panel panel-primary">
+        <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#project-group" href="#project-<?=$project->project_id; ?>">
@@ -75,8 +75,7 @@ $(document).ready(
                     type: 'post',
                     data: {
                         target: selected,
-                        status: '1',
-                        reviewer: ''
+                        status: '1'
                     },
                     success: function(response) {
                         window.location.reload();

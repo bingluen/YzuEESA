@@ -1,19 +1,124 @@
 <?php
+@session_start();
 class webMan extends Controller
 {
+    private function getIP() {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+          $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+          $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+          $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
+
+    private function deleteSession() {
+        unset($_SESSION['auth']);
+        unset($_SESSION['user']);
+        unset($_SESSION['user_id']);
+        unset($_SESSION['user_ip']);
+        unset($_SESSION['login_time']);
+    }
+
     public function index()
     {
         header("Location: ". URL);
     }
 
-    public function login() {
+    public function login($page = 0, $msg = 0) {
+        if($page === 0) {
+            header("Location: ". URL);
+        }
+
+        $WorkerModel = $this->loadModel('workermodel');
+        if($page === 'doLogin') {
+            if($msg === 'AuthError0' )
+                $msg = '此帳號已經被停權';
+            $page = 'login';
+            $this->loadView('_templates/header_man', $page);
+            $this->loadView('manager/login', $msg);
+            $this->loadView('_templates/footer_man');
+        }
+
+        if($page === 'Auth') {
+            if(isset($_POST['username']) && isset($_POST['password'])) {
+
+                //驗證是否已透過md5加密，並收下登入資訊
+                if(strlen($_POST['password']) == 32)
+                    $authData = array('user' => $_POST['username'], 'pw' => $_POST['password']);
+
+                //驗證登入資料
+                try {
+                    $authResult = $WorkerModel->authUser($authData);
+                } catch (Exception $e) {
+                    echo json_encode($e->getMessage());
+                    exit;
+                }
+
+                //驗證成功 寫入session & 更新登入紀錄
+                if($authResult['auth']) {
+                    $_SESSION['auth'] = 'yes';
+                    $_SESSION['user'] = $authData['user'];
+                    $_SESSION['user_id'] = $authResult['userid'];
+                    $_SESSION['level'] = $authResult['level'];
+                    $_SESSION['user_ip'] = $this->getIP();
+                    $_SESSION['login_time'] = date('Y-m-d H:i:s');
+
+                    $WorkerModel->updateWorker(array(
+                        'worker_id' => $_SESSION['user_id'],
+                        'worker_lastIP' => $_SESSION['user_ip'],
+                        'worker_lastlogin' => $_SESSION['login_time']));
+
+                    echo json_encode('success');
+                    exit;
+                }
+
+                exit;
+            }
+
+            header("Location: ". URL);
+        }
+
+        if($page === 'AuthSuccess') {
+            echo '<pre>';
+            var_dump($_SESSION);
+            echo '</pre>';
+        }
 
     }
 
     public function CashFlow($page = 0, $action = 0) {
+
         if($page === 0) {
             header("Location: ". URL);
         }
+
+        if(!(isset($_SESSION['auth'])
+            && $_SESSION['auth'] == 'yes')) {
+            //沒過驗證轉回首頁
+            $this->deleteSession();
+            header("Location: ". URL);
+        } else if(!(isset($_SESSION['user_ip'])
+            && $_SESSION['user_ip'] == $this->getIP())) {
+            //ip位址和登入時不同轉回首頁
+            $this->deleteSession();
+            header("Location: ". URL);
+        } else if(!(isset($_SESSION['login_time'])
+            && time() - strtotime($_SESSION['login_time']) <= 1800)) {
+            //超過30分鐘沒動作 轉回登入頁面
+            $this->deleteSession();
+            header("Location: ". URL."login/doLogin");
+        } else if(!(isset($_SESSION['level'])
+            && $_SESSION['level'] > 0)) {
+            //停權
+            $this->deleteSession();
+            header("Location: ". URL."login/doLogin/AuthError0");
+        } else {
+            //刷新最後動作時間
+            $_SESSION['login_time'] = date('Y-m-d H:i:s');
+        }
+
         // Loading Model
         $ProjectModel = $this->loadModel('projectmodel');
         $WorkerModel = $this->loadModel('workermodel');
@@ -138,8 +243,12 @@ class webMan extends Controller
                         'items_reviewer' => $_POST['reviewer'],
                         'items_rev_time' => date('Y-m-d H:i:s'));
                 }
-                if($ItemsModel->updateItems($update)) {
+
+                $result = $ItemsModel->updateItems($update);
+                if($result === true) {
                     echo json_encode('success');
+                } else {
+                    echo json_encode($result);
                 }
                 exit;
             }
@@ -198,7 +307,7 @@ class webMan extends Controller
                         'worker_id' => $target,
                         'worker_level' => 0);
                 }
-                $doDisable = $WorkerModel->updateWorker($disable);
+                $doDisable = $WorkerModel->updateWorker($disable, true);
 
                 if($doDisable) {
                     echo json_encode('已經將所選取工人帳號停權。');
@@ -267,7 +376,7 @@ class webMan extends Controller
                         if($_POST['password'] != 'false')
                             $data['worker_password'] = $_POST['password'];
 
-                        $executeR = $WorkerModel->updateWorker(array($data));
+                        $executeR = $WorkerModel->updateWorker($data);
                         if($executeR === true)
                             echo json_encode('success');
                         else

@@ -66,6 +66,9 @@ class WorkerModel
                return $e->getMessage();
         }
 
+        if(!$result)
+            return 'Null';
+
         return $result->worker_name;
     }
 
@@ -165,40 +168,111 @@ class WorkerModel
         return $execute_result;
     }
 
-    function updateWorker($data) {
-        foreach ($data as $worker) {
+    function updateWorker($data, $batch = false) {
+        if($batch) {
+            foreach ($data as $worker) {
+                $param = '';
+                $param_val = '';
+
+                if(isset($worker['worker_level'])) {
+                    if($param != '')
+                        $param = $param.', ';
+                    $param = $param.'`worker_level` = ?';
+                    $param_val[] = $worker['worker_level'];
+                }
+
+                if(isset($worker['worker_name'])) {
+                    if($param != '')
+                        $param = $param.', ';
+                    $param = $param.'`worker_name` = ?';
+                    $param_val[] = $worker['worker_name'];
+                }
+
+                if(isset($worker['worker_password'])) {
+                    if($param != '')
+                        $param = $param.', ';
+                    $param = $param.'`worker_password` = ?';
+                    $param_val[] = $worker['worker_password'];
+                }
+
+                if(isset($worker['worker_project'])) {
+                    if($param != '')
+                        $param = $param.', ';
+                    $param = $param.'`worker_project` = ?';
+                    $param_val[] = $worker['worker_project'];
+                }
+
+                if(isset($worker['worker_lastlogin'])) {
+                    if($param != '')
+                        $param = $param.', ';
+                    $param = $param.'`worker_lastlogin` = ?';
+                    $param_val[] = $worker['worker_lastlogin'];
+                }
+
+                if(isset($worker['worker_lastIP'])) {
+                    if($param != '')
+                        $param = $param.', ';
+                    $param = $param.'`worker_lastIP` = ?';
+                    $param_val[] = $worker['worker_lastIP'];
+                }
+
+                $param_val[] = $worker['worker_id'];
+
+                try {
+                    $sql = "UPDATE `worker` SET $param WHERE `worker_id` = ?;";
+                    $query = $this->db->prepare($sql);
+                    $result = $query->execute($param_val);
+                } catch(Exception $e) {
+                    return $e->getMessage();
+                }
+            }
+        } else {
             $param = '';
             $param_val = '';
 
-            if(isset($worker['worker_level'])) {
+            if(isset($data['worker_level'])) {
                 if($param != '')
                     $param = $param.', ';
                 $param = $param.'`worker_level` = ?';
-                $param_val[] = $worker['worker_level'];
+                $param_val[] = $data['worker_level'];
             }
 
-            if(isset($worker['worker_name'])) {
+            if(isset($data['worker_name'])) {
                 if($param != '')
                     $param = $param.', ';
                 $param = $param.'`worker_name` = ?';
-                $param_val[] = $worker['worker_name'];
+                $param_val[] = $data['worker_name'];
             }
 
-            if(isset($worker['worker_password'])) {
+            if(isset($data['worker_password'])) {
                 if($param != '')
                     $param = $param.', ';
                 $param = $param.'`worker_password` = ?';
-                $param_val[] = $worker['worker_password'];
+                $param_val[] = $data['worker_password'];
             }
 
-            if(isset($worker['worker_project'])) {
+            if(isset($data['worker_project'])) {
                 if($param != '')
                     $param = $param.', ';
                 $param = $param.'`worker_project` = ?';
-                $param_val[] = $worker['worker_project'];
+                $param_val[] = $data['worker_project'];
             }
 
-            $param_val[] = $worker['worker_id'];
+            if(isset($data['worker_lastlogin'])) {
+                if($param != '')
+                    $param = $param.', ';
+                $param = $param.'`worker_lastlogin` = ?';
+                $param_val[] = $data['worker_lastlogin'];
+            }
+
+            if(isset($data['worker_lastIP'])) {
+                if($param != '')
+                    $param = $param.', ';
+                $param = $param.'`worker_lastIP` = ?';
+                $param_val[] = $data['worker_lastIP'];
+            }
+
+            $param_val[] = $data['worker_id'];
 
             try {
                 $sql = "UPDATE `worker` SET $param WHERE `worker_id` = ?;";
@@ -208,6 +282,7 @@ class WorkerModel
                 return $e->getMessage();
             }
         }
+
 
         return true;
     }
@@ -253,6 +328,31 @@ class WorkerModel
             throw new Exception("沒有此工人資料", 4);
 
         return $result;
+    }
+
+    function authUser($authData) {
+        //拉出密碼來比對
+        try {
+            $sql = "SELECT `worker_password`, `worker_id`,`worker_level` FROM `worker` WHERE `worker_username` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($authData['user']));
+            $result = $query->fetch();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+
+        if(!$result)
+            throw new Exception('帳號不存在', 901);
+
+        if($result->worker_password === $authData['pw']) {
+            $authResult['auth'] = true;
+            $authResult['userid'] = $result->worker_id;
+            $authResult['level'] = $result->worker_level;
+            return $authResult;
+        } else {
+            throw new Exception('帳號或密碼錯誤', 902);
+        }
+
     }
 }
 ?>
