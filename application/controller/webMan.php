@@ -81,9 +81,34 @@ class webMan extends Controller
         }
 
         if($page === 'AuthSuccess') {
-            echo '<pre>';
-            var_dump($_SESSION);
-            echo '</pre>';
+            if(!(isset($_SESSION['auth'])
+                && $_SESSION['auth'] == 'yes')) {
+                //沒過驗證轉回首頁
+                $this->deleteSession();
+                header("Location: ". URL);
+            } else if(!(isset($_SESSION['user_ip'])
+                && $_SESSION['user_ip'] == $this->getIP())) {
+                //ip位址和登入時不同轉回首頁
+                $this->deleteSession();
+                header("Location: ". URL);
+            } else if(!(isset($_SESSION['login_time'])
+                && time() - strtotime($_SESSION['login_time']) <= 1800)) {
+                //超過30分鐘沒動作 轉回登入頁面
+                $this->deleteSession();
+                header("Location: ". URL."login/doLogin");
+            } else if(!(isset($_SESSION['level'])
+                && $_SESSION['level'] > 0)) {
+                //停權
+                $this->deleteSession();
+                header("Location: ". URL."login/doLogin/AuthError0");
+            } else {
+                //刷新最後動作時間
+                $_SESSION['login_time'] = date('Y-m-d H:i:s');
+            }
+
+            $this->loadView('_templates/header_man');
+            $this->loadView('manager/user_information');
+            $this->loadView('_templates/footer_man');
         }
 
     }

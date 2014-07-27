@@ -2,7 +2,7 @@
     <div class="panel panel-default" id="login-form">
         <div class="panel-heading">管理系統登入</div>
         <div class="panel-body">
-            <?php if($msg != 0) { ?>
+            <?php if(isset($msg) && $msg != 0) { ?>
             <div class="alert alert-danger" id="auth-error">
                 <strong>授權失敗 :</strong><?=$msg?>
             </div>
