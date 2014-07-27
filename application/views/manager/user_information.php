@@ -1,3 +1,3 @@
-<div class="main-content-with-sidebar">
+<div class="main-content-with-sidebar tab-content">
 
 </div>

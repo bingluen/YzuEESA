@@ -1,4 +1,5 @@
-<div class="main-content-with-sidebar">
+<div class="tab-content panel" id="man-content">
+    <div class="tab-pane fade active in">
     <div class="panel-group" id="project-group">
     <?php
     $first = true;
@@ -57,6 +58,7 @@
     $first = false;
      } ?>
     </div>
+</div>
 </div>
 
 <script type="text/javascript">

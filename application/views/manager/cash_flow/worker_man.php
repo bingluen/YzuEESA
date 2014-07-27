@@ -1,5 +1,5 @@
-
-<div class="main-content-with-sidebar">
+<div class="tab-content panel" id="man-content">
+    <div class="tab-pane fade active in">
     <h3>工人名單</h3>
         <table class="table">
             <thead>
@@ -35,6 +35,7 @@
             <button id="worker-disable-btn" type="button" class="btn btn-sm btn-warning">停權</button>
             <button id="worker-delete-btn" type="button" class="btn btn-sm btn-danger">刪除</button>
         </div>
+    </div>
 </div>
 
 

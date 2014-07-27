@@ -21,5 +21,9 @@
     <link rel="stylesheet" href="<?php echo URL; ?>public/css/yzueesa.css">
 </head>
 <body>
-<?php if(!(isset($page) && $page =='login')) { ?><div id="Content"> <?php } ?>
+<?php if(!(isset($page) && $page =='login')) { ?>
+<div id="Content">
+    <div class="">
+        <div class="tabbable tabs-left clearfix">
+<?php } ?>
 <!-- header -->

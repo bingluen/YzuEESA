@@ -106,7 +106,9 @@ class webMan extends Controller
                 $_SESSION['login_time'] = date('Y-m-d H:i:s');
             }
 
+            $active = 'home';
             $this->loadView('_templates/header_man');
+            $this->loadView('manager/sidebar', $active);
             $this->loadView('manager/user_information');
             $this->loadView('_templates/footer_man');
         }
@@ -230,7 +232,9 @@ class webMan extends Controller
             }
 
             //呈現頁面
+            $active = 'CashFlow';
             $this->loadView('_templates/header_man');
+            $this->loadView('manager/sidebar', $active);
             $this->loadView('manager/cash_flow/project_man', $data);
             $this->loadView('_templates/footer_man');
         }
@@ -279,7 +283,9 @@ class webMan extends Controller
             }
 
             //呈現頁面
+            $active = 'CashFlow';
             $this->loadView('_templates/header_man');
+            $this->loadView('manager/sidebar', $active);
             $this->loadView('manager/cash_flow/items_man', $data);
             $this->loadView('_templates/footer_man');
         }
@@ -412,7 +418,9 @@ class webMan extends Controller
             }
 
             //呈現頁面
+            $active = 'Worker';
             $this->loadView('_templates/header_man');
+            $this->loadView('manager/sidebar', $active);
             $this->loadView('manager/cash_flow/worker_man', $data);
             $this->loadView('_templates/footer_man');
         }

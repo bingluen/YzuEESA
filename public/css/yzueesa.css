@@ -90,6 +90,7 @@ h2
     margin-bottom: 30px;
     position: relative;
     width: 90%;
+    margin: auto;
 }
 .footer {
     color: #F8F8F8;
@@ -129,6 +130,10 @@ h6 .small,
 .h5 .small,
 .h6 .small {
     color: #BEBEBE !important;
+}
+
+.table {
+    width: 99% !important;
 }
 /*
 --------------- Manage ----------------
@@ -245,17 +250,18 @@ h6 .small,
     }
 }
 
-@media screen and (max-width: 767px)
+@media screen and (max-width: 849px)
 {
-    .sidebar-fixed
-    {
-        display: none;
-    }
 
-    .main-content-with-sidebar
+    #man-sidebar
     {
-        margin: auto;
-        width: 80%;
+        display:none;
+    }
+    #man-sidebar-max1023
+    {
+        border-bottom: none;
+        background-color: #e6e9ed !important;
+        display: inline-block;
     }
 }
 
@@ -324,39 +330,27 @@ h6 .small,
         position: relative;
         width: 90%;
     }
-
-    .main-content-with-sidebar
-    {
-        float: right;
-        margin-bottom: 30px;
-        margin-left: 5px;
-        position: relative;
-        width: 65%;
-    }
-
-    .sidebar-fixed
-    {
-        float: left;
-        margin-left: 15px;
-        margin-right: 15px;
-        margin-top: 40px;
-        position: fixed;
-        width: 200px;
-        display: block;
-    }
 }
 
 @media screen and (min-width: 850px)
 {
-    .sidebar-fixed
+    #man-sidebar-max1023
     {
-        float: left;
-        left: 5%;
-        margin-right: 15px;
-        margin-top: 40px;
-        position: fixed;
-        width: 200px;
+        display: none;
+    }
+
+    #man-sidebar
+    {
+        width:200px;
+        border-right: none;
+        background-color: #e6e9ed !important;
         display: block;
+    }
+
+    #man-content
+    {
+        margin-left: 202px;
+        width:70%;
     }
 }
 
@@ -378,13 +372,6 @@ h6 .small,
 {
     .sidebar-fixed
     {
-        float: left;
-        left: 10%;
-        margin-right: 15px;
-        position: fixed;
-        margin-top: 40px;
-        width: 15%;
-        display: block;
     }
 }
 
