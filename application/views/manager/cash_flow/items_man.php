@@ -3,7 +3,7 @@
     <?php
     foreach ($data['project'] as $project) { ?>
             <h4>
-                ＃<?=$project->project_name; ?><small>計畫負責人：<?=$project->project_host; ?></small>
+                ＃<?=$project->project_name; ?><small class="text-right">計畫負責人：<?=$project->project_host; ?></small>
             </h4>
             <table class="table">
                 <thead>

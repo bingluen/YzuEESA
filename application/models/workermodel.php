@@ -333,7 +333,7 @@ class WorkerModel
     function authUser($authData) {
         //拉出密碼來比對
         try {
-            $sql = "SELECT `worker_password`, `worker_id`,`worker_level` FROM `worker` WHERE `worker_username` = ?;";
+            $sql = "SELECT `worker_id`, `worker_password`, `worker_level`, `worker_project` FROM `worker` WHERE `worker_username` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($authData['user']));
             $result = $query->fetch();
@@ -348,6 +348,7 @@ class WorkerModel
             $authResult['auth'] = true;
             $authResult['userid'] = $result->worker_id;
             $authResult['level'] = $result->worker_level;
+            $authResult['project'] = $result->worker_project;
             return $authResult;
         } else {
             throw new Exception('帳號或密碼錯誤', 902);

@@ -1,12 +1,19 @@
 <ul class="panel nav nav-tabs nav-justified"  id="man-sidebar">
     <li <?php if($data == 'home') echo 'class="active"'; ?>><a href="">管理首頁</a></li>
-    <li <?php if($data == 'CashFlow') echo 'class="active"'; ?>><a href="#" id="cashflow_tab" class="dropdown-toggle" data-toggle="dropdown">金流系統 <b class="caret"></b></a>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+    <li <?php if($data == 'CashFlow') echo 'class="active"'; ?>>
+        <a href="#" id="cashflow_tab" class="dropdown-toggle" data-toggle="dropdown">金流系統 <b class="caret"></b></a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="CashTabDrop">
             <li><a href="<?php echo URL ?>webMan/CashFlow/Project" tabindex="-1" data-toggle="cashflow_tab">Project</a></li>
             <li><a href="<?php echo URL ?>webMan/CashFlow/Items" tabindex="-1" data-toggle="cashflow_tab">Items</a></li>
         </ul>
     </li>
-    <li <?php if($data == 'Worker') echo 'class="active"'; ?>><a href="<?php echo URL ?>webMan/CashFlow/Worker">工人帳號</a></li>
+    <li <?php if($data == 'Worker') echo 'class="active"'; ?>>
+        <a href="#" id="worker_tab" class="dropdown-toggle" data-toggle="dropdown">工人系統 <b class="caret"></b></a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="workerTabDrop">
+            <li><a href="<?php echo URL ?>webMan/Worker/Worker" tabindex="-1" data-toggle="worker_tab">工人帳號</a></li>
+            <li><a href="<?php echo URL ?>webMan/Worker/Authority" tabindex="-1" data-toggle="worker_tab">權限設定</a></li>
+        </ul>
+    </li>
     <li><a href="">登出系統</a></li>
 </ul>
 

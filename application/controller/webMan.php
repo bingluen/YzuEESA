@@ -37,7 +37,10 @@ class webMan extends Controller
                 $data['msg'] = '此帳號已經被停權';
             $page = 'login';
             $this->loadView('_templates/header_man', $page);
-            $this->loadView('manager/login', $data['msg']);
+            if(isset($data['msg']))
+                $this->loadView('manager/login', $data['msg']);
+            else
+                $this->loadView('manager/login');
             $this->loadView('_templates/footer_man');
         }
 
@@ -62,6 +65,7 @@ class webMan extends Controller
                     $_SESSION['user'] = $authData['user'];
                     $_SESSION['user_id'] = $authResult['userid'];
                     $_SESSION['level'] = $authResult['level'];
+                    $_SESSION['user_project'] = $authResult['project'];
                     $_SESSION['user_ip'] = $this->getIP();
                     $_SESSION['login_time'] = date('Y-m-d H:i:s');
 
@@ -289,6 +293,42 @@ class webMan extends Controller
             $this->loadView('manager/cash_flow/items_man', $data);
             $this->loadView('_templates/footer_man');
         }
+    }
+
+    public function Worker($page = 0, $action = 0) {
+        if($page === 0) {
+            header("Location: ". URL);
+        }
+
+        if(!(isset($_SESSION['auth'])
+            && $_SESSION['auth'] == 'yes')) {
+            //沒過驗證轉回首頁
+            $this->deleteSession();
+            header("Location: ". URL);
+        } else if(!(isset($_SESSION['user_ip'])
+            && $_SESSION['user_ip'] == $this->getIP())) {
+            //ip位址和登入時不同轉回首頁
+            $this->deleteSession();
+            header("Location: ". URL);
+        } else if(!(isset($_SESSION['login_time'])
+            && time() - strtotime($_SESSION['login_time']) <= 1800)) {
+            //超過30分鐘沒動作 轉回登入頁面
+            $this->deleteSession();
+            header("Location: ". URL."login/doLogin");
+        } else if(!(isset($_SESSION['level'])
+            && $_SESSION['level'] > 0)) {
+            //停權
+            $this->deleteSession();
+            header("Location: ". URL."login/doLogin/AuthError0");
+        } else {
+            //刷新最後動作時間
+            $_SESSION['login_time'] = date('Y-m-d H:i:s');
+        }
+
+        // Loading Model
+        $ProjectModel = $this->loadModel('projectmodel');
+        $WorkerModel = $this->loadModel('workermodel');
+        $ItemsModel = $this->loadModel('itemsmodel');
 
         if($page === 'Worker') {
             if($action == 0) {
@@ -421,7 +461,7 @@ class webMan extends Controller
             $active = 'Worker';
             $this->loadView('_templates/header_man');
             $this->loadView('manager/sidebar', $active);
-            $this->loadView('manager/cash_flow/worker_man', $data);
+            $this->loadView('manager/worker/worker_man', $data);
             $this->loadView('_templates/footer_man');
         }
     }
