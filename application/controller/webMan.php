@@ -110,10 +110,12 @@ class webMan extends Controller
                 $_SESSION['login_time'] = date('Y-m-d H:i:s');
             }
 
+            $data['class'] = $WorkerModel->getClassName($_SESSION['level']);
+            $data['name'] = $WorkerModel->getWorkerName($_SESSION['user_id']);
             $active = 'home';
             $this->loadView('_templates/header_man');
             $this->loadView('manager/sidebar', $active);
-            $this->loadView('manager/user_information');
+            $this->loadView('manager/user_information', $data);
             $this->loadView('_templates/footer_man');
         }
 
@@ -466,5 +468,8 @@ class webMan extends Controller
         }
     }
 
+    public function Messages($page = 0, $action) {
+
+    }
 }
 ?>

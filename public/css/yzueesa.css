@@ -148,6 +148,24 @@ h6 .small,
     margin-top: -225px;
 }
 /*
+--------------- Man ------------------
+
+*/
+#man-sidebar
+{
+    background-color: #e6e9ed !important;
+    display: block;
+}
+
+#man-content
+{
+}
+
+#man-MainContent
+{
+    margin: 50px;
+}
+/*
 --------------- event ----------------
 */
 #EventMain
@@ -322,17 +340,6 @@ h6 .small,
     #man-sidebar-max1023
     {
         display: none;
-    }
-
-    #man-sidebar
-    {
-        border-right: none;
-        background-color: #e6e9ed !important;
-        display: block;
-    }
-
-    #man-content
-    {
     }
 }
 

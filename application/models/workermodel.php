@@ -124,17 +124,29 @@ class WorkerModel
 
     function deleteWorker($data) {
 
-        //先檢查金流系統中有沒有該工人申請的資料
         $deleteList = '';
+        $List = '';
         $deleteCount = 0;
         $not_delete = '';
         $notDeleteCount = 0;
+        //檢查是不是SuperAdmin
         foreach($data as $items_id) {
+            try {
+                $level = $this->getLevel($items_id);
+            } catch(Exception $e) {
+                return $e->getMessage();
+            }
+            if($level != 999)
+                $List[] = $items_id;
+        }
+
+        //先檢查金流系統中有沒有該工人申請的資料
+        foreach($List as $items_id) {
             try {
                 $sql = "SELECT COUNT(*) AS count FROM `cf_items` WHERE `items_applicant` = ?;";
                 $query = $this->db->prepare($sql);
                 $query->execute(array($items_id));
-                $result = $query->fetch();
+                $result = $que2ry->fetch();
             } catch(Exception $e) {
                     return $e->getMessage();
             }
@@ -353,6 +365,48 @@ class WorkerModel
         } else {
             throw new Exception('帳號或密碼錯誤', 902);
         }
+    }
+
+    function getLevel($key = 0, $index = 0) {
+        if($index == 0 || $key == 0)
+            throw new Exception("No key or index be assigned", 990);
+
+        if($index != 'worker_id' && $index != 'worker_name' && $index != 'worker_username')
+            throw new Exception("the index value is error", 991);
+
+
+        try {
+            $sql = "SELECT `worker_level` AS level FROM `worker` WHERE `$index` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($key));
+            $result = $query->fetchAll();
+        } catch(Exception $e) {
+               return $e->getMessage();
+        }
+
+        if(count($result) === 0)
+            throw new Exception('沒有這個工人啦！', 992);
+
+        if(count($result) > 1)
+            throw new Exception("有多個工人符合條件，請變更key或index", 993);
+
+        return $result[0]->level;
+    }
+
+    function getClassName($level) {
+        try {
+            $sql = "SELECT `class_name` AS class FROM `worker_class` WHERE `class_level` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($level));
+            $result = $query->fetch();
+        } catch(Exception $e) {
+               return $e->getMessage();
+        }
+
+        if(!$result)
+            throw new Exception("this level isn't exists.", 980);
+
+        return $result->class;
 
     }
 }
