@@ -34,10 +34,10 @@ class webMan extends Controller
         $WorkerModel = $this->loadModel('workermodel');
         if($page === 'doLogin') {
             if($msg === 'AuthError0' )
-                $msg = '此帳號已經被停權';
+                $data['msg'] = '此帳號已經被停權';
             $page = 'login';
             $this->loadView('_templates/header_man', $page);
-            $this->loadView('manager/login', $msg);
+            $this->loadView('manager/login', $data['msg']);
             $this->loadView('_templates/footer_man');
         }
 

@@ -2,9 +2,9 @@
     <div class="panel panel-default" id="login-form">
         <div class="panel-heading">管理系統登入</div>
         <div class="panel-body">
-            <?php if(isset($msg) && $msg != 0) { ?>
+            <?php if(isset($data['msg']) && $data['msg'] != 0) { ?>
             <div class="alert alert-danger" id="auth-error">
-                <strong>授權失敗 :</strong><?=$msg?>
+                <strong>授權失敗 :</strong><?=$data['msg']?>
             </div>
             <?php } ?>
             <div class="form-group">
@@ -36,6 +36,7 @@ function goTo() {
     }
     document.location.href=ary[0]+'login/AuthSuccess';
 }
+
 $(document).ready(
     function() {
         $('#close_error_message').click(
@@ -52,6 +53,8 @@ $(document).ready(
 
         $('#doLogin').click(
             function () {
+                $('#login-success').hide();
+                $('#login-error').hide();
                 var url = window.location.toString();
                 if(url.indexOf("login/")!=-1)  {
                     var ary=url.split("login/");

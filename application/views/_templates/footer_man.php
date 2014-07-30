@@ -1,3 +1,3 @@
-<?php if(isset($page) && $page !='login') { ?><?php } ?>
+<?php if(isset($data) && $data !='login') { ?><?php } ?>
 </body>
 </html>
