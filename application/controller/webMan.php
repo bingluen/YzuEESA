@@ -119,6 +119,11 @@ class webMan extends Controller
             $this->loadView('_templates/footer_man');
         }
 
+        if($page === 'Logout') {
+            $this->deleteSession();
+            header("Location: ". URL."login/doLogin/");
+        }
+
     }
 
     public function CashFlow($page = 0, $action = 0) {
@@ -468,8 +473,59 @@ class webMan extends Controller
         }
     }
 
-    public function Messages($page = 0, $action) {
+    public function MessagesSystem($page = 0, $action = 0) {
+        if($page === 0) {
+            header("Location: ". URL);
+        }
 
+        if(!(isset($_SESSION['auth'])
+            && $_SESSION['auth'] == 'yes')) {
+            //沒過驗證轉回首頁
+            $this->deleteSession();
+            header("Location: ". URL);
+        } else if(!(isset($_SESSION['user_ip'])
+            && $_SESSION['user_ip'] == $this->getIP())) {
+            //ip位址和登入時不同轉回首頁
+            $this->deleteSession();
+            header("Location: ". URL);
+        } else if(!(isset($_SESSION['login_time'])
+            && time() - strtotime($_SESSION['login_time']) <= 1800)) {
+            //超過30分鐘沒動作 轉回登入頁面
+            $this->deleteSession();
+            header("Location: ". URL."login/doLogin");
+        } else if(!(isset($_SESSION['level'])
+            && $_SESSION['level'] > 0)) {
+            //停權
+            $this->deleteSession();
+            header("Location: ". URL."login/doLogin/AuthError0");
+        } else {
+            //刷新最後動作時間
+            $_SESSION['login_time'] = date('Y-m-d H:i:s');
+        }
+
+        //Loading Model
+        $ArticleModel = $this->loadModel('articlemodel');
+
+
+        if($page === 'NewPost') {
+            if($action === 'post') {
+                $postData['title'] = $_POST['title'];
+                $postData['content'] = $_POST['content'];
+                $postData['author'] = $_POST['author'];
+                $postData['time'] = date('Y-m-d H:i:s');
+
+                if($post = $ArticleModel->post($postData))
+                    echo json_encode('success');
+                else
+                    echo json_encode('fail');
+                exit;
+            }
+            $active = 'Messages';
+            $this->loadView('_templates/header_man');
+            $this->loadView('manager/sidebar', $active);
+            $this->loadView('manager/messages/editor');
+            $this->loadView('_templates/footer_man');
+        }
     }
 }
 ?>
