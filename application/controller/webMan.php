@@ -440,6 +440,7 @@ class webMan extends Controller
 
         //Loading Model
         $ArticleModel = $this->loadModel('articlemodel');
+        $WorkerModel = $this->loadModel('workermodel');
 
 
         if($page === 'editor') {
@@ -470,6 +471,7 @@ class webMan extends Controller
             if($action === 'new') {
                 $postData['title'] = $_POST['title'];
                 $postData['content'] = $_POST['content'];
+                $postData['draft'] = $_POST['draft'];
                 $postData['author'] = $_SESSION['user_id'];
                 $postData['time'] = date('Y-m-d H:i:s');
 
@@ -488,18 +490,92 @@ class webMan extends Controller
                 $postData['post_id'] = $_POST['id'];
                 $postData['title'] = $_POST['title'];
                 $postData['content'] = $_POST['content'];
+                $postData['draft'] = $_POST['draft'];
                 $postData['author'] = $_SESSION['user_id'];
                 $postData['time'] = date('Y-m-d H:i:s');
 
                 try {
                     $ArticleModel->updatePost($postData);
+                    echo json_encode('success');
                 } catch (Exception $e) {
                     echo json_encode('fail :'.$e->getMessage());
-                    exit;
                 }
-                echo json_encode('success');
                 exit;
             }
+        }
+
+        if($page === 'PostList') {
+
+            if(is_numeric($action) && $action > 0) {
+                //先決定第幾頁
+                $pageNumber = $action - 1;
+
+                //開始撈資料
+                try {
+                    $data = $ArticleModel->listPost($pageNumber, 30, 1);
+                     //把編輯者名字名字拉回來
+                    for($i = 0;$i < count($data);$i++) {
+                        $data[$i]->messages_author = $WorkerModel->getWorkerName($data[$i]->messages_author);
+                    }
+                    echo json_encode($data);
+                } catch (Exception $e) {
+                    echo json_encode($e->getMessage());
+                }
+                exit;
+            } else {
+                $data['pages'] =  $ArticleModel->getPages(30);
+                $active = 'Messages';
+                $this->loadView('_templates/header_man');
+                $this->loadView('manager/sidebar', $active);
+                $this->loadView('manager/messages/postList', $data);
+                $this->loadView('_templates/footer_man');
+            }
+        }
+
+        if($page === 'delete') {
+
+            foreach ($_POST['target'] as $target) {
+                $list[] = $target;
+            }
+
+            try {
+                $ArticleModel->deletePost($list);
+                echo json_encode('success');
+            } catch (Exception $e) {
+                echo json_encode('fail'. $e->getMessage());
+            }
+            exit;
+        }
+
+        if($page === 'draft') {
+
+            foreach ($_POST['target'] as $target) {
+                $list[] = $target;
+            }
+
+            try {
+                $ArticleModel->draftPost($list);
+                echo json_encode('success');
+            } catch (Exception $e) {
+                echo json_encode('fail'. $e->getMessage());
+            }
+            exit;
+
+        }
+
+        if($page === 'public') {
+
+            foreach ($_POST['target'] as $target) {
+                $list[] = $target;
+            }
+
+            try {
+                $ArticleModel->publicPost($list);
+                echo json_encode('success');
+            } catch (Exception $e) {
+                echo json_encode('fail'. $e->getMessage());
+            }
+            exit;
         }
     }
 }

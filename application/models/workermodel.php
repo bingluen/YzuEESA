@@ -25,7 +25,7 @@ class WorkerModel
             $query->execute(array($worker, $worker));
             $result = $query->fetch();
         } catch(Exception $e) {
-               return $e->getMessage();
+               throw new Exception($e->getMessage());
         }
 
         if($result->count === '0')
@@ -44,7 +44,7 @@ class WorkerModel
             $query->execute(array($worker, $worker));
             $result = $query->fetchAll();
         } catch(Exception $e) {
-               return $e->getMessage();
+               throw new Exception($e->getMessage());
         }
 
         if(count($result) === '0')
@@ -63,7 +63,7 @@ class WorkerModel
             $query->execute(array($worker));
             $result = $query->fetch();
         } catch(Exception $e) {
-               return $e->getMessage();
+               throw new Exception($e->getMessage());
         }
 
         if(!$result)
@@ -80,7 +80,7 @@ class WorkerModel
             $query->execute(array($worker, $worker, $worker));
             $result = $query->fetchAll();
         } catch(Exception $e) {
-               return $e->getMessage();
+               throw new Exception($e->getMessage());
         }
 
         if(count($result) === 0)
@@ -105,7 +105,7 @@ class WorkerModel
             $query = $this->db->prepare($sql);
             $query->execute(array($auth, $worker, $worker, $worker));
         } catch(Exception $e) {
-               return $e->getMessage();
+               throw new Exception($e->getMessage());
         }
     }
 
@@ -116,7 +116,7 @@ class WorkerModel
             $query->execute();
             $result = $query->fetchAll();
         } catch(Expection $e) {
-            return $e->getMessage();
+            throw new Exception($e->getMessage());
         }
 
         return $result;
@@ -134,7 +134,7 @@ class WorkerModel
             try {
                 $level = $this->getLevel($items_id);
             } catch(Exception $e) {
-                return $e->getMessage();
+                throw new Exception($e->getMessage());
             }
             if($level != 999)
                 $List[] = $items_id;
@@ -148,7 +148,7 @@ class WorkerModel
                 $query->execute(array($items_id));
                 $result = $que2ry->fetch();
             } catch(Exception $e) {
-                    return $e->getMessage();
+                    throw new Exception($e->getMessage());
             }
 
             if($result->count === '0') {
@@ -169,7 +169,7 @@ class WorkerModel
                     $query = $this->db->prepare($sql);
                     $query->execute(array($deleteItem));
                 } catch(Exception $e) {
-                        return $e->getMessage();
+                        throw new Exception($e->getMessage());
                 }
             }
         }
@@ -235,7 +235,7 @@ class WorkerModel
                     $query = $this->db->prepare($sql);
                     $result = $query->execute($param_val);
                 } catch(Exception $e) {
-                    return $e->getMessage();
+                    throw new Exception($e->getMessage());
                 }
             }
         } else {
@@ -291,7 +291,7 @@ class WorkerModel
                 $query = $this->db->prepare($sql);
                 $result = $query->execute($param_val);
             } catch(Exception $e) {
-                return $e->getMessage();
+                throw new Exception($e->getMessage());
             }
         }
 
@@ -307,7 +307,7 @@ class WorkerModel
             $query->execute(array($data['worker_username']));
             $result = $query->fetchAll();
         } catch(Exception $e) {
-               return $e->getMessage();
+               throw new Exception($e->getMessage());
         }
 
         //已經有人用了，回傳資訊
@@ -320,7 +320,7 @@ class WorkerModel
             $query = $this->db->prepare($sql);
             $query->execute(array($data['worker_level'], $data['worker_name'], $data['worker_username'], $data['worker_password']));
         } catch(Exception $e) {
-               return $e->getMessage();
+               throw new Exception($e->getMessage());
         }
 
         return true;
@@ -333,7 +333,7 @@ class WorkerModel
             $query->execute(array($id));
             $result = $query->fetch();
         } catch(Expection $e) {
-            return $e->getMessage();
+            throw new Exception($e->getMessage());
         }
 
         if(count($result) == 0)
@@ -350,7 +350,7 @@ class WorkerModel
             $query->execute(array($authData['user']));
             $result = $query->fetch();
         } catch (Exception $e) {
-            return $e->getMessage();
+            throw new Exception($e->getMessage());
         }
 
         if(!$result)
@@ -381,7 +381,7 @@ class WorkerModel
             $query->execute(array($key));
             $result = $query->fetchAll();
         } catch(Exception $e) {
-               return $e->getMessage();
+               throw new Exception($e->getMessage());
         }
 
         if(count($result) === 0)
@@ -400,7 +400,7 @@ class WorkerModel
             $query->execute(array($level));
             $result = $query->fetch();
         } catch(Exception $e) {
-               return $e->getMessage();
+               throw new Exception($e->getMessage());
         }
 
         if(!$result)

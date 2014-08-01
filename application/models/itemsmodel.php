@@ -25,7 +25,7 @@ class itemsModel
             $query->execute(array($project));
             $result = $query->fetchAll();
         } catch(Exception $e) {
-               return $e->getMessage();
+               throw new Exception($e->getMessage());
         }
 
         return $result;
@@ -90,7 +90,7 @@ class itemsModel
                 $query = $this->db->prepare($sql);
                 $result = $query->execute($param_val);
             } catch(Exception $e) {
-                return $e->getMessage();
+                throw new Exception($e->getMessage());
             }
         }
 

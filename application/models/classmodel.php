@@ -35,7 +35,7 @@ class ClassModel
             $query->execute(array($level));
             $result = $query->fetch();
         } catch (Exception $e) {
-            return $e->getMessage();
+            throw new Exception($e->getMessage());
         }
 
 

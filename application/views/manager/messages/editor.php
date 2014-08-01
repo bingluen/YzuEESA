@@ -21,7 +21,8 @@
         <input type="hidden" id="post_id" value="<?=$data['post_id']?>">
         <?php } ?>
         <p class="text-center" style="margin-top: 30px;">
-            <button type="button" class="btn btn-primary" id="post-btn">發   布</button>
+            <button type="button" class="btn btn-default" id="draft-btn">存為草稿</button>
+            <button type="button" class="btn btn-info" id="post-btn">發   布</button>
         </p>
     </div>
 </div>
@@ -75,11 +76,39 @@ $('#post-btn').click(function() {
         data: {
             title: $('#title').val(),
             content: tinyMCE.activeEditor.getContent(),
-            id: $('#post_id').val()
+            id: $('#post_id').val(),
+            draft: '0'
         },
         success: function(response) {
             if(response == 'success')
                 alert('文章已更新');
+                goTo();
+        },
+        error: function (response) {
+            console.log('response is not json');
+            console.log(response);
+        }
+    });
+});
+
+$('#draft-btn').click(function() {
+    var url = window.location.toString();
+    if(url.indexOf("editor/")!=-1)  {
+        var ary=url.split("editor/");
+    }
+    $.ajax({
+        url: ary[0]+'post/update',
+        dataType: 'json',
+        type: 'post',
+        data: {
+            title: $('#title').val(),
+            content: tinyMCE.activeEditor.getContent(),
+            id: $('#post_id').val(),
+            draft: '1'
+        },
+        success: function(response) {
+            if(response == 'success')
+                alert('文章已存為草稿');
                 goTo();
         },
         error: function (response) {
@@ -101,9 +130,34 @@ $('#post-btn').click(function() {
         data: {
             title: $('#title').val(),
             content: tinyMCE.activeEditor.getContent(),
+            draft: '0'
         },
         success: function(response) {
             alert('文章已發布');
+            goTo();
+        },
+        error: function (response) {
+            console.log('response is not json');
+            console.log(response);
+        }
+    });
+});
+$('#draft-btn').click(function() {
+    var url = window.location.toString();
+    if(url.indexOf("editor/")!=-1)  {
+        var ary=url.split("editor/");
+    }
+    $.ajax({
+        url: ary[0]+'post/new',
+        dataType: 'json',
+        type: 'post',
+        data: {
+            title: $('#title').val(),
+            content: tinyMCE.activeEditor.getContent(),
+            draft: '1'
+        },
+        success: function(response) {
+            alert('文章已存為草稿');
             goTo();
         },
         error: function (response) {

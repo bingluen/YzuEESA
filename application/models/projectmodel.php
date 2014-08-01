@@ -24,7 +24,7 @@ class ProjectModel
             $query = $this->db->prepare($sql);
             $query->execute(array($data['project_name'], $data['project_host'], $data['project_time']));
         } catch(Exception $e) {
-            return $e->getMessage();
+            throw new Exception($e->getMessage());
         }
 
         try {
@@ -33,7 +33,7 @@ class ProjectModel
             $query->execute();
             $result = $query->fetch();
         } catch(Exception $e) {
-            return $e->getMessage();
+            throw new Exception($e->getMessage());
         }
 
         return $result;
@@ -69,7 +69,7 @@ class ProjectModel
                 $query = $this->db->prepare($sql);
                 $result = $query->execute($param_val);
             } catch(Exception $e) {
-                return $e->getMessage();
+                throw new Exception($e->getMessage());
             }
         }
 
@@ -90,7 +90,7 @@ class ProjectModel
                 $query->execute(array($project_id));
                 $result = $query->fetch();
             } catch(Exception $e) {
-                    return $e->getMessage();
+                    throw new Exception($e->getMessage());
             }
 
             if($result->count === '0') {
@@ -111,7 +111,7 @@ class ProjectModel
                     $query = $this->db->prepare($sql);
                     $query->execute(array($deleteItem));
                 } catch(Exception $e) {
-                        return $e->getMessage();
+                        throw new Exception($e->getMessage());
                 }
             }
         }
@@ -130,7 +130,7 @@ class ProjectModel
             $query->execute();
             $result = $query->fetchAll();
         } catch(Expection $e) {
-            return $e->getMessage();
+            throw new Exception($e->getMessage());
         }
         return $result;
     }
@@ -142,7 +142,7 @@ class ProjectModel
             $query->execute(array($id));
             $result = $query->fetch();
         } catch(Expection $e) {
-            return $e->getMessage();
+            throw new Exception($e->getMessage());
         }
         if($result)
             return $result->project_name;

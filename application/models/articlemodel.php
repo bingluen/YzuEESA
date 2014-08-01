@@ -20,9 +20,9 @@ class ArticleModel
 
     function post($data) {
         try {
-            $sql = "INSERT INTO `messages` (messages_title, messages_content, messages_author, messages_time) VALUES(?, ?, ?, ?);";
+            $sql = "INSERT INTO `messages` (messages_title, messages_content, messages_author, messages_time, messages_draft) VALUES(?, ?, ?, ?, ?);";
             $query = $this->db->prepare($sql);
-            $query->execute(array($data['title'], $data['content'], $data['author'], $data['time']));
+            $query->execute(array($data['title'], $data['content'], $data['author'], $data['time'], $data['draft']));
         } catch(Exception $e) {
             throw new Exception($e->getMessage(), 810);
         }
@@ -32,9 +32,9 @@ class ArticleModel
 
     function updatePost($data) {
         try {
-            $sql = "UPDATE `messages` SET `messages_title` = ?, `messages_content` = ?, `messages_author` = ?, `messages_time` = ? WHERE `messages_id` = ?;";
+            $sql = "UPDATE `messages` SET `messages_title` = ?, `messages_content` = ?, `messages_author` = ?, `messages_time` = ?, `messages_draft` = ? WHERE `messages_id` = ?;";
             $query = $this->db->prepare($sql);
-            $query->execute(array($data['title'], $data['content'], $data['author'], $data['time'], $data['post_id']));
+            $query->execute(array($data['title'], $data['content'], $data['author'], $data['time'], $data['draft'], $data['post_id']));
         } catch (Exception $e) {
             throw new Exception($e->getMessage(), 811);
         }
@@ -54,16 +54,75 @@ class ArticleModel
         return $result;
     }
 
-    function listPost($limit = 15) {
+    function listPost($page = 0, $limit = 15, $position = 0) {
         try {
-            $sql = "SELECT `messages_id`, `messages_title`, `messages_time` FROM `messages` ORDER BY `messages_time` DESC LIMIT $limit;";
+
+            if($position == 0 ) { // 0 = 前台
+                $sql = "SELECT `messages_id`, `messages_title`, `messages_time` FROM `messages` ORDER BY `messages_time` DESC LIMIT $page, $limit WHERE `messages_draft` = '0';";
+            } else if($position == 1) { // 1 = 後台
+                $sql = "SELECT `messages_id`, `messages_draft`, `messages_title`, `messages_time`, `messages_author` FROM `messages` ORDER BY `messages_time` DESC LIMIT $page, $limit;";
+            }
             $query = $this->db->prepare($sql);
-            $query->excute();
+            $query->execute();
             $result = $query->fetchAll();
         } catch (Exception $e) {
             throw new Exception($e->getMessage(), 800);
         }
 
         return $result;
+    }
+
+    function deletePost($list) {
+        foreach ($list as $id) {
+            try {
+                $sql = "DELETE FROM `messages` WHERE `messages_id` = ?;";
+                $query = $this->db->prepare($sql);
+                $query->execute(array($id));
+            } catch(Exception $e) {
+                throw new Exception($e->getMessage());
+            }
+            return true;
+        }
+    }
+
+    function publicPost($list) {
+        foreach ($list as $id) {
+            try {
+                $sql = "UPDATE `messages` SET `messages_draft` = ? WHERE `messages_id` = ?;";
+                $query = $this->db->prepare($sql);
+                $query->execute(array(0, $id));
+            } catch(Exception $e) {
+                throw new Exception($e->getMessage());
+            }
+            return true;
+        }
+    }
+
+    function draftPost($list) {
+        foreach ($list as $id) {
+            try {
+                $sql = "UPDATE `messages` SET `messages_draft` = ? WHERE `messages_id` = ?;";
+                $query = $this->db->prepare($sql);
+                $query->execute(array(1, $id));
+            } catch(Exception $e) {
+                throw new Exception($e->getMessage());
+            }
+            return true;
+        }
+    }
+
+    function getPages($dpp) {
+        try {
+            $sql = "SELECT (COUNT(*) DIV $dpp) AS pages, (COUNT(*) MOD $dpp) AS mode  FROM `messages`;";
+            $query = $this->db->prepare($sql);
+            $query->execute();
+            $result = $query->fetch();
+            if($result->mode > 0)
+                return $result->pages+1;
+            else
+                return $result->pages;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 }
