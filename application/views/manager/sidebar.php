@@ -3,7 +3,7 @@
     <li <?php if($data == 'Messages') echo 'class="active"'; ?>>
         <a href="#" id="messages_tab" class="dropdown-toggle" data-toggle="dropdown">公告系統 <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="CashTabDrop">
-            <li><a href="<?php echo URL ?>webMan/MessagesSystem/NewPost" tabindex="-1" data-toggle="messages_tab">發新文章</a></li>
+            <li><a href="<?php echo URL ?>webMan/MessagesSystem/editor/NewPost" tabindex="-1" data-toggle="messages_tab">發新文章</a></li>
             <li><a href="<?php echo URL ?>webMan/MessagesSystem/PostList" tabindex="-1" data-toggle="messages_tab">管理文章</a></li>
         </ul>
     </li>

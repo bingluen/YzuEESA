@@ -21,6 +21,33 @@ class webMan extends Controller
         unset($_SESSION['login_time']);
     }
 
+    private function checkAuth() {
+        if(!(isset($_SESSION['auth'])
+            && $_SESSION['auth'] == 'yes')) {
+            //沒過驗證轉回首頁
+            $this->deleteSession();
+            header("Location: ". URL);
+        } else if(!(isset($_SESSION['user_ip'])
+            && $_SESSION['user_ip'] == $this->getIP())) {
+            //ip位址和登入時不同轉回首頁
+            $this->deleteSession();
+            header("Location: ". URL);
+        } else if(!(isset($_SESSION['login_time'])
+            && time() - strtotime($_SESSION['login_time']) <= 1800)) {
+            //超過30分鐘沒動作 轉回登入頁面
+            $this->deleteSession();
+            header("Location: ". URL."login/doLogin");
+        } else if(!(isset($_SESSION['level'])
+            && $_SESSION['level'] > 0)) {
+            //停權
+            $this->deleteSession();
+            header("Location: ". URL."login/doLogin/AuthError0");
+        } else {
+            //刷新最後動作時間
+            $_SESSION['login_time'] = date('Y-m-d H:i:s');
+        }
+    }
+
     public function index()
     {
         header("Location: ". URL);
@@ -85,30 +112,7 @@ class webMan extends Controller
         }
 
         if($page === 'AuthSuccess') {
-            if(!(isset($_SESSION['auth'])
-                && $_SESSION['auth'] == 'yes')) {
-                //沒過驗證轉回首頁
-                $this->deleteSession();
-                header("Location: ". URL);
-            } else if(!(isset($_SESSION['user_ip'])
-                && $_SESSION['user_ip'] == $this->getIP())) {
-                //ip位址和登入時不同轉回首頁
-                $this->deleteSession();
-                header("Location: ". URL);
-            } else if(!(isset($_SESSION['login_time'])
-                && time() - strtotime($_SESSION['login_time']) <= 1800)) {
-                //超過30分鐘沒動作 轉回登入頁面
-                $this->deleteSession();
-                header("Location: ". URL."login/doLogin");
-            } else if(!(isset($_SESSION['level'])
-                && $_SESSION['level'] > 0)) {
-                //停權
-                $this->deleteSession();
-                header("Location: ". URL."login/doLogin/AuthError0");
-            } else {
-                //刷新最後動作時間
-                $_SESSION['login_time'] = date('Y-m-d H:i:s');
-            }
+            $this->checkAuth();
 
             $data['class'] = $WorkerModel->getClassName($_SESSION['level']);
             $data['name'] = $WorkerModel->getWorkerName($_SESSION['user_id']);
@@ -132,30 +136,7 @@ class webMan extends Controller
             header("Location: ". URL);
         }
 
-        if(!(isset($_SESSION['auth'])
-            && $_SESSION['auth'] == 'yes')) {
-            //沒過驗證轉回首頁
-            $this->deleteSession();
-            header("Location: ". URL);
-        } else if(!(isset($_SESSION['user_ip'])
-            && $_SESSION['user_ip'] == $this->getIP())) {
-            //ip位址和登入時不同轉回首頁
-            $this->deleteSession();
-            header("Location: ". URL);
-        } else if(!(isset($_SESSION['login_time'])
-            && time() - strtotime($_SESSION['login_time']) <= 1800)) {
-            //超過30分鐘沒動作 轉回登入頁面
-            $this->deleteSession();
-            header("Location: ". URL."login/doLogin");
-        } else if(!(isset($_SESSION['level'])
-            && $_SESSION['level'] > 0)) {
-            //停權
-            $this->deleteSession();
-            header("Location: ". URL."login/doLogin/AuthError0");
-        } else {
-            //刷新最後動作時間
-            $_SESSION['login_time'] = date('Y-m-d H:i:s');
-        }
+        $this->checkAuth();
 
         // Loading Model
         $ProjectModel = $this->loadModel('projectmodel');
@@ -307,30 +288,7 @@ class webMan extends Controller
             header("Location: ". URL);
         }
 
-        if(!(isset($_SESSION['auth'])
-            && $_SESSION['auth'] == 'yes')) {
-            //沒過驗證轉回首頁
-            $this->deleteSession();
-            header("Location: ". URL);
-        } else if(!(isset($_SESSION['user_ip'])
-            && $_SESSION['user_ip'] == $this->getIP())) {
-            //ip位址和登入時不同轉回首頁
-            $this->deleteSession();
-            header("Location: ". URL);
-        } else if(!(isset($_SESSION['login_time'])
-            && time() - strtotime($_SESSION['login_time']) <= 1800)) {
-            //超過30分鐘沒動作 轉回登入頁面
-            $this->deleteSession();
-            header("Location: ". URL."login/doLogin");
-        } else if(!(isset($_SESSION['level'])
-            && $_SESSION['level'] > 0)) {
-            //停權
-            $this->deleteSession();
-            header("Location: ". URL."login/doLogin/AuthError0");
-        } else {
-            //刷新最後動作時間
-            $_SESSION['login_time'] = date('Y-m-d H:i:s');
-        }
+        $this->checkAuth();
 
         // Loading Model
         $ProjectModel = $this->loadModel('projectmodel');
@@ -478,53 +436,70 @@ class webMan extends Controller
             header("Location: ". URL);
         }
 
-        if(!(isset($_SESSION['auth'])
-            && $_SESSION['auth'] == 'yes')) {
-            //沒過驗證轉回首頁
-            $this->deleteSession();
-            header("Location: ". URL);
-        } else if(!(isset($_SESSION['user_ip'])
-            && $_SESSION['user_ip'] == $this->getIP())) {
-            //ip位址和登入時不同轉回首頁
-            $this->deleteSession();
-            header("Location: ". URL);
-        } else if(!(isset($_SESSION['login_time'])
-            && time() - strtotime($_SESSION['login_time']) <= 1800)) {
-            //超過30分鐘沒動作 轉回登入頁面
-            $this->deleteSession();
-            header("Location: ". URL."login/doLogin");
-        } else if(!(isset($_SESSION['level'])
-            && $_SESSION['level'] > 0)) {
-            //停權
-            $this->deleteSession();
-            header("Location: ". URL."login/doLogin/AuthError0");
-        } else {
-            //刷新最後動作時間
-            $_SESSION['login_time'] = date('Y-m-d H:i:s');
-        }
+        $this->checkAuth();
 
         //Loading Model
         $ArticleModel = $this->loadModel('articlemodel');
 
 
-        if($page === 'NewPost') {
-            if($action === 'post') {
-                $postData['title'] = $_POST['title'];
-                $postData['content'] = $_POST['content'];
-                $postData['author'] = $_POST['author'];
-                $postData['time'] = date('Y-m-d H:i:s');
+        if($page === 'editor') {
+            $data = false;
 
-                if($post = $ArticleModel->post($postData))
-                    echo json_encode('success');
-                else
-                    echo json_encode('fail');
-                exit;
+            if(is_numeric($action)) {
+                //action 是數字 => 文章id => 編輯模式
+
+                //開始撈資料
+                $article = $ArticleModel->getPost($action);
+
+                $data['post_id'] = $action;
+                $data['title'] = $article->messages_title;
+                $data['content'] = $article->messages_content;
+
+            } else if($action != 'NewPost') {
+                header("Location: ". URL. "webMan/MessagesSystem/PostList");
             }
+
             $active = 'Messages';
             $this->loadView('_templates/header_man');
             $this->loadView('manager/sidebar', $active);
-            $this->loadView('manager/messages/editor');
+            $this->loadView('manager/messages/editor', $data);
             $this->loadView('_templates/footer_man');
+        }
+
+        if($page === 'post') {
+            if($action === 'new') {
+                $postData['title'] = $_POST['title'];
+                $postData['content'] = $_POST['content'];
+                $postData['author'] = $_SESSION['user_id'];
+                $postData['time'] = date('Y-m-d H:i:s');
+
+                try {
+                    $ArticleModel->post($postData);
+                } catch (Exception $e) {
+                    echo json_encode('fail :'.$e->getMessage());
+                    exit;
+                }
+                echo json_encode('success');
+                exit;
+            }
+
+
+            if($action === 'update') {
+                $postData['post_id'] = $_POST['id'];
+                $postData['title'] = $_POST['title'];
+                $postData['content'] = $_POST['content'];
+                $postData['author'] = $_SESSION['user_id'];
+                $postData['time'] = date('Y-m-d H:i:s');
+
+                try {
+                    $ArticleModel->updatePost($postData);
+                } catch (Exception $e) {
+                    echo json_encode('fail :'.$e->getMessage());
+                    exit;
+                }
+                echo json_encode('success');
+                exit;
+            }
         }
     }
 }
