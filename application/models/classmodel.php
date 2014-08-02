@@ -23,14 +23,16 @@ class ClassModel
     }
 
     function checkAuthority($level, $model = 0) {
-        if($page == 0)
+        if($model === 0)
             throw new Exception("model error", 851);
 
+        //level大於900自動通過
         if($level > 900)
             return true;
 
+        //拉回權限表
         try {
-            $sql = "SELECT `calss_authority` AS Authority FROM `worker_calss` WHERE `class_level` = ?;";
+            $sql = "SELECT `calss_authority` AS Authority FROM `worker_class` WHERE `class_level` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($level));
             $result = $query->fetch();
@@ -38,6 +40,11 @@ class ClassModel
             throw new Exception($e->getMessage());
         }
 
+        //檢查權限表
+        if(strpos($result->Authority, $model))
+            return true;
+        else
+            return false;
 
     }
 }

@@ -37,10 +37,10 @@
     <div class="collapse navbar-collapse" id="header-collapse">
         <ul class="nav navbar-nav">
             <li><a href="<?php echo URL; ?>">首頁</a></li>
-            <li><a href="<?php echo URL; ?>about/">關於學會</a></li>
-            <li><a href="<?php echo URL; ?>activities/">學會活動</a></li>
-            <li><a href="<?php echo URL; ?>istudy/">iStudy</a></li>
-            <li><a href="<?php echo URL; ?>information/">公開資訊</a></li>
+            <li><a href="<?php echo URL; ?>About/">關於學會</a></li>
+            <li><a href="<?php echo URL; ?>Activities/">學會活動</a></li>
+            <li><a href="<?php echo URL; ?>iStudy/">iStudy</a></li>
+            <li><a href="<?php echo URL; ?>Information/">公開資訊</a></li>
             <li><a href="https://www.facebook.com/messages/147429552025011" target="_blank">問題聯繫</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right" id="fblogo">
@@ -95,5 +95,7 @@
         <div class="item active">
             <img src="<?php echo URL; ?>public/img/test/banner.png">
         </div>
+    </div>
 </div>
 <?php } ?>
+<div id="MainContent" class="container-fluid">

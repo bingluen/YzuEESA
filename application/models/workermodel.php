@@ -67,7 +67,8 @@ class WorkerModel
         }
 
         if(!$result)
-            return 'Null';
+            throw new Exception("帳號已刪除");
+
 
         return $result->worker_name;
     }
@@ -132,7 +133,7 @@ class WorkerModel
         //檢查是不是SuperAdmin
         foreach($data as $items_id) {
             try {
-                $level = $this->getLevel($items_id);
+                $level = $this->getLevel($items_id, 'worker_id');
             } catch(Exception $e) {
                 throw new Exception($e->getMessage());
             }
@@ -146,7 +147,7 @@ class WorkerModel
                 $sql = "SELECT COUNT(*) AS count FROM `cf_items` WHERE `items_applicant` = ?;";
                 $query = $this->db->prepare($sql);
                 $query->execute(array($items_id));
-                $result = $que2ry->fetch();
+                $result = $query->fetch();
             } catch(Exception $e) {
                     throw new Exception($e->getMessage());
             }
@@ -368,7 +369,7 @@ class WorkerModel
     }
 
     function getLevel($key = 0, $index = 0) {
-        if($index == 0 || $key == 0)
+        if($index === 0 || $key === 0)
             throw new Exception("No key or index be assigned", 990);
 
         if($index != 'worker_id' && $index != 'worker_name' && $index != 'worker_username')

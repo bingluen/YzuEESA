@@ -57,7 +57,7 @@ $(document).ready(
                 var selected = new Array();
                 $('input[name="items-<?=$project->project_id; ?>-select"]:checked').each(function(i) { selected[i] = this.value; });
                 $.ajax({
-                    url: 'pass',
+                    url: '<?=URL?>webMan/CashFlow/Items/pass',
                     dataType: 'json',
                     type: 'post',
                     data: {
@@ -79,7 +79,7 @@ $(document).ready(
                 var selected = new Array();
                 $('input[name="items-<?=$project->project_id; ?>-select"]:checked').each(function(i) { selected[i] = this.value; });
                 $.ajax({
-                    url: 'pass',
+                    url: '<?=URL?>webMan/CashFlow/Items/pass',
                     dataType: 'json',
                     type: 'post',
                     data: {

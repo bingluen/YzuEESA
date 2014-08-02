@@ -24,7 +24,7 @@ class ArticleModel
             $query = $this->db->prepare($sql);
             $query->execute(array($data['title'], $data['content'], $data['author'], $data['time'], $data['draft']));
         } catch(Exception $e) {
-            throw new Exception($e->getMessage(), 810);
+            throw new Exception($e->getMessage());
         }
 
         return true;
@@ -36,7 +36,7 @@ class ArticleModel
             $query = $this->db->prepare($sql);
             $query->execute(array($data['title'], $data['content'], $data['author'], $data['time'], $data['draft'], $data['post_id']));
         } catch (Exception $e) {
-            throw new Exception($e->getMessage(), 811);
+            throw new Exception($e->getMessage());
         }
 
         return true;
@@ -49,24 +49,27 @@ class ArticleModel
             $query->execute(array($id));
             $result = $query->fetch();
         } catch (Exception $e) {
-            throw new Exception($e->getMessage(), 801);
+            throw new Exception($e->getMessage());
         }
         return $result;
     }
 
-    function listPost($page = 0, $limit = 15, $position = 0) {
+    function listPost($page = 0, $limit = 15, $position = 0, $level = 0, $user = 0) {
         try {
 
             if($position == 0 ) { // 0 = 前台
-                $sql = "SELECT `messages_id`, `messages_title`, `messages_time` FROM `messages` ORDER BY `messages_time` DESC LIMIT $page, $limit WHERE `messages_draft` = '0';";
+                $sql = "SELECT `messages_id` AS id, `messages_title` AS title, `messages_time` AS time FROM `messages` WHERE `messages_draft` = '0' ORDER BY `messages_time` DESC LIMIT $page, $limit;";
             } else if($position == 1) { // 1 = 後台
-                $sql = "SELECT `messages_id`, `messages_draft`, `messages_title`, `messages_time`, `messages_author` FROM `messages` ORDER BY `messages_time` DESC LIMIT $page, $limit;";
+                if($level > 900)
+                    $sql = "SELECT `messages_id`, `messages_draft`, `messages_title`, `messages_time`, `messages_author` FROM `messages` ORDER BY `messages_time` DESC LIMIT $page, $limit;";
+                else
+                    $sql = "SELECT `messages_id`, `messages_draft`, `messages_title`, `messages_time`, `messages_author` FROM `messages` WHERE `messages_author` = '$user' ORDER BY `messages_time` DESC LIMIT $page, $limit;";
             }
             $query = $this->db->prepare($sql);
             $query->execute();
             $result = $query->fetchAll();
         } catch (Exception $e) {
-            throw new Exception($e->getMessage(), 800);
+            throw new Exception($e->getMessage());
         }
 
         return $result;
@@ -124,5 +127,34 @@ class ArticleModel
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+    }
+
+    function viewPost($id) {
+        try {
+            $sql = "SELECT `messages_title` AS title, `messages_content` AS content, `messages_author` AS author, `messages_time` AS time FROM `messages` WHERE `messages_id` = ?";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($id));
+            $result = $query->fetch();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
+        if(count($result) <= 0) {
+            throw new Exception("文章不存在或已經被刪除。", 801);
+        }
+
+        return $result;
+    }
+
+    function getAuthor($id) {
+        try {
+            $sql = "SELECT `messages_author` FROM `messages` WHERE `messages_id` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($id));
+            $result = $query->fetch();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+        return $result->messages_author;
     }
 }

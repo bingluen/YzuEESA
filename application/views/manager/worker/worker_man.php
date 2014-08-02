@@ -126,7 +126,7 @@ $(document).ready(
         $('#worker-edit-btn-<?=$workerList->worker_id;?>').click(
             function () {
                 $.ajax({
-                    url: 'editWorker',
+                    url: '<?=URL?>webMan/Worker/Worker/editWorker',
                     dataType: 'json',
                     type: 'post',
                     data: {
@@ -165,7 +165,7 @@ $(document).ready(
                     passwordChange = $.md5($('#edit_worker_password').val());
 
                 $.ajax({
-                    url: 'editWorker',
+                    url: '<?=URL?>webMan/Worker/Worker/editWorker',
                     dataType: 'json',
                     type: 'post',
                     data: {
@@ -205,7 +205,7 @@ $(document).ready(
         $('#do-workerAdd').click(
             function() {
                 $.ajax({
-                    url: 'addWorker',
+                    url: '<?=URL?>webMan/Worker/Worker/addWorker',
                     dataType: 'json',
                     type: 'post',
                     data: {
@@ -235,7 +235,7 @@ $(document).ready(
                 var selected = new Array();
                 $('input[name="worker-select"]:checked').each(function(i) { selected[i] = this.value; });
                 $.ajax({
-                    url: 'delete',
+                    url: '<?=URL?>webMan/Worker/Worker/delete',
                     dataType: 'json',
                     type: 'post',
                     data: {
@@ -258,7 +258,7 @@ $(document).ready(
                 var selected = new Array();
                 $('input[name="worker-select"]:checked').each(function(i) { selected[i] = this.value; });
                 $.ajax({
-                    url: 'disable',
+                    url: '<?=URL?>webMan/Worker/Worker/disable',
                     dataType: 'json',
                     type: 'post',
                     data: {

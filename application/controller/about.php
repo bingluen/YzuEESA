@@ -1,5 +1,5 @@
 <?php
-class Home extends Controller
+class About extends Controller
 {
     public function index()
     {

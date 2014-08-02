@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Class Home
  *
@@ -16,12 +15,16 @@ class Home extends Controller
      */
     public function index()
     {
+        //loading Model
+        $ArticleModel = $this->loadModel('articlemodel');
+        //撈訊息
+        $data['messages'] = $ArticleModel->listPost(0, 5);
+        //呈現頁面
         $View['isHome'] = true;
         $this->loadView('_templates/header', $View);
-        $this->loadView('home/index');
+        $this->loadView('home/index', $data);
         $this->loadView('_templates/footer');
     }
-
     /**
      * PAGE: exampleone
      * This method handles what happens when you move to http://yourproject/home/exampleone

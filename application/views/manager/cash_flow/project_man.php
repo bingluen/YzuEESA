@@ -94,7 +94,7 @@ $(document).ready(
         $('#do-projectAdd').click(
             function() {
                 $.ajax({
-                    url: 'insert',
+                    url: '<?=URL?>webMan/CashFlow/Project/insert',
                     dataType: 'json',
                     type: 'post',
                     data: {
@@ -123,7 +123,7 @@ $(document).ready(
                 var selected = new Array();
                 $('input[name="project-select"]:checked').each(function(i) { selected[i] = this.value; });
                 $.ajax({
-                    url: 'update',
+                    url: '<?=URL?>webMan/CashFlow/Project/update',
                     dataType: 'json',
                     type: 'post',
                     data: {
@@ -145,7 +145,7 @@ $(document).ready(
                 var selected = new Array();
                 $('input[name="project-select"]:checked').each(function(i) { selected[i] = this.value; });
                 $.ajax({
-                    url: 'update',
+                    url: '<?=URL?>webMan/CashFlow/Project/update',
                     dataType: 'json',
                     type: 'post',
                     data: {
@@ -167,7 +167,7 @@ $(document).ready(
                 var selected = new Array();
                 $('input[name="project-select"]:checked').each(function(i) { selected[i] = this.value; });
                 $.ajax({
-                    url: 'delete',
+                    url: '<?=URL?>webMan/CashFlow/Project/delete',
                     dataType: 'json',
                     type: 'post',
                     data: {

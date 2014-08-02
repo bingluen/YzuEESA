@@ -83,36 +83,39 @@ function displayArticleList(data) {
 }
 
 function changePage(page) {
+    Pages = page;
     RenewArticleList(page);
     displayPagination(page);
+    console.log('page is '+page);
+    console.log('Pages is '+Pages);
 }
 
 function displayPagination(page) {
     $('#article-pagination li').remove();
     str = '';
-    if(Pages == 1) {
+    if(Pages <= 1) {
         str += '<li class="disabled"><a href="#">&laquo;</a></li>';
     } else {
-        str += '<li><a href="#" onclick="changePage('+Pages-1+')">&laquo;</a></li>';
+        str += '<li><a href="#" onclick="changePage('+(Pages-1)+')">&laquo;</a></li>';
     }
     var startPage = 0
-    if(Pages-5 < 0) {
+    if(page-5 < 0) {
         startPage = 1;
     } else {
-        startPage = Pages-5;
+        startPage = page-5;
     }
     for(i = startPage;i <= <?=$data['pages']?> && i <= startPage+10;i++) {
-        if(page == Pages) {
+        if(i == page) {
             str += '<li class="active"><a href="#">'+i+' <span class="sr-only">(current)</span></a></li>';
         } else {
             str += '<li ><a href="#" onclick="changePage('+i+')">'+i+' </a></li>';
         }
 
     }
-    if(Pages == <?=$data['pages']?>) {
+    if(Pages >= <?=$data['pages']?>) {
         str += '<li class="disabled"><a href="#">&raquo;</a></li>';
     } else {
-        str += '<li><a href="#" onclick="changePage('+Pages+1+')">&raquo;</a></li>';
+        str += '<li><a href="#" onclick="changePage('+(Pages+1)+')">&raquo;</a></li>';
     }
     $('#article-pagination').append(str);
 }
@@ -175,6 +178,14 @@ $('.delete-btn').click(function () {
             RenewArticleList(Pages);
         }
     });
+});
+
+$('.newArticle-btn').click(function () {
+    var url = window.location.toString();
+    if(url.indexOf("PostList")!=-1)  {
+        var ary=url.split("PostList");
+    }
+    document.location.href=ary[0]+'editor/NewPost';
 });
 
 $(document).ready(

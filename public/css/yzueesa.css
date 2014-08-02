@@ -132,8 +132,10 @@ h6 .small,
     color: #BEBEBE !important;
 }
 
-.table {
-    width: 99% !important;
+#MainContent
+{
+    width: 78%;
+    margin-top: 30px;
 }
 /*
 --------------- Manage ----------------
@@ -214,6 +216,11 @@ h6 .small,
     h2
     {
         margin-top: 0;
+    }
+    #MainContent
+    {
+        width: 90%;
+        margin-top: 30px;
     }
 
 }
