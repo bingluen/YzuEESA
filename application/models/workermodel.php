@@ -29,10 +29,10 @@ class WorkerModel
         }
 
         if($result->count === '0')
-            throw new Exception('沒有這個工人啦！', 1);
+            throw new Exception('沒有這個工人啦！', 911);
 
         if($result->count > 1)
-            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式指定", 2);
+            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式指定", 912);
 
         return true;
     }
@@ -48,10 +48,10 @@ class WorkerModel
         }
 
         if(count($result) === '0')
-            throw new Exception('沒有這個工人啦！', 1);
+            throw new Exception('沒有這個工人啦！', 911);
 
         if(count($result) > 1)
-            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式查詢", 2);
+            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式查詢", 912);
 
         return $result[0]->worker_id;
     }
@@ -85,10 +85,10 @@ class WorkerModel
         }
 
         if(count($result) === 0)
-            throw new Exception('沒有這個工人啦！', 1);
+            throw new Exception('沒有這個工人啦！', 911);
 
         if(count($result) > 1)
-            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式指定", 2);
+            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式指定", 912);
 
         $auth = $result[0]->auth;
 
@@ -313,7 +313,7 @@ class WorkerModel
 
         //已經有人用了，回傳資訊
         if(count($result) > 0)
-            throw new Exception("工人".$result[0]->name."已經使用了這個帳號，請換一個", 3);
+            throw new Exception("工人".$result[0]->name."已經使用了這個帳號，請換一個", 913);
 
         //新增工人
         try {
@@ -338,7 +338,7 @@ class WorkerModel
         }
 
         if(count($result) == 0)
-            throw new Exception("沒有此工人資料", 4);
+            throw new Exception("沒有此工人資料", 911);
 
         return $result;
     }
@@ -394,21 +394,6 @@ class WorkerModel
         return $result[0]->level;
     }
 
-    function getClassName($level) {
-        try {
-            $sql = "SELECT `class_name` AS class FROM `worker_class` WHERE `class_level` = ?;";
-            $query = $this->db->prepare($sql);
-            $query->execute(array($level));
-            $result = $query->fetch();
-        } catch(Exception $e) {
-               throw new Exception($e->getMessage());
-        }
 
-        if(!$result)
-            throw new Exception("this level isn't exists.", 980);
-
-        return $result->class;
-
-    }
 }
 ?>

@@ -1,6 +1,10 @@
 <div class="tab-content panel" id="man-content">
     <div class="tab-pane fade active in">
          <h3>文章列表</h3>
+         <div class="alert alert-warning alert-dismissable" id="Alert-messages">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true" id="close-alert">×</button>
+            <strong>注意!</strong> 除了特殊設定權限的人員，都只能看到自己發布的文章
+        </div>
          <div class="text-right">
             <button type="button" class="btn btn-sm btn-primary newArticle-btn">新增文章</button>
                 或是   所有選取的文章

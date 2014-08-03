@@ -139,7 +139,7 @@ class ArticleModel
             throw new Exception($e->getMessage());
         }
 
-        if(count($result) <= 0) {
+        if(!$result) {
             throw new Exception("文章不存在或已經被刪除。", 801);
         }
 

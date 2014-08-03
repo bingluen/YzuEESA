@@ -148,5 +148,19 @@ class ProjectModel
             return $result->project_name;
         return false;
     }
+
+    function getProjectStatus($id) {
+        try {
+            $sql = "SELECT `project_status` FROM `cf_project` WHERE `project_id` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($id));
+            $result = $query->fetch();
+        } catch(Expection $e) {
+            throw new Exception($e->getMessage());
+        }
+        if($result->project_status == 'T')
+            return true;
+        return false;
+    }
 }
 ?>

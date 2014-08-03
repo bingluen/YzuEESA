@@ -49,24 +49,6 @@ class webMan extends Controller
         }
     }
 
-    private function checkAuth($level, $page, $action = false) {
-        $ClassModel = $this->loadModel('classmodel');
-        if(!$ClassModel->checkAuthority($level, $page)) {
-            if(!$action) {
-                echo "
-                <meta charset='utf8'>
-                <script>
-                alert('授權失敗，操作未經授權');
-                history.back();
-                </script>";
-                exit;
-            } else {
-                echo json_encode('fail: Auth Error');
-                exit;
-            }
-        }
-    }
-
     public function index()
     {
         header("Location: ". URL);
@@ -78,6 +60,7 @@ class webMan extends Controller
         }
 
         $WorkerModel = $this->loadModel('workermodel');
+        $ClassModel = $this->loadModel('classmodel');
         if($page === 'doLogin') {
             if($msg === 'AuthError0' )
                 $data['msg'] = '此帳號已經被停權';
@@ -133,7 +116,7 @@ class webMan extends Controller
         if($page === 'AuthSuccess') {
             $this->checkLogin();
 
-            $data['class'] = $WorkerModel->getClassName($_SESSION['level']);
+            $data['class'] = $ClassModel->getClassName($_SESSION['level']);
             try {
                 $data['name'] = $WorkerModel->getWorkerName($_SESSION['user_id']);
             } catch (Exception $e) {
@@ -148,7 +131,7 @@ class webMan extends Controller
 
         if($page === 'Logout') {
             $this->deleteSession();
-            header("Location: ". URL."login/doLogin/");
+            header("Location: ". URL."webMan/login/doLogin/");
         }
 
     }
@@ -165,9 +148,11 @@ class webMan extends Controller
         $ProjectModel = $this->loadModel('projectmodel');
         $WorkerModel = $this->loadModel('workermodel');
         $ItemsModel = $this->loadModel('itemsmodel');
+        $ClassModel = $this->loadModel('classmodel');
 
         if($page === 'Project') {
-            $this->checkAuth($_SESSION['level'], 'project');
+            if(!$ClassModel->checkAuthority($_SESSION['level'], 'project'))
+                exit;
             if($action == 0) {
                 // 預設列出所有的project
                 $data['project'] = $ProjectModel->getProject();
@@ -183,7 +168,8 @@ class webMan extends Controller
             }
 
             if($action === 'update') {
-                $this->checkAuth($_SESSION['level'], 'project-update', true);
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'project-update', true))
+                    exit;
                 foreach($_POST['target'] as $target) {
                     $update[]= array(
                         'project_id' => $target,
@@ -196,7 +182,8 @@ class webMan extends Controller
             }
 
             if($action === 'delete') {
-                $this->checkAuth($_SESSION['level'], 'project-delete', true);
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'project-delete', true))
+                    exit;
                 foreach($_POST['target'] as $target) {
                     $delete[] = $target;
                 }
@@ -208,7 +195,8 @@ class webMan extends Controller
             }
 
             if($action === 'insert') {
-                $this->checkAuth($_SESSION['level'], 'project-insert', true);
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'project-insert', true))
+                    exit;
                 //先過濾資料 ？
                 /*
                 $insertData = array('host' => $_POST['host'], 'projectName' => $_POST['name']);
@@ -263,7 +251,8 @@ class webMan extends Controller
         }
 
         if($page === 'Items') {
-            $this->checkAuth($_SESSION['level'], 'Items');
+            if(!$ClassModel->checkAuthority($_SESSION['level'], 'Items'))
+                exit;
             if($action == 0) {
                 //step1 先拉回project
                 $data['project'] = $ProjectModel->getProject();
@@ -302,12 +291,13 @@ class webMan extends Controller
             }
 
             if($action === 'pass') {
-                $this->checkAuth($_SESSION['level'], 'Items-pass', true);
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'Items-pass', true))
+                    exit;
                 foreach($_POST['target'] as $target) {
                     $update[]= array(
                         'items_id' => $target,
                         'items_status' => $_POST['status'],
-                        'items_reviewer' => $_POST['reviewer'],
+                        'items_reviewer' => $_SESSION['user_id'],
                         'items_rev_time' => date('Y-m-d H:i:s'));
                 }
 
@@ -327,6 +317,86 @@ class webMan extends Controller
             $this->loadView('manager/cash_flow/items_man', $data);
             $this->loadView('_templates/footer_man');
         }
+
+        if($page === 'AppItem') {
+            if($_SESSION['user_project'] == '' && !$ClassModel->checkAuthority($_SESSION['level'], 'AppItem'))
+                exit;
+            if($action == 0) {
+                //撈出自己申請的東西
+                try {
+                    $data['appItems'] = $ItemsModel->userItems($_SESSION['user_id']);
+
+                    //若有人審核了，順便把審核人的名字找回來
+                    for($i = 0;$i <count($data['appItems']);$i++) {
+                        if($data['appItems'][$i]->items_reviewer != NULL)
+                        {
+                            try {
+                                $data['appItems'][$i]->items_reviewer = $WorkerModel->getWorkerName($data['appItems'][$i]->items_reviewer);
+                            } catch (Exception $e) {
+                                $data['appItems'][$i]->items_reviewer = $e->getMessage();
+                            }
+                        }
+                    }
+                } catch (Exception $e) {
+                    $data['message'] = $e->getMessage();
+                }
+
+                //撈出可以申請的Project 和 活動的名字
+                //拉回Project Name
+                $projectKey = explode(',', $_SESSION['user_project']);
+                for ($j = 0; $j < count($projectKey);$j++) {
+                    $projectKey[$j] = str_replace(' ', '', $projectKey[$j]);
+                }
+
+                for($i = 0;$i < count($projectKey);$i++) {
+                    if($name = $ProjectModel->getProjectName($projectKey[$i])) {
+                       $data['project'][$i]['name'] = $name;
+                       $data['project'][$i]['key'] = $projectKey[$i];
+                    }
+                }
+            }
+
+            if($action === 'sendApp') {
+                if($_SESSION['user_project'] == '' && !$ClassModel->checkAuthority($_SESSION['level'], 'sendApp', true))
+                    exit;
+                //收post
+                $appData['applicant'] = $_SESSION['user_id'];
+                $appData['time'] = date('Y-m-d H:i:s');
+                $appData['type'] = $_POST['type'];
+                $appData['name'] = $_POST['name'];
+                $appData['cost'] = $_POST['cost'];
+                $appData['project'] = $_POST['project'];
+                //先檢查是否已經結案
+                if(!$ProjectModel->getProjectStatus($appData['project'])) {
+                    echo json_encode('該Project/活動已經結案，不能在申報');
+                    exit;
+                }
+                //開始送資料
+                for($i = 0 ; $i < count($appData['type']) ; $i++) {
+                    try {
+                        $ItemsModel->appItme(array(
+                            'project' => $appData['project'],
+                            'type' => $appData['type'][$i],
+                            'cost' => $appData['cost'][$i],
+                            'name' => $appData['name'][$i],
+                            'applicant' => $appData['applicant'],
+                            'time' => $appData['time']));
+                    } catch (Exception $e) {
+                        echo json_encode($e->getMessage());
+                        exit;
+                    }
+                }
+                echo json_encode('success');
+                exit;
+            }
+
+            //呈現頁面
+            $active = 'CashFlow';
+            $this->loadView('_templates/header_man');
+            $this->loadView('manager/sidebar', $active);
+            $this->loadView('manager/cash_flow/appItem', $data);
+            $this->loadView('_templates/footer_man');
+        }
     }
 
     public function Worker($page = 0, $action = 0) {
@@ -340,10 +410,12 @@ class webMan extends Controller
         $ProjectModel = $this->loadModel('projectmodel');
         $WorkerModel = $this->loadModel('workermodel');
         $ItemsModel = $this->loadModel('itemsmodel');
+        $ClassModel = $this->loadModel('classmodel');
 
         if($page === 'Worker') {
-            $this->checkAuth($_SESSION['level'], 'Worker');
             if($action == 0) {
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'Worker'))
+                    exit;
                 //列出工人
                 $data['workerList'] = $WorkerModel->getWorkerList();
 
@@ -374,7 +446,8 @@ class webMan extends Controller
             }
 
             if($action === 'delete') {
-                $this->checkAuth($_SESSION['level'], 'Worker-delete', true);
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'Worker-delete', true))
+                    exit;
                 foreach($_POST['target'] as $target) {
                     $delete[] = $target;
                 }
@@ -386,7 +459,8 @@ class webMan extends Controller
             }
 
             if($action === 'disable') {
-                $this->checkAuth($_SESSION['level'], 'Worker-disable', true);
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'Worker-disable', true))
+                    exit;
                 foreach ($_POST['target'] as $target) {
                     $disable[] = array(
                         'worker_id' => $target,
@@ -401,7 +475,8 @@ class webMan extends Controller
             }
 
             if($action === 'addWorker') {
-                $this->checkAuth($_SESSION['level'], 'Worker-addWorker', true);
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'Worker-addWorker', true))
+                    exit;
                 //收資料
                 $workerData['worker_name'] = $_POST['name'];
                 $workerData['worker_username'] = $_POST['username'];
@@ -421,7 +496,8 @@ class webMan extends Controller
             }
 
             if($action === 'editWorker') {
-                $this->checkAuth($_SESSION['level'], 'Worker-editWorker', true);
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'Worker-editWorker', true))
+                    exit;
                 if(isset($_POST['doing'])) {
                     if($_POST['doing'] === 'getDetail' && isset($_POST['userid'])) {
                         try {
@@ -491,6 +567,7 @@ class webMan extends Controller
         //Loading Model
         $ArticleModel = $this->loadModel('articlemodel');
         $WorkerModel = $this->loadModel('workermodel');
+        $ClassModel = $this->loadModel('classmodel');
 
 
         if($page === 'editor') {
@@ -508,7 +585,8 @@ class webMan extends Controller
                 $data['content'] = $article->messages_content;
 
             } else if($action != 'NewPost') {
-                $this->checkAuth($_SESSION['level'], 'Messages-new');
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'Messages-new'))
+                    exit;
                 header("Location: ". URL. "webMan/MessagesSystem/PostList");
             }
 
@@ -521,7 +599,8 @@ class webMan extends Controller
 
         if($page === 'post') {
             if($action === 'new') {
-                $this->checkAuth($_SESSION['level'], 'Messages-new', true);
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'Messages-new', true))
+                    exit;
                 $postData['title'] = $_POST['title'];
                 $postData['content'] = $_POST['content'];
                 $postData['draft'] = $_POST['draft'];
@@ -590,7 +669,7 @@ class webMan extends Controller
 
         if($page === 'delete') {
             foreach ($_POST['target'] as $target) {
-                if($ArticleModel->getAuthor($traget) == $_SESSION['user_id'])
+                if($ArticleModel->getAuthor($target) == $_SESSION['user_id'])
                     $list[] = $target;
             }
 
@@ -605,7 +684,7 @@ class webMan extends Controller
 
         if($page === 'draft') {
             foreach ($_POST['target'] as $target) {
-                if($ArticleModel->getAuthor($traget) == $_SESSION['user_id'])
+                if($ArticleModel->getAuthor($target) == $_SESSION['user_id'])
                     $list[] = $target;
             }
 
@@ -621,7 +700,7 @@ class webMan extends Controller
 
         if($page === 'public') {
             foreach ($_POST['target'] as $target) {
-                if($ArticleModel->getAuthor($traget) == $_SESSION['user_id'])
+                if($ArticleModel->getAuthor($target) == $_SESSION['user_id'])
                     $list[] = $target;
             }
 

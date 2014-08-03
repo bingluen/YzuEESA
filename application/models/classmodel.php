@@ -22,7 +22,7 @@ class ClassModel
 
     }
 
-    function checkAuthority($level, $model = 0) {
+    function checkAuthority($level, $model = 0, $action = false) {
         if($model === 0)
             throw new Exception("model error", 851);
 
@@ -41,10 +41,37 @@ class ClassModel
         }
 
         //檢查權限表
-        if(strpos($result->Authority, $model))
-            return true;
-        else
+        if(!strpos($result->Authority, $model)) {
+            if(!$action) {
+                echo "
+                <meta charset='utf8'>
+                <script>
+                alert('授權失敗，操作未經授權');
+                history.back();
+                </script>";
+            } else {
+                echo json_encode('fail: Auth Error');
+            }
             return false;
+        }
+
+        return true;
+    }
+
+        function getClassName($level) {
+        try {
+            $sql = "SELECT `class_name` AS class FROM `worker_class` WHERE `class_level` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($level));
+            $result = $query->fetch();
+        } catch(Exception $e) {
+               throw new Exception($e->getMessage());
+        }
+
+        if(!$result)
+            throw new Exception("this level isn't exists.", 980);
+
+        return $result->class;
 
     }
 }

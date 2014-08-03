@@ -10,8 +10,9 @@
     <li <?php if($data == 'CashFlow') echo 'class="active"'; ?>>
         <a href="#" id="cashflow_tab" class="dropdown-toggle" data-toggle="dropdown">金流系統 <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="CashTabDrop">
-            <li><a href="<?php echo URL ?>webMan/CashFlow/Project" tabindex="-1" data-toggle="cashflow_tab">Project</a></li>
-            <li><a href="<?php echo URL ?>webMan/CashFlow/Items" tabindex="-1" data-toggle="cashflow_tab">Items</a></li>
+            <li><a href="<?php echo URL ?>webMan/CashFlow/Project" tabindex="-1" data-toggle="cashflow_tab">計畫管理</a></li>
+            <li><a href="<?php echo URL ?>webMan/CashFlow/Items" tabindex="-1" data-toggle="cashflow_tab">申報審核</a></li>
+            <li><a href="<?php echo URL ?>webMan/CashFlow/AppItem" tabindex="-1" data-toggle="cashflow_tab">帳務申報</a></li>
         </ul>
     </li>
     <li <?php if($data == 'Worker') echo 'class="active"'; ?>>

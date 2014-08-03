@@ -96,5 +96,33 @@ class itemsModel
 
         return true;
     }
+
+    function userItems($userid) {
+        try {
+            $sql = "SELECT * FROM `cf_items` WHERE `items_applicant` = ? ORDER BY items_app_time;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($userid));
+            $result = $query->fetchAll();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
+        if(count($result) <= 0)
+            throw new Exception("沒有申請東西");
+
+        return $result;
+
+    }
+
+    function appItme($data) {
+        try {
+            $sql = "INSERT INTO `cf_items` (items_project, items_outlay, items_price, items_name, items_applicant, items_app_time) VALUES(?, ?, ?, ?, ?, ?);";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($data['project'], $data['type'], $data['cost'], $data['name'], $data['applicant'], $data['time']));
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+        return true;
+    }
 }
 ?>

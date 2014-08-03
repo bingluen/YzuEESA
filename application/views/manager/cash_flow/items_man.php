@@ -85,7 +85,6 @@ $(document).ready(
                     data: {
                         target: selected,
                         status: '2',
-                        reviewer: ''
                     },
                     success: function(response) {
                         window.location.reload();
