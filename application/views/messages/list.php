@@ -2,8 +2,7 @@
     <div class="container-fluid">
         <ol class="breadcrumb breadcrumb-arrow SUNFLOWER">
             <li><a href="<?=URL?>"><i class="glyphicon glyphicon-home"></i> 首頁</a></li>
-            <li><a href="<?=URL?>Messages/"><i class="glyphicon glyphicon-list-alt"></i> 最新資訊</a></li>
-            <li class="active"><span><i class="glyphicon glyphicon-comment"></i> 檢視資訊</span></li>
+            <li class="active"><a href="<?=URL?>Messages/"><i class="glyphicon glyphicon-list-alt"></i> 最新資訊</a></li>
         </ol>
         <?php if(isset($data['errorCode'])) {?>
         <div class="alert alert-danger alert-dismissable">
@@ -14,14 +13,7 @@
             <p><a class="btn btn-danger" href="#" onclick="history.back()">回上一頁</a> <a class="btn btn-link" href="<?php echo URL;?>">Or 回首頁</a></p>
          </div>
         <?php } else { ?>
-        <div id="articleTitle"><h3><?=$data['article']->title?></h3></div>
-        <hr>
-        <div id="articleContent">
-            <?=$data['article']->content?>
-        </div>
-        <div id="articleFooter">
-            <p><small><?=$data['article']->author?> 於 <?=$data['article']->time?> 編輯</small></p>
-        </div>
+
         <?php } ?>
     </div>
 </div>

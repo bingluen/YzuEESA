@@ -123,11 +123,18 @@ class ProjectModel
         return $execute_result;
     }
 
-    function getProject() {
+    function getProject($status = 0, $key = 0) {
         try {
-            $sql = "SELECT * FROM `cf_project`;";
-            $query = $this->db->prepare($sql);
-            $query->execute();
+            if($status === 0)
+            {
+                $sql = "SELECT * FROM `cf_project`;";
+                $query = $this->db->prepare($sql);
+                $query->execute();
+            } else if ($status === 'active') {
+                $sql = "SELECT `project_name` AS name, `project_id` AS id FROM `cf_project` WHERE `project_status` = 'T' AND `project_name` LIKE ?;";
+                $query = $this->db->prepare($sql);
+                $query->execute(array("$key%"));
+            }
             $result = $query->fetchAll();
         } catch(Expection $e) {
             throw new Exception($e->getMessage());
@@ -149,7 +156,7 @@ class ProjectModel
         return false;
     }
 
-    function getProjectStatus($id) {
+    function ProjectisActive($id) {
         try {
             $sql = "SELECT `project_status` FROM `cf_project` WHERE `project_id` = ?;";
             $query = $this->db->prepare($sql);

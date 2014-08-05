@@ -37,12 +37,12 @@ class webMan extends Controller
             && time() - strtotime($_SESSION['login_time']) <= 1800)) {
             //超過30分鐘沒動作 轉回登入頁面
             $this->deleteSession();
-            header("Location: ". URL."login/doLogin");
+            header("Location: ". URL."webMan/login/doLogin");
         } else if(!(isset($_SESSION['level'])
             && $_SESSION['level'] > 0)) {
             //停權
             $this->deleteSession();
-            header("Location: ". URL."login/doLogin/AuthError0");
+            header("Location: ". URL."webMan/login/doLogin/AuthError0");
         } else {
             //刷新最後動作時間
             $_SESSION['login_time'] = date('Y-m-d H:i:s');
@@ -367,7 +367,7 @@ class webMan extends Controller
                 $appData['cost'] = $_POST['cost'];
                 $appData['project'] = $_POST['project'];
                 //先檢查是否已經結案
-                if(!$ProjectModel->getProjectStatus($appData['project'])) {
+                if(!$ProjectModel->ProjectisActive($appData['project'])) {
                     echo json_encode('該Project/活動已經結案，不能在申報');
                     exit;
                 }
@@ -442,7 +442,18 @@ class webMan extends Controller
                     //回填Project Name
                     $data['workerList'][$i]->worker_project = $projectName;
                 }
+            }
 
+            if($action === 'searchProject') {
+                //撈回進行中的Project，供編輯時使用
+                try {
+                    $searchProject = $ProjectModel->getProject('active', $_POST['key']);
+                } catch (Exception $e) {
+                    echo json_encode($e->getMessage());
+                    exit;
+                }
+                    echo json_encode($searchProject);
+                    exit;
             }
 
             if($action === 'delete') {
@@ -534,7 +545,8 @@ class webMan extends Controller
                         $data = array(
                             'worker_id' => $_POST['userid'],
                             'worker_name' => $_POST['name'],
-                            'worker_level' => $_POST['level']);
+                            'worker_level' => $_POST['level'],
+                            'worker_project' => $_POST['project']);
                         if($_POST['password'] != 'false')
                             $data['worker_password'] = $_POST['password'];
 
