@@ -10,7 +10,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <h4>Error </h4>
             <p>CODE <?=$data['errorCode']?> : <?=$data['errorMessage']?></p>
-            <p>若您認為此訊息有誤，請透過 <a class="alert-link">問題聯繫</a> 回報給管理員</p>
+            <p>若您認為此訊息有誤，請透過 <a class="alert-link" href="https://www.facebook.com/messages/147429552025011" traget="_blank">問題聯繫</a> 回報給管理員</p>
             <p><a class="btn btn-danger" href="#" onclick="history.back()">回上一頁</a> <a class="btn btn-link" href="<?php echo URL;?>">Or 回首頁</a></p>
          </div>
         <?php } else { ?>

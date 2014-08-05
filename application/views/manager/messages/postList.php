@@ -90,8 +90,6 @@ function changePage(page) {
     Pages = page;
     RenewArticleList(page);
     displayPagination(page);
-    console.log('page is '+page);
-    console.log('Pages is '+Pages);
 }
 
 function displayPagination(page) {
