@@ -1,3 +1,10 @@
+<style type="text/css">
+.google-visualization-table-table {
+  font-size: 18px !important;
+}
+</style>
+
+
 <div id="main">
   <div class="container-fluid">
     <div class="panel">
@@ -28,15 +35,21 @@
             <div id="BalanceChangeOverYear"></div>
           </div>
 
+          <div id="projectData"></div>
+
         </div>
 
         <div class="tab-pane fade" id="yearDetail" style="width: 80%; margin-left: 10%;">
 
           <div class="panel panel-default">
             <div class="panel-heading">收入與支出分佈</div>
-              <span id="year-Income"></span>
-              <span id="year-Expenses"></span>
+              <div class="text-center">
+              <span id="year-Income" style="display: inline-block;"></span>
+              <span id="year-Expenses" style="display: inline-block;"></span>
+            </div>
           </div>
+
+          <div id="projectDetail"></div>
 
           <div id="loadingAnimation" style="hight:500px; display:none">
             <div class="progress progress-striped active">
@@ -58,14 +71,16 @@
 <script type="text/javascript">
 
 google.load("visualization", "1", {packages:["corechart"]});
+google.load('visualization', '1', {packages:['table']});
 
 function drawLineChart(data, title, container) {
   var options = {
     hAxis: {
       baselineColor: '#7B7B7B'
     },
-    height: 350,
-    title: title
+    height: 450,
+    title: title,
+    fontSize: 18
   };
 
   var chart = new google.visualization.LineChart(container);
@@ -74,18 +89,32 @@ function drawLineChart(data, title, container) {
 
 
 function drawPieChart(data, title, container) {
-
   var options = {
     hAxis: {
       baselineColor: '#7B7B7B'
     },
     height: 350,
-    width: $('#yearDetail').actual( 'innerWidth' ) * 0.5,
-    title: title
+    width: 450,
+    title: title,
+    chartArea: {
+      width: 300,
+      height: 300
+    },
+    fontSize: 18
   };
 
   var chart = new google.visualization.PieChart(container);
   chart.draw(data, options);
+}
+
+function drawTable(data, position) {
+  var table = new google.visualization.Table(position);
+  var options = {
+    showRowNumber: true,
+    fontsize: 18,
+    width: $( '.projectBelance' ).actual( 'innerWidth' )
+  };
+  table.draw(data, options);
 }
 
 $(document).ready(
@@ -190,6 +219,8 @@ function yearDetail(year) {
 function displayYearData(RawData) {
   //畫面清空
   $('#year-Income').empty(); //年度收入圓餅圖
+  $('#year-Expenses').empty();
+  $('#projectDetail').empty();
 
   //先畫收入與支出的圓餅圖
 
@@ -206,11 +237,12 @@ function displayYearData(RawData) {
     }
 
     if(isAllZero) {
-      var row = new Array('沒有收入', 100);
+      var row = new Array('沒有收入', 1);
       TotalIncome.addRow(row);
     }
 
     google.setOnLoadCallback(drawPieChart(TotalIncome, '', document.getElementById('year-Income')));
+
 
     //支出
     var TotalExpenses = new google.visualization.DataTable();
@@ -230,6 +262,93 @@ function displayYearData(RawData) {
     }
 
     google.setOnLoadCallback(drawPieChart(TotalExpenses, '', document.getElementById('year-Expenses')));
+
+    IncomeStr = '<p class="text-center">收入 '+RawData['TotalIncome']+'</p>';
+    $('#year-Income').append(IncomeStr);
+    ExpensesStr = '<p class="text-center">支出 '+RawData['TotalExpenses']+'</p>';
+    $('#year-Expenses').append(ExpensesStr);
+
+
+  //做出各個計畫的表格
+  for (var i in RawData['itemList']) {
+    //整理資料 先畫出 收入表
+    var  projectDataIncomeTable = new google.visualization.DataTable();
+    projectDataIncomeTable.addColumn('string', 'Item Name');
+    projectDataIncomeTable.addColumn('number', 'Price');
+    projectDataIncomeTable.addColumn('string', 'Time');
+    projectDataIncomeTable.addColumn('string', 'Reviewer')
+    for(var j in RawData['itemList'][i]['income']) {
+      var row = new Array(RawData['itemList'][i]['income'][j]['items_name'],
+        eval(RawData['itemList'][i]['income'][j]['items_price']),
+        RawData['itemList'][i]['income'][j]['items_app_time'],
+        RawData['itemList'][i]['income'][j]['worker_name']);
+      projectDataIncomeTable.addRow(row);
+    }
+
+    var  projectDataExpensesTable = new google.visualization.DataTable();
+    projectDataExpensesTable.addColumn('string', 'Item Name');
+    projectDataExpensesTable.addColumn('number', 'Price');
+    projectDataExpensesTable.addColumn('string', 'Time');
+    projectDataExpensesTable.addColumn('string', 'Reviewer')
+    for(var j in RawData['itemList'][i]['expenses']) {
+      var row = new Array(RawData['itemList'][i]['expenses'][j]['items_name'],
+        eval(RawData['itemList'][i]['expenses'][j]['items_price']),
+        RawData['itemList'][i]['expenses'][j]['items_app_time'],
+        RawData['itemList'][i]['expenses'][j]['worker_name']);
+      projectDataExpensesTable.addRow(row);
+    }
+
+
+    generateProjectTable(projectDataIncomeTable, projectDataExpensesTable, RawData['projectList'][i]['name'], RawData['projectList'][i]['id']);
+
+
+  };
+
+}
+
+function generateProjectTable(IncomeData, ExpensesData, projectName, projectId) {
+  str = '';
+  str += '<div class="panel panel-default">';
+
+  str += '<div class="panel-heading projectBelance">'+projectName+'</div>';
+
+  str += '<div class="row" style="padding:30px  ;  ">';
+
+  str += '<div class="col-md-6">';
+  str += '<div class="panel panel-default">';
+  str += '<div class="panel-heading">收入表</div>';
+  str += '<span id="projectDetail-'+projectId+'-income"></span>';
+  str += '</div>'
+  str += '</div>'
+
+  str += '<div class="col-md-6">';
+  str += '<div class="panel panel-default">';
+  str += '<div class="panel-heading">支出表</div>';
+  str += '<span id="projectDetail-'+projectId+'-expenses"></span>';
+  str += '</div>'
+  str += '</div>'
+
+  str += '</div>'
+  str += '</div>';
+  $('#projectDetail').append(str);
+
+  if(IncomeData['tf'].length > 0)
+    google.setOnLoadCallback(drawTable(IncomeData, document.getElementById('projectDetail-'+projectId+'-income')));
+  else {
+    str = '<p class="text-center" style="margin:30px;">沒有收入</p>';
+    $('#projectDetail-'+projectId+'-income').append(str);
+  }
+
+
+  if(ExpensesData['tf'].length > 0)
+    google.setOnLoadCallback(drawTable(ExpensesData, document.getElementById('projectDetail-'+projectId+'-expenses')));
+  else {
+    str = '<p class="text-center" style="margin:30px;">沒有支出</p>';
+    $('#projectDetail-'+projectId+'-expenses').append(str);
+  }
+
+  //$('.google-visualization-table-table').addClass('table');
+  //$('.google-visualization-table-table').attr('style', '');
 
 }
 

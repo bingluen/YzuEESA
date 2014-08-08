@@ -39,7 +39,9 @@ class CashFlowChartModel
 
     function getYearTotalPrice($AcademicYear, $isOutlay, $status = 1) {
 
-        $time = $this->transAcademicToDate($AcademicYear);
+        $YearTotal = 0;
+
+        /*
         try {
             $sql = "SELECT SUM(items_price) Total FROM `cf_items` WHERE `items_outlay` = ? AND (`items_app_time` BETWEEN ? AND ?) AND `items_status` = ?;";
             $query = $this->db->prepare($sql);
@@ -47,9 +49,29 @@ class CashFlowChartModel
             $result = $query->fetch();
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
+        }*/
+
+        //先查出該年份所有Project
+        try {
+            $projects = $this->listYearProject($AcademicYear);
+        } catch (Exception $e) {
+            if($e->getCode() === 0)
+                return 0;
+            else
+                throw new Exception("無法讀取project".$e->getMessage());
         }
 
-        return $result->Total;
+        //拉出個別project 的 item做總和計算
+        foreach ($projects as $project) {
+            try {
+                $projectTotal = $this->getProjectTotalPrice($project['id'], $isOutlay);
+            } catch (Exception $e) {
+                throw new Exception("無法計算id=$projectId的支出或收入總額".$e->getMessage());
+            }
+            $YearTotal += $projectTotal;
+        }
+
+        return $YearTotal;
     }
 
     //這個是前台帳目報表用的，只會列出底下有帳目的活動和計畫
@@ -106,7 +128,7 @@ class CashFlowChartModel
 
     function listProjectItem($projectId, $isOutlay, $status = 1) {
         try {
-            $sql = "SELECT * FROM `cf_items` WHERE `items_outlay` = ? AND `items_project` = ? AND `items_status` = ?;";
+            $sql = "SELECT `items_price`, `items_name`, `items_reviewer`, `items_app_time`, `worker_name` FROM `cf_items`, `worker` WHERE `items_reviewer` = `worker_id` AND `items_outlay` = ? AND `items_project` = ? AND `items_status` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($isOutlay, $projectId, $status));
             $result = $query->fetchAll();
