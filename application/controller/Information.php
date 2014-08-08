@@ -2,7 +2,7 @@
 class Information extends Controller
 {
     function index() {
-
+        header('Location: '.URL.'Information/Account');
     }
 
     function Account($page = 0) {
