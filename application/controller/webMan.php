@@ -77,8 +77,12 @@ class webMan extends Controller
             if(isset($_POST['username']) && isset($_POST['password'])) {
 
                 //驗證是否已透過md5加密，並收下登入資訊
+                /*
                 if(strlen($_POST['password']) == 32)
                     $authData = array('user' => $_POST['username'], 'pw' => $_POST['password']);
+                */
+
+                $authData = array('user' => $_POST['username'], 'pw' => $this->loadModel('hashmodel')->passwordHash($_POST['password']));
 
                 //驗證登入資料
                 try {
@@ -165,6 +169,23 @@ class webMan extends Controller
                         $data['project'][$i]->project_host = $e->getMessage();
                     }
                 }
+
+                //把分類名稱拉回來
+
+                for($i = 0;$i < count($data['project']);$i++) {
+                    try {
+                        $data['project'][$i]->project_category = $ProjectModel->getCategory($data['project'][$i]->project_category);
+                    } catch (Exception $e) {
+                        $data['project'][$i]->project_category = $e->getMessage();
+                    }
+                }
+
+                //把可以選的分類拉回來
+                try {
+                    $data['categoryList'] = $ProjectModel->listCategory();
+                } catch (Exception $e) {
+                    $data['categoryList'] = $e->getMessage();
+                }
             }
 
             if($action === 'update') {
@@ -207,6 +228,7 @@ class webMan extends Controller
                 //從post收資料
                 $insertData['project_host'] = $_POST['host'];
                 $insertData['project_name'] = $_POST['name'];
+                $insertData['project_category'] = $_POST['category'];
                 $insertData['project_time'] = date('Y-m-d H:i:s');
 
                 // 檢查資料庫有沒有工人資料，如果沒有或有人同名同姓，不能指定為負責人
@@ -367,7 +389,7 @@ class webMan extends Controller
                 $appData['cost'] = $_POST['cost'];
                 $appData['project'] = $_POST['project'];
                 //先檢查是否已經結案
-                if(!$ProjectModel->ProjectisActive($appData['project'])) {
+                if(!$ProjectModel->ProjectIsActive($appData['project'])) {
                     echo json_encode('該Project/活動已經結案，不能在申報');
                     exit;
                 }
@@ -491,7 +513,7 @@ class webMan extends Controller
                 //收資料
                 $workerData['worker_name'] = $_POST['name'];
                 $workerData['worker_username'] = $_POST['username'];
-                $workerData['worker_password'] = $_POST['password'];
+                $workerData['worker_password'] = $this->loadModel('hashmodel')->passwordHash($_POST['password']);
                 $workerData['worker_level'] = $_POST['level'];
 
                 //新增工人
@@ -548,7 +570,7 @@ class webMan extends Controller
                             'worker_level' => $_POST['level'],
                             'worker_project' => $_POST['project']);
                         if($_POST['password'] != 'false')
-                            $data['worker_password'] = $_POST['password'];
+                            $data['worker_password'] = $this->loadModel('hashmodel')->passwordHash($_POST['password']);
 
                         $executeR = $WorkerModel->updateWorker($data);
                         if($executeR === true)

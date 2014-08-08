@@ -20,9 +20,9 @@ class ProjectModel
 
     function addProject($data) {
         try {
-            $sql = "INSERT INTO `cf_project` (project_name, project_host, project_time) VALUES(?, ?, ?);";
+            $sql = "INSERT INTO `cf_project` (project_category, project_name, project_host, project_time) VALUES(?, ?, ?, ?);";
             $query = $this->db->prepare($sql);
-            $query->execute(array($data['project_name'], $data['project_host'], $data['project_time']));
+            $query->execute(array($data['project_category'], $data['project_name'], $data['project_host'], $data['project_time']));
         } catch(Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -60,6 +60,11 @@ class ProjectModel
                     $param = $param. ',';
                 $param = $param.'`project_host` = ?';
                 $param_val[] = $project['project_host'];
+            }
+
+            if(isset($project['project_category'])) {
+                $param = $param.'`project_category` = ?';
+                $param_val[] = $project['project_category'];
             }
 
             $param_val[] = $project['project_id'];
@@ -156,7 +161,7 @@ class ProjectModel
         return false;
     }
 
-    function ProjectisActive($id) {
+    function ProjectIsActive($id) {
         try {
             $sql = "SELECT `project_status` FROM `cf_project` WHERE `project_id` = ?;";
             $query = $this->db->prepare($sql);
@@ -169,5 +174,35 @@ class ProjectModel
             return true;
         return false;
     }
+
+    function getCategory($id) {
+        try {
+            $sql = "SELECT `category_name` AS name, `category_color` AS color FROM `cf_project_category` WHERE `category_id` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($id));
+            $result = $query->fetch();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
+        if(!$result)
+            throw new Exception("Unclassified");
+
+        return $result;
+    }
+
+    function listCategory() {
+        try {
+            $sql = "SELECT `category_name` AS name, `category_id` AS id FROM `cf_project_category`;";
+            $query = $this->db->prepare($sql);
+            $query->execute();
+            $result = $query->fetchAll();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
+        return $result;
+    }
+
 }
 ?>

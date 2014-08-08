@@ -1,5 +1,5 @@
 <?php
-class itemsModel
+class ItemsModel
 {
     /**
      * Every model needs a database connection, passed to the model

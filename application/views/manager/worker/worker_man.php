@@ -221,7 +221,7 @@ $('#do-workerEdit').click(
         if($('#edit_worker_password').val() == '')
             passwordChange = false;
         else
-            passwordChange = $.md5($('#edit_worker_password').val());
+            passwordChange = $('#edit_worker_password').val();
         //統整所屬計畫
         var select = new Array();
         $('input[name="workerEdit_project"]').each(function(i) { select[i] = this.value; });
@@ -280,7 +280,7 @@ $('#do-workerAdd').click(
             data: {
                 name: $('#add_worker_name').val(),
                 username: $('#add_worker_username').val(),
-                password: $.md5($('#add_worker_password').val()),
+                password: $('#add_worker_password').val(),
                 level: $('#add_worker_level').val()
             },
             success: function(response) {

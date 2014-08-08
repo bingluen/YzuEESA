@@ -65,7 +65,7 @@ $(document).ready(
                     type: 'post',
                     data: {
                         username: $('#username').val(),
-                        password: $.md5($('#password').val())
+                        password: $('#password').val()
                     },
                     success: function(response) {
                         if(response == 'success') {
