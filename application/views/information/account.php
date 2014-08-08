@@ -1,6 +1,6 @@
 <style type="text/css">
 .google-visualization-table-table {
-  font-size: 18px !important;
+  font-size: 14px !important;
 }
 </style>
 
@@ -20,7 +20,7 @@
 
       </ul>
       <div id="accountContent" class="tab-content">
-        <div class="tab-pane fade active in" id="Overview" style="width: 80%; margin-left: 10%;">
+        <div class="tab-pane fade active in" id="Overview" style="width: 90%; margin-left: 5%;">
 
           <div class="panel panel-default">
             <div class="panel-heading">各年度結餘</div>
@@ -47,7 +47,7 @@
 
         </div>
 
-        <div class="tab-pane fade" id="yearDetail" style="width: 80%; margin-left: 10%;">
+        <div class="tab-pane fade" id="yearDetail" style="width: 90%; margin-left: 5%;">
 
           <div class="panel panel-default">
             <div class="panel-heading">收入與支出分佈</div>
@@ -120,7 +120,7 @@ function drawTable(data, position) {
   var options = {
     showRowNumber: true,
     fontsize: 18,
-    width: $( '.projectBelance' ).actual( 'innerWidth' )
+    width: $( '.projectIncome' ).actual( 'innerWidth' )
   };
   table.draw(data, options);
 }
@@ -318,13 +318,13 @@ function generateProjectTable(IncomeData, ExpensesData, projectName, projectId) 
   str = '';
   str += '<div class="panel panel-default">';
 
-  str += '<div class="panel-heading projectBelance">'+projectName+'</div>';
+  str += '<div class="panel-heading">'+projectName+'</div>';
 
   str += '<div class="row" style="padding:30px  ;  ">';
 
   str += '<div class="col-md-6">';
   str += '<div class="panel panel-default">';
-  str += '<div class="panel-heading">收入表</div>';
+  str += '<div class="panel-heading projectIncome">收入表</div>';
   str += '<span id="projectDetail-'+projectId+'-income"></span>';
   str += '</div>'
   str += '</div>'

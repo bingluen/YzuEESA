@@ -94,7 +94,7 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner ">
         <div class="item active">
-            <img src="<?php echo URL; ?>public/img/test/banner.png">
+            <img src="<?php echo URL; ?>public/img/banner2.png">
         </div>
     </div>
 </div>

@@ -66,18 +66,18 @@
                                             'photo' => '103-Executive-Secretary.jpg'
                                         ),
                                         array(
+                                            'cposition' => '學務長',
+                                            'eposition' => 'Academic Affairs Director',
+                                            'cname' => '莊秉倫',
+                                            'ename' => 'Ping-Lun Chuang',
+                                            'photo' => '103-Academic-Affairs-Director.jpg'
+                                        ),
+                                        array(
                                             'cposition' => '活動長',
                                             'eposition' => 'Activities Director',
                                             'cname' => '林哲民',
                                             'ename' => 'Che Ming Lin',
                                             'photo' => '103-Activities-Director.jpg'
-                                        ),
-                                        array(
-                                            'cposition' => '副活動長 ',
-                                            'eposition' => 'Dep. Activities Director',
-                                            'cname' => '吳書祐',
-                                            'ename' => 'Shu Yu Wu',
-                                            'photo' => '103-Deputy-Activities-Director.jpg'
                                         ),
                                         array(
                                             'cposition' => '公關長',
@@ -87,13 +87,6 @@
                                             'photo' => '103-Public-Relations-Director.jpg'
                                         ),
                                         array(
-                                            'cposition' => '副公關長 ',
-                                            'eposition' => 'Dep. PR Director',
-                                            'cname' => '鄧慧惠',
-                                            'ename' => 'Hui Hui Teng',
-                                            'photo' => '103-Deputy-Public-Relations-Director.jpg'
-                                        ),
-                                        array(
                                             'cposition' => '總務長 ',
                                             'eposition' => 'Treasurer',
                                             'cname' => '張軒豪',
@@ -101,25 +94,11 @@
                                             'photo' => '103-Treasurer.jpg'
                                         ),
                                         array(
-                                            'cposition' => '副總務長',
-                                            'eposition' => 'Dep. Treasurer',
-                                            'cname' => '李建勳',
-                                            'ename' => 'Chien Hsun Lee',
-                                            'photo' => '103-Deputy-Treasurer.jpg'
-                                        ),
-                                        array(
                                             'cposition' => '美宣長 ',
                                             'eposition' => 'Art/Design Director',
                                             'cname' => '黃玉茵',
                                             'ename' => 'Christiana Huang',
                                             'photo' => '103-Art_Design-Director.jpg'
-                                        ),
-                                        array(
-                                            'cposition' => '副美宣長',
-                                            'eposition' => 'Dep. Art/Design Director',
-                                            'cname' => '王子謙',
-                                            'ename' => 'Tzu Chien Wang',
-                                            'photo' => '103-Deputy-Art_Design-Director.jpg'
                                         ),
                                         array(
                                             'cposition' => '資訊長',
@@ -143,18 +122,39 @@
                                             'photo' => '103-Athletics_Activities-Director.jpg'
                                         ),
                                         array(
+                                            'cposition' => '副活動長 ',
+                                            'eposition' => 'Dep. Activities Director',
+                                            'cname' => '吳書祐',
+                                            'ename' => 'Shu Yu Wu',
+                                            'photo' => '103-Deputy-Activities-Director.jpg'
+                                        ),
+                                        array(
+                                            'cposition' => '副公關長 ',
+                                            'eposition' => 'Dep. PR Director',
+                                            'cname' => '鄧慧惠',
+                                            'ename' => 'Hui Hui Teng',
+                                            'photo' => '103-Deputy-Public-Relations-Director.jpg'
+                                        ),
+                                        array(
+                                            'cposition' => '副總務長',
+                                            'eposition' => 'Dep. Treasurer',
+                                            'cname' => '李建勳',
+                                            'ename' => 'Chien Hsun Lee',
+                                            'photo' => '103-Deputy-Treasurer.jpg'
+                                        ),
+                                        array(
+                                            'cposition' => '副美宣長',
+                                            'eposition' => 'Dep. Art/Design Director',
+                                            'cname' => '王子謙',
+                                            'ename' => 'Tzu Chien Wang',
+                                            'photo' => '103-Deputy-Art_Design-Director.jpg'
+                                        ),
+                                        array(
                                             'cposition' => '副體育長 ',
                                             'eposition' => 'Dep. Athletics/Activities Director',
                                             'cname' => '呂映萱',
                                             'ename' => 'Ying Hsueh Lu',
                                             'photo' => '103-Deputy-Athletics_Activities-Director.jpg'
-                                        ),
-                                        array(
-                                            'cposition' => '學務長',
-                                            'eposition' => 'Academic Affairs Director',
-                                            'cname' => '莊秉倫',
-                                            'ename' => 'Ping-Lun Chuang',
-                                            'photo' => '103-Academic-Affairs-Director.jpg'
                                         )
                                     );
                                 foreach ($team as $member) {

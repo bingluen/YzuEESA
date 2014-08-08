@@ -94,6 +94,7 @@ h2
 }
 .footer {
     color: #F8F8F8;
+    background-color: #555555 !important;
     padding: 20px 0 !important;
 }
 .Content-Text
