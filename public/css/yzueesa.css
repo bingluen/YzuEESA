@@ -373,6 +373,13 @@ h6 .small,
 }
 
 
+.man-MainInfo {
+    width: 130px;
+    margin-right: 10px;
+    text-align: right;
+}
+
+
 /* ------------- 圖片固定比例自動裁剪 ------------- */
 .img-cut-32
 {
