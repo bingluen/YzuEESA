@@ -2,9 +2,19 @@
     <li <?php if($data == 'home') echo 'class="active"'; ?>><a href="<?php echo URL?>webMan/login/AuthSuccess">管理首頁</a></li>
     <li <?php if($data == 'Messages') echo 'class="active"'; ?>>
         <a href="#" id="messages_tab" class="dropdown-toggle" data-toggle="dropdown">公告系統 <b class="caret"></b></a>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="CashTabDrop">
+        <ul class="dropdown-menu" role="menu" aria-labelledby="MessagesTabDrop">
             <li><a href="<?php echo URL ?>webMan/MessagesSystem/editor/NewPost" tabindex="-1" data-toggle="messages_tab">發新文章</a></li>
             <li><a href="<?php echo URL ?>webMan/MessagesSystem/PostList" tabindex="-1" data-toggle="messages_tab">管理文章</a></li>
+        </ul>
+    </li>
+    <li <?php if($data == 'Event') echo 'class="active"'; ?>>
+        <a href="#" id="Event_tab" class="dropdown-toggle" data-toggle="dropdown">活動系統 <b class="caret"></b></a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="EventTabDrop">
+            <li><a href="<?php echo URL ?>webMan/Event" tabindex="-1" data-toggle="Event_tab">系統說明</a></li>
+            <li><a href="<?php echo URL ?>webMan/Event/EventList" tabindex="-1" data-toggle="Event_tab">活動列表</a></li>
+            <li><a href="<?php echo URL ?>webMan/Event/EventMes" tabindex="-1" data-toggle="Event_tab">公告系統（活動）</a></li>
+            <li><a href="<?php echo URL ?>webMan/Event/EventCreate" tabindex="-1" data-toggle="Event_tab">舉辦活動</a></li>
+
         </ul>
     </li>
     <li <?php if($data == 'CashFlow') echo 'class="active"'; ?>>

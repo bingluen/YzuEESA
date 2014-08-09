@@ -747,5 +747,21 @@ class webMan extends Controller
             exit;
         }
     }
+
+    public function Event($page = 0, $action = 0) {
+        $this->checkLogin();
+
+        $ClassModel = $this->loadModel('classmodel');
+
+        if($page === 0) {
+            if(!$ClassModel->checkAuthority($_SESSION['level'], 'Event'))
+                exit;
+            $active = 'Event';
+            $this->loadView('_templates/header_man');
+            $this->loadView('manager/sidebar', $active);
+            $this->loadView('manager/page/event_introduction');
+            $this->loadView('_templates/footer_man');
+        }
+    }
 }
 ?>
