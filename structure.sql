@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主機: localhost
--- 產生時間： 2014 年 08 月 03 日 19:13
+-- 產生時間： 2014 年 08 月 09 日 21:35
 -- 伺服器版本: 5.5.38-0ubuntu0.14.04.1
 -- PHP 版本： 5.5.9-1ubuntu4.3
 
@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `cf_items` (
 
 CREATE TABLE IF NOT EXISTS `cf_project` (
 `project_id` int(10) NOT NULL,
+  `project_category` int(3) NOT NULL,
   `project_name` varchar(255) NOT NULL,
   `project_status` char(1) NOT NULL DEFAULT 'T',
   `project_host` int(5) NOT NULL,
@@ -56,11 +57,24 @@ CREATE TABLE IF NOT EXISTS `cf_project` (
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `cf_project_category`
+--
+
+CREATE TABLE IF NOT EXISTS `cf_project_category` (
+`category_id` int(3) NOT NULL,
+  `category_name` varchar(25) NOT NULL,
+  `category_color` varchar(7) NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `messages`
 --
 
 CREATE TABLE IF NOT EXISTS `messages` (
 `messages_id` int(10) NOT NULL,
+  `messages_type` tinyint(1) NOT NULL DEFAULT '0',
   `messages_draft` tinyint(1) NOT NULL DEFAULT '0',
   `messages_title` varchar(255) NOT NULL,
   `messages_content` longtext NOT NULL,
@@ -115,6 +129,12 @@ ALTER TABLE `cf_project`
  ADD PRIMARY KEY (`project_id`);
 
 --
+-- 資料表索引 `cf_project_category`
+--
+ALTER TABLE `cf_project_category`
+ ADD PRIMARY KEY (`category_id`);
+
+--
 -- 資料表索引 `messages`
 --
 ALTER TABLE `messages`
@@ -146,6 +166,11 @@ MODIFY `items_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 ALTER TABLE `cf_project`
 MODIFY `project_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
+--
+-- 使用資料表 AUTO_INCREMENT `cf_project_category`
+--
+ALTER TABLE `cf_project_category`
+MODIFY `category_id` int(3) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- 使用資料表 AUTO_INCREMENT `messages`
 --

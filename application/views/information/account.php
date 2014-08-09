@@ -51,9 +51,9 @@
 
           <div class="panel panel-default">
             <div class="panel-heading">收入與支出分佈</div>
-              <div class="text-center">
-              <span id="year-Income" style="display: inline-block;"></span>
-              <span id="year-Expenses" style="display: inline-block;"></span>
+              <div class="text-center row">
+              <div class="col-md-6" id="year-Income" style="display: inline-block;"></div>
+              <div class="col-md-6" id="year-Expenses" style="display: inline-block;"></div>
             </div>
           </div>
 
@@ -102,13 +102,13 @@ function drawPieChart(data, title, container) {
       baselineColor: '#7B7B7B'
     },
     height: 350,
-    width: 450,
+    width: 400,
     title: title,
     chartArea: {
       width: 300,
       height: 300
     },
-    fontSize: 18
+    fontSize: 14
   };
 
   var chart = new google.visualization.PieChart(container);
