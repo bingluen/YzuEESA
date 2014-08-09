@@ -69,7 +69,7 @@ $(document).ready(
                     },
                     success: function(response) {
                         if(response == 'success') {
-                            setTimeout("goTo()", 5000);
+                            setTimeout("goTo()", 500);
                             $('#login-success').show();
                         } else {
                             $('#error-message-here').empty();
