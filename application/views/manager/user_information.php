@@ -16,32 +16,32 @@
 
                 <tr>
                     <td class="man-MainInfo">使用者</td>
-                    <td><? echo $data['name']; ?></td>
+                    <td><?php echo $data['name']; ?></td>
                 </tr>
 
                 <tr>
                     <td class="man-MainInfo">帳號</td>
-                    <td><? echo $_SESSION['user']; ?></td>
+                    <td><?php echo $_SESSION['user']; ?></td>
                 </tr>
 
                 <tr>
                     <td class="man-MainInfo">登入IP</td>
-                    <td><? echo $_SESSION['user_ip']; ?></td>
+                    <td><?php echo $_SESSION['user_ip']; ?></td>
                 </tr>
 
 
                 <tr>
                     <td class="man-MainInfo">所屬群組</td>
-                    <td><? echo $data['class']; ?>（Level = <? echo $_SESSION['level']?>)</td>
+                    <td><?php echo $data['class']; ?>（Level = <? echo $_SESSION['level']?>)</td>
                 </tr>
 
                 <tr>
                     <td class="man-MainInfo">最後新增</td>
-                    <td><? echo $_SESSION['login_time']; ?></td>
+                    <td><?php echo $_SESSION['login_time']; ?></td>
                 </tr>
                 </table>
         </div>
-    </div> 
+    </div>
 
 
 </div>
