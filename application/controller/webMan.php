@@ -1,5 +1,8 @@
 <?php
 @session_start();
+
+date_default_timezone_set('Asia/Taipei');
+
 class webMan extends Controller
 {
 
