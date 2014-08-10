@@ -9,7 +9,7 @@
             <?php } ?>
             <div class="form-group">
                 <label for="username">登入帳號</label>
-                <input type="text" class="form-control" id="username" placeholder="input your username">
+                <input type="text" class="form-control" id="username" placeholder="input your username" autofocus>
             </div>
 
             <div class="form-group">
