@@ -379,6 +379,9 @@ h6 .small,
     text-align: right;
 }
 
+#postList-Function {
+    margin-bottom: 10px;
+}
 
 /* ------------- 圖片固定比例自動裁剪 ------------- */
 .img-cut-32
