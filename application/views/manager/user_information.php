@@ -25,14 +25,14 @@
 
                 <tr>
                     <td class="man-MainInfo">所屬群組</td>
-                    <td><?php echo $data['class']; ?>（Level = <? echo $_SESSION['level']?>)</td>
+                    <td><?php echo $data['class']; ?>（Level = <?php echo $_SESSION['level']?>)</td>
                 </tr>
 
                 <tr>
                     <td class="man-MainInfo">最後新增</td>
                     <td><?php echo $_SESSION['login_time']; ?></td>
                 </tr>
-                
+
                 </table>
         </div>
     </div>
