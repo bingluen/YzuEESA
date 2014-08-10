@@ -755,6 +755,7 @@ class webMan extends Controller
         $this->checkLogin();
 
         $ClassModel = $this->loadModel('classmodel');
+        $EventMOdel = $this->loadMOdel('eventmodel');
 
         if($page === 0) {
             if(!$ClassModel->checkAuthority($_SESSION['level'], 'Event'))
@@ -763,6 +764,21 @@ class webMan extends Controller
             $this->loadView('_templates/header_man');
             $this->loadView('manager/sidebar', $active);
             $this->loadView('manager/page/event_introduction');
+            $this->loadView('_templates/footer_man');
+        }
+
+        if($page === 'NewEvent') {
+            if(!$ClassModel->checkAuthority($_SESSION['level'], 'NewEvent'))
+                exit;
+            if($action === 'send') {
+
+                exit;
+            }
+
+            $active = 'Event';
+            $this->loadView('_templates/header_man');
+            $this->loadView('manager/sidebar', $active);
+            $this->loadView('manager/events/event_');
             $this->loadView('_templates/footer_man');
         }
     }
