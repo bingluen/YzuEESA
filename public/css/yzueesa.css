@@ -383,6 +383,10 @@ h6 .small,
     margin-bottom: 10px;
 }
 
+#articleFooter {
+    margin-bottom: 40px;
+}
+
 /* ------------- 圖片固定比例自動裁剪 ------------- */
 .img-cut-32
 {
