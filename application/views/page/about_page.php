@@ -7,6 +7,7 @@
     </ol>
 
             <h3 id="abst">系學會簡介 <small>Student Association Abstractions</small></h2>
+            <hr>
                 <div class="Content-Text">
                     <p>全名—<abbr title="Yuan Ze University Electrical Engineering Student Association">元智大學電機工程學系系學會</abbr>，簡稱—<abbr title="YZUEESA">元智電機系學會</abbr></p>
                     <p>組織人數約500人</p>
