@@ -107,4 +107,3 @@
 
         </div> <?php 
     } ?>
-    <div id="MainContent" class="container-fluid">
