@@ -128,8 +128,9 @@ h6 .small,
     color: #BEBEBE !important;
 }
 
-#MainContent {
-    width: 78%;
+#main {
+    left: 10%;
+    right: 10%;
     margin-top: 30px;
 }
 /*
