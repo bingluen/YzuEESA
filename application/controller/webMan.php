@@ -765,20 +765,17 @@ class webMan extends Controller
             $this->loadView('_templates/footer_man');
         }
 
-        if($page === 'NewEvent') {
-            if(!$ClassModel->checkAuthority($_SESSION['level'], 'NewEvent'))
+        if($page === 'EventCreate') {
+            if(!$ClassModel->checkAuthority($_SESSION['level'], 'EventCreate'))
                 exit;
-            if($action === 'send') {
-
-                exit;
-            }
-
             $active = 'Event';
             $this->loadView('_templates/header_man');
             $this->loadView('manager/sidebar', $active);
-            $this->loadView('manager/events/event_');
+            $this->loadView('manager/event/EventCreate');
             $this->loadView('_templates/footer_man');
         }
+
+
     }
 }
 ?>
