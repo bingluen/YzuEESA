@@ -17,7 +17,7 @@
         <button type="button" class="btn btn-default" id="preview-btn">抓取預覽</button>
         <h4>step 3.預覽</h4>
         <div class="form-group">
-            <label for="活動名稱"></label>
+
         </div>
         <div></div>
     </div>

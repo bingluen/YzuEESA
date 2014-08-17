@@ -753,7 +753,7 @@ class webMan extends Controller
         $this->checkLogin();
 
         $ClassModel = $this->loadModel('classmodel');
-        $EventMOdel = $this->loadMOdel('eventmodel');
+        $EventModel = $this->loadMOdel('eventmodel');
 
         if($page === 0) {
             if(!$ClassModel->checkAuthority($_SESSION['level'], 'Event'))
@@ -773,6 +773,11 @@ class webMan extends Controller
             $this->loadView('manager/sidebar', $active);
             $this->loadView('manager/event/EventCreate');
             $this->loadView('_templates/footer_man');
+
+            if($action === 'catchEvent') {
+                $EventModel->catchEventDetail($_POST['url']);
+                echo
+            }
         }
 
 
