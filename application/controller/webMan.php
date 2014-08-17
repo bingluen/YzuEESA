@@ -768,16 +768,18 @@ class webMan extends Controller
         if($page === 'EventCreate') {
             if(!$ClassModel->checkAuthority($_SESSION['level'], 'EventCreate'))
                 exit;
+
+            if($action === 'catchEvent') {
+                $catchData = $EventModel->catchEventDetail($_POST['url']);
+                echo json_encode($catchData);
+                exit;
+            }
+
             $active = 'Event';
             $this->loadView('_templates/header_man');
             $this->loadView('manager/sidebar', $active);
             $this->loadView('manager/event/EventCreate');
             $this->loadView('_templates/footer_man');
-
-            if($action === 'catchEvent') {
-                $EventModel->catchEventDetail($_POST['url']);
-                echo
-            }
         }
 
 
