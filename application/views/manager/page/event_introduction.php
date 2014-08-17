@@ -31,6 +31,7 @@
 <h4 id="to-Aad">5.通知學務長</h4>
 <img src="<?=URL?>public/img/EventSystem/5.png" class="img-rounded img-responsive">
 <p>將設定的信箱，告知學務長，等待學務長將您邀請至元智系學會組織內</p>
+<p>如果已經在組織內，請點<a href="#createEvent">這裡</a></p>
 
 <h4>6.至信箱接收邀請信</h4>
 <img src="<?=URL?>public/img/EventSystem/6.png" class="img-rounded img-responsive">
@@ -41,7 +42,7 @@
 <h4>8.同意後自動轉至系學會組織頁面</h4>
 <img src="<?=URL?>public/img/EventSystem/8.png" class="img-rounded img-responsive">
 
-<h3>建立活動</h3>
+<h3 id="createEvent">建立活動</h3>
 <h4>1.點選一下建立活動</h4>
 <img src="<?=URL?>public/img/EventSystem/8.png" class="img-rounded img-responsive">
 <p></p>

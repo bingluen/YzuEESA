@@ -1,5 +1,13 @@
 <div class="tab-content panel" id="man-content">
     <div class="tab-pane fade active in">
+        <h3>申請審核</h3>
+        <?php
+            if(sizeof($data['project']) == 0) { ?>        
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            沒有申請資料
+        </div>
+        <?php } ?>
     <?php
     foreach ($data['project'] as $project) { ?>
             <h4>
