@@ -71,6 +71,18 @@ $('#preview-btn').click(function() {
 });
 
 $('#send-btn').click(function () {
-    
+    $.ajax({
+        url: '',
+        dataType: 'json',
+        type: 'post',
+        data: {
+            name: $('#eventName').val(),
+            url: $('#eventPath').val()
+        },
+        success: function(response) {
+        },
+        error: function (response) {
+        }
+    });
 });
 </script>
