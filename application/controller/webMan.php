@@ -18,7 +18,7 @@ class webMan extends Controller
     private function deleteSession() {
         unset($_SESSION['auth']);
         unset($_SESSION['user']);
-        unset($_SESSION['user_id']);
+        unset($_SESSION['userid']);
         unset($_SESSION['level']);
         unset($_SESSION['user_project']);
         unset($_SESSION['user_ip']);
@@ -79,12 +79,6 @@ class webMan extends Controller
         if($page === 'Auth') {
             if(isset($_POST['username']) && isset($_POST['password'])) {
 
-                //驗證是否已透過md5加密，並收下登入資訊
-                /*
-                if(strlen($_POST['password']) == 32)
-                    $authData = array('user' => $_POST['username'], 'pw' => $_POST['password']);
-                */
-
                 $authData = array('user' => $_POST['username'], 'pw' => $this->loadModel('hashmodel')->passwordHash($_POST['password']));
 
                 //驗證登入資料
@@ -97,19 +91,6 @@ class webMan extends Controller
 
                 //驗證成功 寫入session & 更新登入紀錄
                 if($authResult['auth']) {
-                    $_SESSION['auth'] = 'yes';
-                    $_SESSION['user'] = $authData['user'];
-                    $_SESSION['user_id'] = $authResult['userid'];
-                    $_SESSION['level'] = $authResult['level'];
-                    $_SESSION['user_project'] = $authResult['project'];
-                    $_SESSION['user_ip'] = $this->getIP();
-                    $_SESSION['login_time'] = date('Y-m-d H:i:s');
-
-                    $WorkerModel->updateWorker(array(
-                        'worker_id' => $_SESSION['user_id'],
-                        'worker_lastIP' => $_SESSION['user_ip'],
-                        'worker_lastlogin' => $_SESSION['login_time']));
-
                     echo json_encode('success');
                     exit;
                 }
@@ -125,7 +106,7 @@ class webMan extends Controller
 
             $data['class'] = $ClassModel->getClassName($_SESSION['level']);
             try {
-                $data['name'] = $WorkerModel->getWorkerName($_SESSION['user_id']);
+                $data['name'] = $WorkerModel->getWorkerName($_SESSION['userid']);
             } catch (Exception $e) {
                 $data['name'] = $e->getMessage();
             }
@@ -322,7 +303,7 @@ class webMan extends Controller
                     $update[]= array(
                         'items_id' => $target,
                         'items_status' => $_POST['status'],
-                        'items_reviewer' => $_SESSION['user_id'],
+                        'items_reviewer' => $_SESSION['userid'],
                         'items_rev_time' => date('Y-m-d H:i:s'));
                 }
 
@@ -349,7 +330,7 @@ class webMan extends Controller
             if($action == 0) {
                 //撈出自己申請的東西
                 try {
-                    $data['appItems'] = $ItemsModel->userItems($_SESSION['user_id']);
+                    $data['appItems'] = $ItemsModel->userItems($_SESSION['userid']);
 
                     //若有人審核了，順便把審核人的名字找回來
                     for($i = 0;$i <count($data['appItems']);$i++) {
@@ -385,7 +366,7 @@ class webMan extends Controller
                 if($_SESSION['user_project'] == '' && !$ClassModel->checkAuthority($_SESSION['level'], 'sendApp', true))
                     exit;
                 //收post
-                $appData['applicant'] = $_SESSION['user_id'];
+                $appData['applicant'] = $_SESSION['userid'];
                 $appData['time'] = date('Y-m-d H:i:s');
                 $appData['type'] = $_POST['type'];
                 $appData['name'] = $_POST['name'];
@@ -502,12 +483,15 @@ class webMan extends Controller
                         'worker_id' => $target,
                         'worker_level' => 0);
                 }
-                $doDisable = $WorkerModel->updateWorker($disable, true);
 
-                if($doDisable) {
+                try {
+                    $WorkerModel->updateWorker($disable, true);
                     echo json_encode('已經將所選取工人帳號停權。');
-                    exit;
+                } catch (Exception $e) {
+                    echo json_encode($e->getMessage());
                 }
+
+                exit;
             }
 
             if($action === 'addWorker') {
@@ -577,11 +561,12 @@ class webMan extends Controller
                         if($_POST['password'] != 'false')
                             $data['worker_password'] = $this->loadModel('hashmodel')->passwordHash($_POST['password']);
 
-                        $executeR = $WorkerModel->updateWorker($data);
-                        if($executeR === true)
+                        try {
+                            $WorkerModel->updateWorker($data);
                             echo json_encode('success');
-                        else
-                            echo json_encode($executeR);
+                        } catch (Exception $e) {
+                            echo json_encode($e->getMessage());
+                        }
                     }
                 }
                 exit;
@@ -643,7 +628,7 @@ class webMan extends Controller
                 $postData['title'] = $_POST['title'];
                 $postData['content'] = $_POST['content'];
                 $postData['draft'] = $_POST['draft'];
-                $postData['author'] = $_SESSION['user_id'];
+                $postData['author'] = $_SESSION['userid'];
                 $postData['time'] = date('Y-m-d H:i:s');
 
                 try {
@@ -662,7 +647,7 @@ class webMan extends Controller
                 $postData['title'] = $_POST['title'];
                 $postData['content'] = $_POST['content'];
                 $postData['draft'] = $_POST['draft'];
-                $postData['author'] = $_SESSION['user_id'];
+                $postData['author'] = $_SESSION['userid'];
                 $postData['time'] = date('Y-m-d H:i:s');
 
                 try {
@@ -682,7 +667,7 @@ class webMan extends Controller
 
                 //開始撈資料
                 try {
-                    $data = $ArticleModel->listPost($pageNumber, 30, 1, $_SESSION['level'], $_SESSION['user_id']);
+                    $data = $ArticleModel->listPost($pageNumber, 30, 1, $_SESSION['level'], $_SESSION['userid']);
                      //把編輯者名字名字拉回來
                     for($i = 0;$i < count($data);$i++) {
                         try {
@@ -708,7 +693,7 @@ class webMan extends Controller
 
         if($page === 'delete') {
             foreach ($_POST['target'] as $target) {
-                if($ArticleModel->getAuthor($target) == $_SESSION['user_id'])
+                if($ArticleModel->getAuthor($target) == $_SESSION['userid'])
                     $list[] = $target;
             }
 
@@ -723,7 +708,7 @@ class webMan extends Controller
 
         if($page === 'draft') {
             foreach ($_POST['target'] as $target) {
-                if($ArticleModel->getAuthor($target) == $_SESSION['user_id'])
+                if($ArticleModel->getAuthor($target) == $_SESSION['userid'])
                     $list[] = $target;
             }
 
@@ -739,7 +724,7 @@ class webMan extends Controller
 
         if($page === 'public') {
             foreach ($_POST['target'] as $target) {
-                if($ArticleModel->getAuthor($target) == $_SESSION['user_id'])
+                if($ArticleModel->getAuthor($target) == $_SESSION['userid'])
                     $list[] = $target;
             }
 
@@ -784,7 +769,7 @@ class webMan extends Controller
             if($action === 'insertToDatabase') {
                 $data['name'] = $_POST['name'];
                 $data['path'] = $_POST['url'];
-                $data['host'] = $_SESSION['user_id'];
+                $data['host'] = $_SESSION['userid'];
 
                 //+到活動系統
                 try {
@@ -796,7 +781,7 @@ class webMan extends Controller
 
                 //開project
                 //從post收資料
-                $insertData['project_host'] = $_SESSION['user_id'];
+                $insertData['project_host'] = $_SESSION['userid'];
                 $insertData['project_name'] = $_POST['name'];
                 $insertData['project_category'] = '2';
                 $insertData['project_time'] = date('Y-m-d H:i:s');

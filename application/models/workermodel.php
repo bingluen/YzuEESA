@@ -18,6 +18,17 @@ class WorkerModel
      * how to use more than one model in a controller (see application/controller/songs.php for more)
      */
 
+    private function getIP() {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+          $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+          $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+          $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
+
     function checkWorkerExist($worker) {
         try {
             $sql = "SELECT COUNT(*) AS count FROM `worker` WHERE `worker_name` = ? OR `worker_username` = ?;";
@@ -184,120 +195,95 @@ class WorkerModel
     function updateWorker($data, $batch = false) {
         if($batch) {
             foreach ($data as $worker) {
-                $param = '';
-                $param_val = '';
-
-                if(isset($worker['worker_level'])) {
-                    if($param != '')
-                        $param = $param.', ';
-                    $param = $param.'`worker_level` = ?';
-                    $param_val[] = $worker['worker_level'];
+                /*
+                    權限檢查
+                    1.不能修改level比自己大的資料
+                    2.不能修改自己的level
+                */
+                if($worker['worker_id'] === $_SESSION['userid']) {
+                    throw new Exception("不能修改自己的Level", 921);
                 }
 
-                if(isset($worker['worker_name'])) {
-                    if($param != '')
-                        $param = $param.', ';
-                    $param = $param.'`worker_name` = ?';
-                    $param_val[] = $worker['worker_name'];
-                }
+                if(isset($worker['worker_level']) && $worker['worker_level'] != $this->getLevel($worker['worker_id'], 'worker_id') && $this->getLevel($worker['worker_id'], 'worker_id') >= $_SESSION['level'])
+                    throw new Exception("只能修改level比自己小的帳號喔", 920);
 
-                if(isset($worker['worker_password'])) {
-                    if($param != '')
-                        $param = $param.', ';
-                    $param = $param.'`worker_password` = ?';
-                    $param_val[] = $worker['worker_password'];
-                }
+                $this->updateRow($worker);
 
-                if(isset($worker['worker_project'])) {
-                    if($param != '')
-                        $param = $param.', ';
-                    $param = $param.'`worker_project` = ?';
-                    $param_val[] = $worker['worker_project'];
-                }
-
-                if(isset($worker['worker_lastlogin'])) {
-                    if($param != '')
-                        $param = $param.', ';
-                    $param = $param.'`worker_lastlogin` = ?';
-                    $param_val[] = $worker['worker_lastlogin'];
-                }
-
-                if(isset($worker['worker_lastIP'])) {
-                    if($param != '')
-                        $param = $param.', ';
-                    $param = $param.'`worker_lastIP` = ?';
-                    $param_val[] = $worker['worker_lastIP'];
-                }
-
-                $param_val[] = $worker['worker_id'];
-
-                try {
-                    $sql = "UPDATE `worker` SET $param WHERE `worker_id` = ?;";
-                    $query = $this->db->prepare($sql);
-                    $result = $query->execute($param_val);
-                } catch(Exception $e) {
-                    throw new Exception($e->getMessage());
-                }
             }
         } else {
-            $param = '';
-            $param_val = '';
-
-            if(isset($data['worker_level'])) {
-                if($param != '')
-                    $param = $param.', ';
-                $param = $param.'`worker_level` = ?';
-                $param_val[] = $data['worker_level'];
+            /*
+                權限檢查
+                1.不能修改level比自己大或同level資料
+                2.不能修改自己的level
+            */
+            if($data['worker_id'] === $_SESSION['userid']) {
+                throw new Exception("不能修改自己的Level", 921);
             }
 
-            if(isset($data['worker_name'])) {
-                if($param != '')
-                    $param = $param.', ';
-                $param = $param.'`worker_name` = ?';
-                $param_val[] = $data['worker_name'];
-            }
+            if(isset($data['worker_level']) && $data['worker_level'] != $this->getLevel($data['worker_id'], 'worker_id') && $this->getLevel($data['worker_id'], 'worker_id') >= $_SESSION['level'])
+                throw new Exception("只能修改level比自己小的帳號喔", 920);
 
-            if(isset($data['worker_password'])) {
-                if($param != '')
-                    $param = $param.', ';
-                $param = $param.'`worker_password` = ?';
-                $param_val[] = $data['worker_password'];
-            }
 
-            if(isset($data['worker_project'])) {
-                if($param != '')
-                    $param = $param.', ';
-                $param = $param.'`worker_project` = ?';
-                $param_val[] = $data['worker_project'];
-            }
+            $this->updateRow($data);
 
-            if(isset($data['worker_lastlogin'])) {
-                if($param != '')
-                    $param = $param.', ';
-                $param = $param.'`worker_lastlogin` = ?';
-                $param_val[] = $data['worker_lastlogin'];
-            }
+        }
+    }
 
-            if(isset($data['worker_lastIP'])) {
-                if($param != '')
-                    $param = $param.', ';
-                $param = $param.'`worker_lastIP` = ?';
-                $param_val[] = $data['worker_lastIP'];
-            }
+    function updateRow($data) {
+        $param = '';
+        $param_val = '';
 
-            $param_val[] = $data['worker_id'];
-
-            try {
-                $sql = "UPDATE `worker` SET $param WHERE `worker_id` = ?;";
-                $query = $this->db->prepare($sql);
-                $result = $query->execute($param_val);
-            } catch(Exception $e) {
-                throw new Exception($e->getMessage());
-            }
+        if(isset($data['worker_level'])) {
+            if($param != '')
+                $param = $param.', ';
+            $param = $param.'`worker_level` = ?';
+            $param_val[] = $data['worker_level'];
         }
 
+        if(isset($data['worker_name'])) {
+            if($param != '')
+                $param = $param.', ';
+            $param = $param.'`worker_name` = ?';
+            $param_val[] = $data['worker_name'];
+        }
 
-        return true;
+        if(isset($data['worker_password'])) {
+            if($param != '')
+                $param = $param.', ';
+            $param = $param.'`worker_password` = ?';
+            $param_val[] = $data['worker_password'];
+        }
+
+        if(isset($data['worker_project'])) {
+            if($param != '')
+                $param = $param.', ';
+            $param = $param.'`worker_project` = ?';
+            $param_val[] = $data['worker_project'];
+        }
+
+        if(isset($data['worker_lastlogin'])) {
+            if($param != '')
+                $param = $param.', ';
+            $param = $param.'`worker_lastlogin` = ?';
+            $param_val[] = $data['worker_lastlogin'];
+        }
+
+        if(isset($data['worker_lastIP'])) {
+            if($param != '')
+                $param = $param.', ';
+            $param = $param.'`worker_lastIP` = ?';
+            $param_val[] = $data['worker_lastIP'];
+        }
+
+        $param_val[] = $data['worker_id'];
+
+        try {
+            $sql = "UPDATE `worker` SET $param WHERE `worker_id` = ?;";
+            $query = $this->db->prepare($sql);
+            $result = $query->execute($param_val);
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     function addWorker($data) {
@@ -359,9 +345,23 @@ class WorkerModel
 
         if($result->worker_password === $authData['pw']) {
             $authResult['auth'] = true;
-            $authResult['userid'] = $result->worker_id;
-            $authResult['level'] = $result->worker_level;
-            $authResult['project'] = $result->worker_project;
+            $_SESSION['auth'] = 'yes';
+            $_SESSION['user'] = $authData['user'];
+            $_SESSION['userid'] = $result->worker_id;
+            $_SESSION['level'] = $result->worker_level;
+            $_SESSION['user_project'] = $result->worker_project;
+            $_SESSION['user_ip'] = $this->getIP();
+            $_SESSION['login_time'] = date('Y-m-d H:i:s');
+
+            //寫入登入紀錄
+            try {
+                $sql = "UPDATE `worker` SET `worker_lastIP` = ? , `worker_lastlogin` = ? WHERE `worker_id` = ?;";
+                $query = $this->db->prepare($sql);
+                $result = $query->execute(array($_SESSION['user_ip'], $_SESSION['login_time'], $_SESSION['userid']));
+            } catch(Exception $e) {
+                throw new Exception($e->getMessage());
+            }
+
             return $authResult;
         } else {
             throw new Exception('帳號或密碼錯誤', 902);
