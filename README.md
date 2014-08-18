@@ -1,7 +1,7 @@
-# YzuEESA Project
+﻿# YzuEESA Project
 元智大學電機系學會網站 Project
 
-本計畫基於<a href="https://github.com/panique/php-mvc">php-MVC</a> 開發
+本計畫基於 <a href="https://github.com/panique/php-mvc">php-MVC</a> 開發
 
 開發負責人：元智大學103級電機系學會 學務長 Erickson Juang
 
@@ -29,3 +29,15 @@
         
         未實作：活動模組、相簿模組
         
+    2014/08/19
+
+	修正&更新：
+		簡化部分語法
+		修正工人編輯視窗UI
+		登入模組修改
+		修改資料前檢查level
+		禁止修改自身level
+
+	未完成：活動模組
+	
+	未實作：相簿模組
