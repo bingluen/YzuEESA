@@ -22,7 +22,7 @@ class ArticleModel
         try {
             $sql = "INSERT INTO `messages` (messages_title, messages_content, messages_author, messages_time, messages_draft) VALUES(?, ?, ?, ?, ?);";
             $query = $this->db->prepare($sql);
-            $query->execute(array($data['title'], $data['content'], $data['author'], $data['time'], $data['draft']));
+            $query->execute(array($data['title'], htmlspecialchars($data['content']), $data['author'], $data['time'], $data['draft']));
         } catch(Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -34,7 +34,7 @@ class ArticleModel
         try {
             $sql = "UPDATE `messages` SET `messages_title` = ?, `messages_content` = ?, `messages_author` = ?, `messages_time` = ?, `messages_draft` = ? WHERE `messages_id` = ?;";
             $query = $this->db->prepare($sql);
-            $query->execute(array($data['title'], $data['content'], $data['author'], $data['time'], $data['draft'], $data['post_id']));
+            $query->execute(array($data['title'], htmlspecialchars($data['content']), $data['author'], $data['time'], $data['draft'], $data['post_id']));
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -44,26 +44,27 @@ class ArticleModel
 
     function getPost($id) {
         try {
-            $sql = "SELECT `messages_title`, `messages_content` FROM `messages` WHERE `messages_id` = ?;";
+            $sql = "SELECT `messages_title` AS title, `messages_content` AS content FROM `messages` WHERE `messages_id` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($id));
             $result = $query->fetch();
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+        $result->content = html_entity_decode($result->content);
         return $result;
     }
 
-    function listPost($page = 0, $limit = 15, $position = 0, $level = 0, $user = 0) {
+    function listPost($page = 0, $limit = 15, $position = 0, $type = 0, $level = 0, $user = 0) {
         try {
 
             if($position == 0 ) { // 0 = 前台
-                $sql = "SELECT `messages_id` AS id, `messages_title` AS title, `messages_time` AS time FROM `messages` WHERE `messages_draft` = '0' ORDER BY `messages_time` DESC LIMIT $page, $limit;";
+                $sql = "SELECT `messages_id` AS id, `messages_title` AS title, `messages_time` AS time FROM `messages` WHERE `messages_draft` = '0' AND `messages_type` = '$type' ORDER BY `messages_time` DESC LIMIT $page, $limit;";
             } else if($position == 1) { // 1 = 後台
                 if($level > 900)
-                    $sql = "SELECT `messages_id`, `messages_draft`, `messages_title`, `messages_time`, `messages_author` FROM `messages` ORDER BY `messages_time` DESC LIMIT $page, $limit;";
+                    $sql = "SELECT `messages_id`, `messages_draft`, `messages_title` AS title, `messages_time`, `messages_author` FROM `messages` ORDER BY `messages_time` DESC LIMIT $page, $limit;";
                 else
-                    $sql = "SELECT `messages_id`, `messages_draft`, `messages_title`, `messages_time`, `messages_author` FROM `messages` WHERE `messages_author` = '$user' ORDER BY `messages_time` DESC LIMIT $page, $limit;";
+                    $sql = "SELECT `messages_id`, `messages_draft`, `messages_title` AS title, `messages_time`, `messages_author` FROM `messages` WHERE `messages_author` = '$user' ORDER BY `messages_time` DESC LIMIT $page, $limit;";
             }
             $query = $this->db->prepare($sql);
             $query->execute();
@@ -84,8 +85,8 @@ class ArticleModel
             } catch(Exception $e) {
                 throw new Exception($e->getMessage());
             }
-            return true;
         }
+        return true;
     }
 
     function publicPost($list) {
@@ -142,6 +143,8 @@ class ArticleModel
         if(!$result) {
             throw new Exception("文章不存在或已經被刪除。", 801);
         }
+
+        $result->content = html_entity_decode($result->content);
 
         return $result;
     }
