@@ -19,6 +19,8 @@ class webMan extends Controller
         unset($_SESSION['auth']);
         unset($_SESSION['user']);
         unset($_SESSION['user_id']);
+        unset($_SESSION['level']);
+        unset($_SESSION['user_project']);
         unset($_SESSION['user_ip']);
         unset($_SESSION['login_time']);
     }
@@ -457,7 +459,7 @@ class webMan extends Controller
                     foreach ($projectKey as $key) {
                         if($name = $ProjectModel->getProjectName($key)) {
                             if($projectName != '')
-                            $projectName = $projectName . ', ';
+                            $projectName = $projectName . '<br/>';
                             $projectName = $projectName.$name;
                         }
                     }
@@ -554,8 +556,10 @@ class webMan extends Controller
                                 $projectKey[$j] = str_replace(' ', '', $projectKey[$j]);
                             }
 
+                            $i = 0;
                             foreach ($projectKey as $key) {
                                 if($name = $ProjectModel->getProjectName($key)) {
+                                    $i++;
                                     $detail['worker_project'][$i]['project_id'] = $key;
                                     $detail['worker_project'][$i]['project_name'] = $name;
                                 }
@@ -616,8 +620,8 @@ class webMan extends Controller
                 $article = $ArticleModel->getPost($action);
 
                 $data['post_id'] = $action;
-                $data['title'] = $article->messages_title;
-                $data['content'] = $article->messages_content;
+                $data['title'] = $article->title;
+                $data['content'] = $article->content;
 
             } else if($action != 'NewPost') {
                 if(!$ClassModel->checkAuthority($_SESSION['level'], 'Messages-new'))
@@ -753,7 +757,9 @@ class webMan extends Controller
         $this->checkLogin();
 
         $ClassModel = $this->loadModel('classmodel');
-        $EventModel = $this->loadMOdel('eventmodel');
+        $EventModel = $this->loadModel('eventmodel');
+        $ProjectModel = $this->loadModel('projectmodel');
+        $WorkerModel = $this->loadModel('workermodel');
 
         if($page === 0) {
             if(!$ClassModel->checkAuthority($_SESSION['level'], 'Event'))
@@ -779,7 +785,6 @@ class webMan extends Controller
                 $data['name'] = $_POST['name'];
                 $data['path'] = $_POST['url'];
                 $data['host'] = $_SESSION['user_id'];
-                $insertExecute = $EventModel->addEvent($data);
 
                 //+到活動系統
                 try {
