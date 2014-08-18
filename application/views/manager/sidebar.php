@@ -12,7 +12,6 @@
         <ul class="dropdown-menu" role="menu" aria-labelledby="EventTabDrop">
             <li><a href="<?php echo URL ?>webMan/Event" tabindex="-1" data-toggle="Event_tab">系統說明</a></li>
             <li><a href="<?php echo URL ?>webMan/Event/EventList" tabindex="-1" data-toggle="Event_tab">活動列表</a></li>
-            <li><a href="<?php echo URL ?>webMan/Event/EventMes" tabindex="-1" data-toggle="Event_tab">公告系統（活動）</a></li>
             <li><a href="<?php echo URL ?>webMan/Event/EventCreate" tabindex="-1" data-toggle="Event_tab">舉辦活動</a></li>
 
         </ul>
