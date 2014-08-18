@@ -16,9 +16,9 @@
             <button type="button" class="btn btn-sm btn-warning make-draft-btn">設定為草稿</button>
             <button type="button" class="btn btn-sm btn-danger delete-btn">刪除</button>
         </div>
-        
+
         <table class="table table-hover">
-            
+
             <thead>
                 <tr>
                     <th></th>
@@ -39,7 +39,7 @@
             <ul class="pagination" id="article-pagination">
             </ul>
         </div>
-        
+
 
     </div>
 </div>
@@ -81,7 +81,7 @@
                 str += '<td>公開</td>';
             }
 
-            str += '<td><a href="'+ary[0]+'editor/'+data[i]['messages_id']+'">'+data[i]['messages_title']+'</a></td>';
+            str += '<td><a href="'+ary[0]+'editor/'+data[i]['messages_id']+'">'+data[i]['title']+'</a></td>';
             str += '<td>'+data[i]['messages_author']+'</td>';
             str += '<td>'+data[i]['messages_time']+'</td>';
 
