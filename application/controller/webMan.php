@@ -775,6 +775,38 @@ class webMan extends Controller
                 exit;
             }
 
+            if($action === 'insertToDatabase') {
+                $data['name'] = $_POST['name'];
+                $data['path'] = $_POST['url'];
+                $data['host'] = $_SESSION['user_id'];
+                $insertExecute = $EventModel->addEvent($data);
+
+                //+到活動系統
+                try {
+                    $insertExecute = $EventModel->addEvent($data);
+                } catch (Exception $e) {
+                    echo json_encode($e->getMessage());
+                    exit;
+                }
+
+                //開project
+                //從post收資料
+                $insertData['project_host'] = $_SESSION['user_id'];
+                $insertData['project_name'] = $_POST['name'];
+                $insertData['project_category'] = '2';
+                $insertData['project_time'] = date('Y-m-d H:i:s');
+
+                //新增project，並回傳project id值
+                $projectId = $ProjectModel->addProject($insertData);
+
+                //增加該工人權限
+                $WorkerModel->setWorkerProject($insertData['project_host'], $projectId);
+
+
+                echo json_encode('success');
+                exit;
+            }
+
             $active = 'Event';
             $this->loadView('_templates/header_man');
             $this->loadView('manager/sidebar', $active);

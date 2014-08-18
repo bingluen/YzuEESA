@@ -1,6 +1,14 @@
 <?php
 class EventModel
 {
+    function __construct($db) {
+        try {
+            $this->db = $db;
+        } catch (PDOException $e) {
+            exit('Database connection could not be established.');
+        }
+    }
+
     function catchEventDetail($url) {
         $content = '';
         $host = 'http://yzueesa.kktix.cc/events/'.$url;
@@ -18,27 +26,43 @@ class EventModel
         $content = curl_exec($connect);
         curl_close($connect);
 
-        //catch Time
-        preg_match_all('/class="timezoneSuffix">(.*)<\/span> ~ /', $content, $catch);
-        $data['start'] = $catch['1']['0'];
-        preg_match_all('/~ <span class="timezoneSuffix">(.*)<\/span> /', $content, $catch);
-        $data['end'] = $catch['1']['0'];
+        if(preg_match('/404 Page Not Found/', $content)) {
+            return false;
+        } else {
+            //catch Time
+            preg_match_all('/class="timezoneSuffix">(.*)<\/span> ~ /', $content, $catch);
+            $data['start'] = $catch['1']['0'];
+            preg_match_all('/~ <span class="timezoneSuffix">(.*)<\/span> /', $content, $catch);
+            $data['end'] = $catch['1']['0'];
 
-        //catch Location
-        preg_match_all('/class="fa fa-map-marker"><\/i>(.*)<\/span>/', $content, $catch);
-        $data['location'] = $catch['1']['0'];
+            //catch Location
+            preg_match_all('/class="fa fa-map-marker"><\/i>(.*)<\/span>/', $content, $catch);
+            $data['location'] = $catch['1']['0'];
 
-        //catch the number of participants
-        preg_match_all('/class="fa fa-male"><\/i>\x0A[ ]+(.*)/', $content, $catch);
-        $data['people'] = $catch['1']['0'];        
+            //catch the number of participants
+            preg_match_all('/class="fa fa-male"><\/i>\x0A[ ]+(.*)/', $content, $catch);
+            $data['people'] = $catch['1']['0'];
 
-        //catch event description text
-        //preg_match_all('/<div class="description">((.|\n)*)<\/div>/', $content, $catch);
-        $Needle['start'] = strpos($content, '<div class="description">') + 25;
-        $Needle['end'] = strpos($content, '</div>', $Needle['start']);
-        $data['description'] = substr($content, $Needle['start'], $Needle['end']-$Needle['start']);
+            //catch event description text
+            //preg_match_all('/<div class="description">((.|\n)*)<\/div>/', $content, $catch);
+            $Needle['start'] = strpos($content, '<div class="description">') + 25;
+            $Needle['end'] = strpos($content, '</div>', $Needle['start']);
+            $data['description'] = substr($content, $Needle['start'], $Needle['end']-$Needle['start']);
 
-        return $data;
+            return $data;
+        }
+    }
+
+    function addEvent($data) {
+        try {
+            $sql = "INSERT INTO `event_list` (event_name, event_path, event_host) VALUES(?, ?, ?);";
+            $query = $this->db->prepare($sql);
+            $result = $query->execute(array($data['name'], $data['path'], $data['host']));
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
+        return true;
     }
 }
 ?>
