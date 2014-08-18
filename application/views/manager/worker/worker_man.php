@@ -105,8 +105,8 @@
 
                 <p>
                     <label for="edit_worker_level" class="control-label">所屬計畫/活動</label>
-                    <h4 id="workerEdit_project">
-                    </h4>
+                    <div id="workerEdit_project" style="font-size:18px;">
+                    </div>
                     新增活動（按一下結果中的project/活動名稱來新增）
                     <input id="searchProjectKey" class="form-control" type="text" placeholder="輸入project/活動名稱進行搜尋">
                     <span id="projectSearchResult"></span>
@@ -129,7 +129,7 @@ function displayProject(projects) {
     if(projects != '') {
         for (var project in projects) {
             var str = '';
-            str += '<span class="label label-default" id="';
+            str += '<div style="display: inline-block;" class="label label-default" id="';
             str += projects[project]['project_id'];
             str += '">';
             str += projects[project]['project_name'];
@@ -138,7 +138,7 @@ function displayProject(projects) {
             str += ')">&times;</button>';
             str += '<input id="workerEdit_project" name="workerEdit_project" type="hidden" value="';
             str += projects[project]['project_id'];
-            str += '"></span';
+            str += '"></div>';
             $('#workerEdit_project').append(str);
         }
     }
@@ -150,7 +150,7 @@ function deleteProject(project) {
 
 function addProject(id, name) {
     var str = '';
-    str += '<span class="label label-default" id="';
+    str += '<div style="display: inline-block;" class="label label-default" id="';
     str += id;
     str += '">';
     str += name;
@@ -159,7 +159,7 @@ function addProject(id, name) {
     str += ')">&times;</button>';
     str += '<input id="workerEdit_project" name="workerEdit_project" type="hidden" value="';
     str += id;
-    str += '"></span';
+    str += '"></div>';
     $('#workerEdit_project').append(str);
 }
 
