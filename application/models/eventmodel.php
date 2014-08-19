@@ -43,6 +43,13 @@ class EventModel
             preg_match_all('/class="fa fa-male"><\/i>\x0A[ ]+(.*)/', $content, $catch);
             $data['people'] = $catch['1']['0'];
 
+            //catch ima of description
+            preg_match_all('/<div class="description">[ \n]+<img src="(.*)"/', $content, $catch);
+            if(isset($catch['1']['0']))
+                $data['img'] = $catch['1']['0'];
+            else
+                $data['img'] = URL.'public/img/EventSystem/null-img.png';
+
             //catch event description text
             //preg_match_all('/<div class="description">((.|\n)*)<\/div>/', $content, $catch);
             $Needle['start'] = strpos($content, '<div class="description">') + 25;
@@ -61,8 +68,19 @@ class EventModel
         } catch(Exception $e) {
             throw new Exception($e->getMessage());
         }
+    }
 
-        return true;
+    function listEvent() {
+        try {
+            $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list`;";
+            $query = $this->db->prepare($sql);
+            $query->execute();
+            $result = $query->fetchAll();
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
     }
 }
 ?>
