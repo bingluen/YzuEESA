@@ -6,7 +6,6 @@
 
 
 <div id="main">
-  <div class="container-fluid">
 
     <ol class="breadcrumb breadcrumb-arrow SUNFLOWER">
       <li><a href="<?=URL?>"><i class="glyphicon glyphicon-home"></i> 首頁</a></li>
@@ -71,7 +70,7 @@
 
       </div>
     </div>
-  </div>
+
 </div>
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>

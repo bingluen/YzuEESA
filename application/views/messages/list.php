@@ -1,5 +1,4 @@
 <div id="main">
-    <div class="container-fluid">
         <ol class="breadcrumb breadcrumb-arrow SUNFLOWER">
             <li><a href="<?=URL?>"><i class="glyphicon glyphicon-home"></i> 首頁</a></li>
             <li class="active"><span><i class="glyphicon glyphicon-list-alt"></i> 最新資訊</span></li>
@@ -24,7 +23,6 @@
             </div>
         </div>
 
-    </div>
 </div>
 
 <script type="text/javascript">
