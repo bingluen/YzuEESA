@@ -1,10 +1,3 @@
-<style type="text/css">
-.google-visualization-table-table {
-  font-size: 14px !important;
-}
-</style>
-
-
 <div id="main" class="container">
 
     <ol class="breadcrumb breadcrumb-arrow">
