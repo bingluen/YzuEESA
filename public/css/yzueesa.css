@@ -245,6 +245,13 @@
 
 
 /*
+----------- google chart --------------
+*/
+    .google-visualization-table-table {
+        font-size: 14px !important;
+    }
+
+/*
 --------- container override ---------
 */
     @media screen and (min-width: 768px) {
