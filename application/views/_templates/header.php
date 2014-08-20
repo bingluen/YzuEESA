@@ -49,6 +49,7 @@
                 <li><a href="<?php echo URL; ?>iStudy/">iStudy</a></li>
                 <li><a href="<?php echo URL; ?>Information/">公開資訊</a></li>
                 <li><a href="https://www.facebook.com/messages/147429552025011" target="_blank">問題聯繫</a></li>
+                <li id ="fblogo-min768"><a href="https://www.facebook.com/yzueesa" target="_blank"><span class="fblogo"></span></a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right" id="fblogo">
                 <li><a href="https://www.facebook.com/yzueesa" target="_blank"><span class="fblogo"></span></a></li>
@@ -90,8 +91,8 @@
 
             </div>
 
-        </div> <?php 
-    } 
+        </div> <?php
+    }
     else { ?>
 
         <div id="photoslide" class="carousel slide" data-ride="carousel">
@@ -106,5 +107,5 @@
                 </div>
             </div>
 
-        </div> <?php 
+        </div> <?php
     } ?>

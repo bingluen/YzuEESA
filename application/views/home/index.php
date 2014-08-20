@@ -1,5 +1,4 @@
-<div id="main">
-    <div class="container-fluid">
+<div id="main" class="container">
         <div class="row">
             <!-- 公告區 -->
             <div class="col-sm-6">
@@ -18,5 +17,4 @@
                 </ul>
             </div>
         </div>
-    </div>
 </div>
