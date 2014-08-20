@@ -70,9 +70,17 @@ class EventModel
         }
     }
 
-    function listEvent() {
+    function listEvent($page = 0, $limit = 5, $position = 0, $level = 0, $user = 0) {
         try {
-            $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list`;";
+            if($position == 0) {
+                $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list` ORDER BY `event_id` DESC LIMIT $page, $limit;";
+            } else {
+                if($level > 900) {
+                    $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list` ORDER BY `event_id` DESC LIMIT $page, $limit;";
+                } else {
+                    $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list` WHERE `event_host` = '$user' ORDER BY `event_id` DESC LIMIT $page, $limit;";
+                }
+            }
             $query = $this->db->prepare($sql);
             $query->execute();
             $result = $query->fetchAll();
