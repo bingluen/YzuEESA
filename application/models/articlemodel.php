@@ -62,9 +62,9 @@ class ArticleModel
                 $sql = "SELECT `messages_id` AS id, `messages_title` AS title, `messages_time` AS time FROM `messages` WHERE `messages_draft` = '0' AND `messages_type` = '$type' ORDER BY `messages_time` DESC LIMIT $page, $limit;";
             } else if($position == 1) { // 1 = 後台
                 if($level > 900)
-                    $sql = "SELECT `messages_id`, `messages_draft`, `messages_title` AS title, `messages_time`, `messages_author` FROM `messages` ORDER BY `messages_time` DESC LIMIT $page, $limit;";
+                    $sql = "SELECT `messages_id`, `messages_draft`, `messages_title` AS title, `messages_time`, `messages_author`, `messages_type` FROM `messages` ORDER BY `messages_time` DESC LIMIT $page, $limit;";
                 else
-                    $sql = "SELECT `messages_id`, `messages_draft`, `messages_title` AS title, `messages_time`, `messages_author` FROM `messages` WHERE `messages_author` = '$user' ORDER BY `messages_time` DESC LIMIT $page, $limit;";
+                    $sql = "SELECT `messages_id`, `messages_draft`, `messages_title` AS title, `messages_time`, `messages_author`, `messages_type` FROM `messages` WHERE `messages_author` = '$user' ORDER BY `messages_time` DESC LIMIT $page, $limit;";
             }
             $query = $this->db->prepare($sql);
             $query->execute();
