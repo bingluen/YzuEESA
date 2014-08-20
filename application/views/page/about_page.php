@@ -1,6 +1,6 @@
 <div id="main">
 
-    <ol class="breadcrumb breadcrumb-arrow SUNFLOWER">
+    <ol class="breadcrumb breadcrumb-arrow">
         <li><a href="<?=URL?>"><i class="glyphicon glyphicon-home"></i> 首頁</a></li>
         <li class="active"><span><i class="glyphicon glyphicon-leaf"></i> 關於系學會</span></li>
     </ol>
@@ -26,7 +26,7 @@
     </div>
 
     <h3 id="core">系學會團隊 <small>Student Association Team</small></h2>
-    
+
     <div class="panel-group" id="sa-team">
 
             <div class="panel panel-default">
@@ -40,7 +40,7 @@
             </div>
 
             <div id="103-team" class="panel-collapse collapse in panel-group">
-                
+
                 <div class="panel-body">
 
                     <?php
@@ -160,7 +160,7 @@
                     );
 
                     foreach ($team as $member) { ?>
-                        
+
                         <div class="col-xs-6 col-sm-6 col-md-4">
 
                             <div class="thumbnail">
@@ -178,7 +178,7 @@
                                 </div>
 
                             </div>
-                        </div> <?php 
+                        </div> <?php
 
                     } ?>
 

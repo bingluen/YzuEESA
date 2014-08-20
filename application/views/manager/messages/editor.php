@@ -1,5 +1,4 @@
-<div class="tab-content panel" id="man-content">
-    <div id="man-MainContent">
+<div class="tab-content panel">
         <div class="alert alert-warning alert-dismissable" id="Alert-messages">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true" id="close-alert">×</button>
             <strong>注意!</strong> 若編輯超過30分鐘，系統自動登出，文章會發送失敗。
@@ -24,7 +23,6 @@
             <button type="button" class="btn btn-default" id="draft-btn">存為草稿</button>
             <button type="button" class="btn btn-info" id="post-btn">發   布</button>
         </p>
-    </div>
 </div>
 
 <script type="text/javascript" src="<?=URL?>public/js/tinymce/tinymce.min.js"></script>

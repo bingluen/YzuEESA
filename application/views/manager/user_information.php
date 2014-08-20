@@ -1,4 +1,4 @@
-<div class="tab-content panel" id="man-content">
+<div class="tab-content panel">
 
     <div id="man-MainContent">
        <div class="panel panel-info" id="">

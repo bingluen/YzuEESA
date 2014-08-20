@@ -24,7 +24,7 @@
 </head>
 <body>
 <?php if(!(isset($data) && $data =='login')) { ?>
-<div id="Content">
+<div id="man-Content">
     <div class="">
         <div class="tabbable tabs-left clearfix">
 <?php } ?>

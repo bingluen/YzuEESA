@@ -1,4 +1,4 @@
-<div class="tab-content panel" id="man-content">
+<div class="tab-content panel">
     <div class="tab-pane fade active in">
         <h3>所有計畫 / 活動</h3>
         <table class="table">

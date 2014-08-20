@@ -1,5 +1,5 @@
 <div id="main">
-        <ol class="breadcrumb breadcrumb-arrow SUNFLOWER">
+        <ol class="breadcrumb breadcrumb-arrow">
             <li><a href="<?=URL?>"><i class="glyphicon glyphicon-home"></i> 首頁</a></li>
             <li class="active"><span><i class="glyphicon glyphicon-list-alt"></i> 最新資訊</span></li>
         </ol>

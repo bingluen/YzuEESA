@@ -1,10 +1,4 @@
-<style type="text/css">
-.introduction {
-    width:70%;
-    margin: auto;
-}
-</style>
-<div class="tab-content panel" id="man-content">
+<div class="tab-content panel">
     <div class="tab-pane fade active in">
         <div class="introduction">
 <h3>活動系統簡介</h3>

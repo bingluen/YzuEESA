@@ -1,5 +1,4 @@
-<div class="tab-content panel" id="man-content">
-    <div id="man-MainContent">
+<div class="tab-content panel">
         <h3>新增活動</h3>
         <h4>Step 1.先上kktix新增活動</h4>
 
@@ -45,7 +44,6 @@
         <button type="button" class="btn btn-success" id="send-btn" disabled>新增到系學會網站</button>
 
         <div class="alert alert-danger" role="alert" id="InternalError" style="display:none;"></div>
-    </div>
 </div>
 
 <script>

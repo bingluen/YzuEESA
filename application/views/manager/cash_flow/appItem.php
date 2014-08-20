@@ -1,4 +1,4 @@
-<div class="tab-content panel" id="man-content">
+<div class="tab-content panel">
     <div class="tab-pane fade active in">
         <h3>我提出的申項目</h3>
         <?php if(!isset($data['message'])) { ?>

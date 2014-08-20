@@ -7,7 +7,7 @@
 
 <div id="main">
 
-    <ol class="breadcrumb breadcrumb-arrow SUNFLOWER">
+    <ol class="breadcrumb breadcrumb-arrow">
       <li><a href="<?=URL?>"><i class="glyphicon glyphicon-home"></i> 首頁</a></li>
       <li><a href="<?=URL?>Information/"><i class="glyphicon glyphicon-info-sign"></i> 公開資訊</a></li>
       <li class="active"><span><i class="glyphicon glyphicon-usd"></i> 財務透明</span></li>

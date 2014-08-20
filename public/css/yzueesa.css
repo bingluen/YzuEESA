@@ -64,9 +64,6 @@
     z-index: 10;
 }
 
-body {
-}
-
 h2 {
     margin-top: 0px;
 }
@@ -78,13 +75,6 @@ h2 {
     padding: 0px !important;
 }
 
-/* 後台的content */
-#Content {
-    margin-bottom: 30px;
-    position: relative;
-    width: 90%;
-    margin: auto;
-}
 
 .footer {
     color: #F8F8F8;
@@ -151,41 +141,40 @@ h6 .small,
     margin-top: -225px;
 }
 /*
---------------- Man ------------------
+--------------- 後台 ------------------
 
 */
-#man-sidebar {
-    background-color: #e6e9ed !important;
-    display: block;
-}
+    #man-sidebar {
+        background-color: #e6e9ed !important;
+        display: block;
+    }
 
-#man-content {
-}
+    #man-Content {
+        margin-bottom: 30px;
+        position: relative;
+        width: 90%;
+        margin: auto;
+    }
+    .man-MainInfo {
+        width: 130px;
+        margin-right: 10px;
+        text-align: right;
+    }
 
-#man-MainContent {
-    margin: 50px;
-}
+    #postList-Function {
+        margin-bottom: 10px;
+    }
+
+    #articleFooter {
+        margin-bottom: 40px;
+    }
+
+    /* 活動 */
+    .introduction {
+        width:70%;
+        margin: auto;
+    }
 /*
---------------- event ----------------
-*/
-#EventMain {
-    margin-bottom: 30px;
-    position: relative;
-    left: 5%;
-    height: auto;
-    z-index: 2;
-    width: 80%;
-    margin: 0 auto;
-    margin-top: -20px;
-}
-
-.eventContentTitle {
-    margin-top: 0px;
-}
-
-.Event-Content-Text {
-    margin-left: 30px;
-}
 /*
 --------------max width ----------------
 */
@@ -211,11 +200,6 @@ h6 .small,
 
     h2 {
         margin-top: 0;
-    }
-
-    #MainContent {
-        width: 90%;
-        margin-top: 30px;
     }
 }
 
@@ -257,10 +241,6 @@ h6 .small,
 
     .carousel-caption > h4 {
         font-size: 15px;
-    }
-
-    iframe {
-        display: none;
     }
 
     h2 {
@@ -325,26 +305,26 @@ h6 .small,
         height: 29px;
         display: inline-block;
     }
+    /*
+    --------------- 後台 ------------------
 
-    #Content {
+    */
+    #man-Content {
         margin-bottom: 30px;
         position: relative;
         width: 90%;
     }
 }
-
-@media screen and (min-width: 850px) {
-    #man-sidebar-max1023 {
-        display: none;
-    }
-}
-
 @media screen and (min-width: 1024px) {
     .navbar-toggle {
         display: none !important;
     }
 
-    #Content {
+    /*
+    --------------- 後台 ------------------
+
+    */
+    #man-Content {
         margin-bottom: 30px;
         position: relative;
         width: 90%;
@@ -356,19 +336,6 @@ h6 .small,
     }
 }
 
-.man-MainInfo {
-    width: 130px;
-    margin-right: 10px;
-    text-align: right;
-}
-
-#postList-Function {
-    margin-bottom: 10px;
-}
-
-#articleFooter {
-    margin-bottom: 40px;
-}
 
 /* ------------- 圖片固定比例自動裁剪 ------------- */
 .img-cut-32 {
