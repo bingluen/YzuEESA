@@ -243,6 +243,79 @@
         }
     }
 
+/*
+-------------- Activities ---------------
+*/
+    #event-menu {
+        width: 20%
+    }
+    #event-demo {
+        width: 75%;
+        float: right;
+    }
+
+    #event-demo .thumbnail {
+        width: 80%;
+        left: 10%;
+        right: 10%;
+        margin-bottom: 25px;
+        margin-top: 5px;
+    }
+
+    #event-demo .caption img {
+        max-width: 100%;
+    }
+
+    .frame {
+        overflow: hidden;
+    }
+
+    aside[id="event-demo-breadcrumbs"],
+    aside[id="event-demo-control"] .slidr-control.up,
+    aside[id="event-demo-control"] .slidr-control.down {
+        display: none;
+    }
+    aside[id="event-demo-control"] .slidr-control.left:after {
+        border-style: none !important;
+    }
+    aside[id="event-demo-control"] .slidr-control.left:before {
+        content: "\e079";
+    }
+
+    aside[id="event-demo-control"] .slidr-control.right:after {
+        border-style: none !important;
+    }
+    aside[id="event-demo-control"] .slidr-control.right:before {
+        content: "\e080";
+    }
+
+    aside[id="event-demo-control"] .slidr-control.right {
+        float: right;
+        margin-right: 15px;
+    }
+
+    @media screen and (min-width: 768px) {
+        aside[id="event-demo-control"] .slidr-control {
+            height: 30px;
+            margin-top: -15px;
+            font-size: 30px;
+        }
+    }
+
+    aside[id="event-demo-control"] {
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        z-index: 5;
+        display: inline-block;
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
 
 /*
 ----------- google chart --------------
@@ -317,7 +390,26 @@
     }
 
 /* ------------- 圖片固定比例自動裁剪 ------------- */
-    .img-cut-32 {
+    .img-cut-32,
+    .img-cut.img-cut-32, {
+        max-width: 100%;
+        height: 0;
+        padding-bottom: 67%;
+        background-color: #FFF;
+        overflow: hidden;
+    }
+
+    .img-cut-31,
+    .img-cut.img-cut-31, {
+        max-width: 100%;
+        height: 0;
+        padding-bottom: 33%;
+        background-color: #FFF;
+        overflow: hidden;
+    }
+
+    .img-cut-43,
+    .img-cut.img-cut-43 {
         max-width: 100%;
         height: 0;
         padding-bottom: 75%;

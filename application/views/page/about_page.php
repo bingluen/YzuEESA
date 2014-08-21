@@ -165,7 +165,7 @@
 
                             <div class="thumbnail">
 
-                                <div class="img-cut-32 img-cut">
+                                <div class="img-cut-43 img-cut">
                                     <img class="img-rounded" src="<?php echo URL;?>/public/img/about/team_member/<?=$member['photo']?>">
                                 </div>
 
