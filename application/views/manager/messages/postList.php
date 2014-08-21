@@ -10,7 +10,7 @@
             <strong>注意!</strong> 除了特殊設定權限的人員，都只能看到自己發布的文章
         </div> -->
 
-        <div id="postList-Function" class="text-left">
+        <div class="text-left function-btn">
             <button type="button" class="btn btn-sm btn-primary newArticle-btn">新增文章</button>
             <button type="button" class="btn btn-sm btn-info make-public-btn">設定為公開</button>
             <button type="button" class="btn btn-sm btn-warning make-draft-btn">設定為草稿</button>
