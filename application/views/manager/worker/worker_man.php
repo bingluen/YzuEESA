@@ -12,6 +12,14 @@
 <div class="tab-content panel" id="man-content">
     <div class="tab-pane fade active in">
     <h3>工人名單</h3>
+    <hr>
+
+        <div class="text-left function-btn">
+            <button id="worker-add-btn" type="button" class="btn btn-sm btn-primary">新增一個工人</button>
+            <button id="worker-disable-btn" type="button" class="btn btn-sm btn-warning">停權</button>
+            <button id="worker-delete-btn" type="button" class="btn btn-sm btn-danger">刪除</button>
+        </div>
+
         <table class="table">
             <thead>
                 <tr>
@@ -40,12 +48,7 @@
                 <?php } ?>
             </tbody>
         </table>
-        <div class="text-right">
-            <button id="worker-add-btn" type="button" class="btn btn-sm btn-primary">新增一個工人</button>
-                或是   所有選取的Worker
-            <button id="worker-disable-btn" type="button" class="btn btn-sm btn-warning">停權</button>
-            <button id="worker-delete-btn" type="button" class="btn btn-sm btn-danger">刪除</button>
-        </div>
+
     </div>
 </div>
 
