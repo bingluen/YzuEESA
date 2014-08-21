@@ -1,9 +1,9 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.2.3
 -- http://www.phpmyadmin.net
 --
 -- 主機: localhost
--- 產生時間： 2014 年 08 月 09 日 21:35
+-- 產生時間： 2014 年 08 月 21 日 13:29
 -- 伺服器版本: 5.5.38-0ubuntu0.14.04.1
 -- PHP 版本： 5.5.9-1ubuntu4.3
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `cf_items` (
   `items_reviewer` int(5) DEFAULT NULL,
   `items_app_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `items_rev_time` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `cf_project` (
   `project_status` char(1) NOT NULL DEFAULT 'T',
   `project_host` int(5) NOT NULL,
   `project_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -64,7 +64,20 @@ CREATE TABLE IF NOT EXISTS `cf_project_category` (
 `category_id` int(3) NOT NULL,
   `category_name` varchar(25) NOT NULL,
   `category_color` varchar(7) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `event_list`
+--
+
+CREATE TABLE IF NOT EXISTS `event_list` (
+`event_id` int(10) NOT NULL,
+  `event_name` varchar(255) NOT NULL,
+  `event_path` varchar(255) NOT NULL,
+  `event_host` int(5) NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -74,13 +87,13 @@ CREATE TABLE IF NOT EXISTS `cf_project_category` (
 
 CREATE TABLE IF NOT EXISTS `messages` (
 `messages_id` int(10) NOT NULL,
-  `messages_type` tinyint(1) NOT NULL DEFAULT '0',
+  `messages_type` int(2) NOT NULL DEFAULT '0',
   `messages_draft` tinyint(1) NOT NULL DEFAULT '0',
   `messages_title` varchar(255) NOT NULL,
   `messages_content` longtext NOT NULL,
   `messages_author` int(5) NOT NULL,
   `messages_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -97,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `worker` (
   `worker_project` text NOT NULL,
   `worker_lastlogin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `worker_lastIP` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -135,6 +148,12 @@ ALTER TABLE `cf_project_category`
  ADD PRIMARY KEY (`category_id`);
 
 --
+-- 資料表索引 `event_list`
+--
+ALTER TABLE `event_list`
+ ADD PRIMARY KEY (`event_id`);
+
+--
 -- 資料表索引 `messages`
 --
 ALTER TABLE `messages`
@@ -160,27 +179,32 @@ ALTER TABLE `worker_class`
 -- 使用資料表 AUTO_INCREMENT `cf_items`
 --
 ALTER TABLE `cf_items`
-MODIFY `items_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+MODIFY `items_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- 使用資料表 AUTO_INCREMENT `cf_project`
 --
 ALTER TABLE `cf_project`
-MODIFY `project_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
+MODIFY `project_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- 使用資料表 AUTO_INCREMENT `cf_project_category`
 --
 ALTER TABLE `cf_project_category`
-MODIFY `category_id` int(3) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `category_id` int(3) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- 使用資料表 AUTO_INCREMENT `event_list`
+--
+ALTER TABLE `event_list`
+MODIFY `event_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- 使用資料表 AUTO_INCREMENT `messages`
 --
 ALTER TABLE `messages`
-MODIFY `messages_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `messages_id` int(10) NOT NULL AUTO_INCREMENT;
 --
 -- 使用資料表 AUTO_INCREMENT `worker`
 --
 ALTER TABLE `worker`
-MODIFY `worker_id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `worker_id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- 使用資料表 AUTO_INCREMENT `worker_class`
 --
