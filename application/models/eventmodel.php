@@ -50,6 +50,12 @@ class EventModel
             else
                 $data['img'] = URL.'public/img/EventSystem/null-img.png';
 
+            //catch time calendar
+            preg_match_all('/, <a href="(.*)" target="_blank">Google/', $content, $catch);
+            $data['googleCalendar'] = $catch['1']['0'];
+            preg_match_all('/<a href="(.*)">iCal/', $content, $catch);
+            $data['iCal'] = $catch['1']['0'];
+
             //catch event description text
             //preg_match_all('/<div class="description">((.|\n)*)<\/div>/', $content, $catch);
             $Needle['start'] = strpos($content, '<div class="description">') + 25;

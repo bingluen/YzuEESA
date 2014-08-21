@@ -2,13 +2,6 @@
 class Activities extends Controller
 {
     function index() {
-
-        $this->loadView('_templates/header');
-        $this->loadView('event/event.php');
-        $this->loadView('_templates/footer');
-    }
-
-    function listEvent() {
         //loading model
         $EventModel = $this->loadModel('eventmodel');
 
@@ -35,6 +28,9 @@ class Activities extends Controller
                 $data['fresh'][$i]['people'] = $catchData['people'];
                 $data['fresh'][$i]['start'] = $catchData['start'];
                 $data['fresh'][$i]['end'] = $catchData['end'];
+                $data['fresh'][$i]['url'] = $event->url;
+                $data['fresh'][$i]['googleCalendar'] = $catchData['googleCalendar'];
+                $data['fresh'][$i]['iCal'] = $catchData['iCal'];
                 $i++;
             } else {
                 $data['expired'][$j]['id'] = $event->id;
@@ -47,12 +43,15 @@ class Activities extends Controller
                 $data['expired'][$j]['people'] = $catchData['people'];
                 $data['expired'][$j]['start'] = $catchData['start'];
                 $data['expired'][$j]['end'] = $catchData['end'];
+                $data['expired'][$i]['url'] = $event->url;
+                $data['expired'][$i]['googleCalendar'] = $catchData['googleCalendar'];
+                $data['expired'][$i]['iCal'] = $catchData['iCal'];
                 $j++;
             }
         }
-        echo json_encode($data);
-        exit;
-
+        $this->loadView('_templates/header');
+        $this->loadView('event/event', $data);
+        $this->loadView('_templates/footer');
     }
 }
 

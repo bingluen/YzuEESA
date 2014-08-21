@@ -15,6 +15,7 @@
     <script src="<?php echo URL; ?>public/js/icheck.min.js"></script>
     <script src="<?php echo URL; ?>public/js/jquery-md5.js"></script>
     <script src="<?php echo URL; ?>public/js/jquery.actual.min.js"></script>
+    <script src="<?php echo URL; ?>public/js/slidr.min.js"></script>
     <script src="<?php echo URL; ?>public/js/yzueesa.js"></script>
     <!-- our JavaScript -->
     <!-- css -->
