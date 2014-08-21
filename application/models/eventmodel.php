@@ -48,7 +48,8 @@ class EventModel
             if(isset($catch['1']['0']))
                 $data['img'] = $catch['1']['0'];
             else
-                $data['img'] = URL.'public/img/EventSystem/null-img.png';
+                //$data['img'] = URL.'public/img/EventSystem/null-img.png';
+                $data['img'] = NULL;
 
             //catch time calendar
             preg_match_all('/, <a href="(.*)" target="_blank">Google/', $content, $catch);
