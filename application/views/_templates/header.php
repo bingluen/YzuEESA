@@ -16,12 +16,14 @@
     <script src="<?php echo URL; ?>public/js/jquery-md5.js"></script>
     <script src="<?php echo URL; ?>public/js/jquery.actual.min.js"></script>
     <script src="<?php echo URL; ?>public/js/slidr.min.js"></script>
+    <script src="<?php echo URL; ?>public/js/jquery.fs.selecter.min.js"></script>
     <script src="<?php echo URL; ?>public/js/yzueesa.js"></script>
     <!-- our JavaScript -->
     <!-- css -->
     <link rel="stylesheet" href="<?php echo URL; ?>public/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo URL; ?>public/css/bootflat.min.css">
     <!--<link rel="stylesheet" href="<?php echo URL; ?>public/css/ui-lightness/jquery-ui-1.10.4.min.css">-->
+    <link href="<?php echo URL; ?>public/css/jquery.fs.selecter.css" rel="stylesheet">
     <!-- our css -->
     <link rel="stylesheet" href="<?php echo URL; ?>public/css/yzueesa.css">
 
