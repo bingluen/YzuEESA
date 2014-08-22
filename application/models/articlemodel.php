@@ -20,9 +20,9 @@ class ArticleModel
 
     function post($data) {
         try {
-            $sql = "INSERT INTO `messages` (messages_title, messages_content, messages_author, messages_time, messages_draft) VALUES(?, ?, ?, ?, ?);";
+            $sql = "INSERT INTO `messages` (messages_title, messages_content, messages_author, messages_time, messages_draft, messages_type, messages_eventid) VALUES(?, ?, ?, ?, ?, ?, ?);";
             $query = $this->db->prepare($sql);
-            $query->execute(array($data['title'], htmlspecialchars($data['content']), $data['author'], $data['time'], $data['draft']));
+            $query->execute(array($data['title'], htmlspecialchars($data['content']), $data['author'], $data['time'], $data['draft'], $data['type'], $data['eventid']));
         } catch(Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -32,9 +32,9 @@ class ArticleModel
 
     function updatePost($data) {
         try {
-            $sql = "UPDATE `messages` SET `messages_title` = ?, `messages_content` = ?, `messages_author` = ?, `messages_time` = ?, `messages_draft` = ? WHERE `messages_id` = ?;";
+            $sql = "UPDATE `messages` SET `messages_title` = ?, `messages_content` = ?, `messages_author` = ?, `messages_time` = ?, `messages_draft` = ?, `messages_type` = ?, `messages_eventid` = ? WHERE `messages_id` = ?;";
             $query = $this->db->prepare($sql);
-            $query->execute(array($data['title'], htmlspecialchars($data['content']), $data['author'], $data['time'], $data['draft'], $data['post_id']));
+            $query->execute(array($data['title'], htmlspecialchars($data['content']), $data['author'], $data['time'], $data['draft'], $data['type'], $data['eventid'], $data['post_id']));
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -55,7 +55,7 @@ class ArticleModel
         return $result;
     }
 
-    function listPost($page = 0, $limit = 15, $position = 0, $type = 0, $level = 0, $user = 0) {
+    function listPost($page = 0, $limit = 15, $type = 0, $position = 0, $level = 0, $user = 0) {
         try {
 
             if($position == 0 ) { // 0 = 前台

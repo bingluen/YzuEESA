@@ -7,10 +7,10 @@ class webMan extends Controller
     private function getIP() {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
           $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } 
+        }
         else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
           $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } 
+        }
         else {
           $ip = $_SERVER['REMOTE_ADDR'];
         }
@@ -33,25 +33,25 @@ class webMan extends Controller
             //沒過驗證轉回首頁
             $this->deleteSession();
             header("Location: ". URL);
-        } 
+        }
         else if (!(isset($_SESSION['user_ip'])
             && $_SESSION['user_ip'] == $this->getIP())) {
             //ip位址和登入時不同轉回首頁
             $this->deleteSession();
             header("Location: ". URL);
-        } 
+        }
         else if (!(isset($_SESSION['login_time'])
             && time() - strtotime($_SESSION['login_time']) <= 1800)) {
             //超過30分鐘沒動作 轉回登入頁面
             $this->deleteSession();
             header("Location: ". URL."webMan/login/doLogin");
-        } 
+        }
         else if (!(isset($_SESSION['level'])
             && $_SESSION['level'] > 0)) {
             //停權
             $this->deleteSession();
             header("Location: ". URL."webMan/login/doLogin/AuthError0");
-        } 
+        }
         else {
             //刷新最後動作時間
             $_SESSION['login_time'] = date('Y-m-d H:i:s');
@@ -90,7 +90,7 @@ class webMan extends Controller
                 //驗證登入資料
                 try {
                     $authResult = $WorkerModel->authUser($authData);
-                } 
+                }
                 catch (Exception $e) {
                     echo json_encode($e->getMessage());
                     exit;
@@ -114,7 +114,7 @@ class webMan extends Controller
             $data['class'] = $ClassModel->getClassName($_SESSION['level']);
             try {
                 $data['name'] = $WorkerModel->getWorkerName($_SESSION['userid']);
-            } 
+            }
             catch (Exception $e) {
                 $data['name'] = $e->getMessage();
             }
@@ -157,7 +157,7 @@ class webMan extends Controller
                 for ($i = 0;$i < count($data['project']);$i++) {
                     try {
                         $data['project'][$i]->project_host = $WorkerModel->getWorkerName($data['project'][$i]->project_host);
-                    } 
+                    }
                     catch (Exception $e) {
                         $data['project'][$i]->project_host = $e->getMessage();
                     }
@@ -168,7 +168,7 @@ class webMan extends Controller
                 for ($i = 0;$i < count($data['project']);$i++) {
                     try {
                         $data['project'][$i]->project_category = $ProjectModel->getCategory($data['project'][$i]->project_category);
-                    } 
+                    }
                     catch (Exception $e) {
                         $data['project'][$i]->project_category = $e->getMessage();
                     }
@@ -177,7 +177,7 @@ class webMan extends Controller
                 //把可以選的分類拉回來
                 try {
                     $data['categoryList'] = $ProjectModel->listCategory();
-                } 
+                }
                 catch (Exception $e) {
                     $data['categoryList'] = $e->getMessage();
                 }
@@ -230,13 +230,13 @@ class webMan extends Controller
 
                 try {
                     $WorkerModel->checkWorkerExist($insertData['project_host']);
-                } 
+                }
                 catch (Exception $e) {
 
                     if ($e->getCode() == 1) {
                         echo json_encode('資料庫沒有這個工人資料，不能指定為負責人，要先新增工人才可以喔～');
                         exit;
-                    } 
+                    }
                     else {
                         echo json_encode($e->getMessage());
                         exit;
@@ -246,7 +246,7 @@ class webMan extends Controller
                 //取得工人id
                 try {
                     $insertData['project_host'] = $WorkerModel->getWorkerID($insertData['project_host']);
-                } 
+                }
                 catch (Exception $e) {
                     echo json_encode($e->getMessage());
                     exit;
@@ -282,7 +282,7 @@ class webMan extends Controller
                 for($i = 0;$i < count($data['project']);$i++) {
                     try {
                         $data['project'][$i]->project_host = $WorkerModel->getWorkerName($data['project'][$i]->project_host);
-                    } 
+                    }
                     catch (Exception $e) {
                         $data['project'][$i]->project_host = $e->getMessage();
                     }
@@ -297,7 +297,7 @@ class webMan extends Controller
                     for($j = 0;$j <count($data['items'][$data['project'][$i]->project_id]);$j++) {
                         try {
                             $data['items'][$data['project'][$i]->project_id][$j]->items_applicant = $WorkerModel->getWorkerName($data['items'][$data['project'][$i]->project_id][$j]->items_applicant);
-                        } 
+                        }
                         catch (Exception $e) {
                             $data['items'][$data['project'][$i]->project_id][$j]->items_applicant = $e->getMessage();
                         }
@@ -307,7 +307,7 @@ class webMan extends Controller
                     for($j = 0;$j <count($data['items'][$data['project'][$i]->project_id]) && $data['items'][$data['project'][$i]->project_id][$j]->items_reviewer != NULL;$j++) {
                         try {
                             $data['items'][$data['project'][$i]->project_id][$j]->items_reviewer = $WorkerModel->getWorkerName($data['items'][$data['project'][$i]->project_id][$j]->items_reviewer);
-                        } 
+                        }
                         catch (Exception $e) {
                             $data['items'][$data['project'][$i]->project_id][$j]->items_reviewer = $e->getMessage();
                         }
@@ -329,7 +329,7 @@ class webMan extends Controller
                 $result = $ItemsModel->updateItems($update);
                 if ($result === true) {
                     echo json_encode('success');
-                } 
+                }
                 else {
                     echo json_encode($result);
                 }
@@ -359,13 +359,13 @@ class webMan extends Controller
                         {
                             try {
                                 $data['appItems'][$i]->items_reviewer = $WorkerModel->getWorkerName($data['appItems'][$i]->items_reviewer);
-                            } 
+                            }
                             catch (Exception $e) {
                                 $data['appItems'][$i]->items_reviewer = $e->getMessage();
                             }
                         }
                     }
-                } 
+                }
                 catch (Exception $e) {
                     $data['message'] = $e->getMessage();
                 }
@@ -411,7 +411,7 @@ class webMan extends Controller
                             'name' => $appData['name'][$i],
                             'applicant' => $appData['applicant'],
                             'time' => $appData['time']));
-                    } 
+                    }
                     catch (Exception $e) {
                         echo json_encode($e->getMessage());
                         exit;
@@ -479,7 +479,7 @@ class webMan extends Controller
                 //撈回進行中的Project，供編輯時使用
                 try {
                     $searchProject = $ProjectModel->getProject('active', $_POST['key']);
-                } 
+                }
                 catch (Exception $e) {
                     echo json_encode($e->getMessage());
                     exit;
@@ -513,7 +513,7 @@ class webMan extends Controller
                 try {
                     $WorkerModel->updateWorker($disable, true);
                     echo json_encode('已經將所選取工人帳號停權。');
-                } 
+                }
                 catch (Exception $e) {
                     echo json_encode($e->getMessage());
                 }
@@ -533,7 +533,7 @@ class webMan extends Controller
                 //新增工人
                 try {
                     $WorkerModel->addWorker($workerData);
-                } 
+                }
                 catch (Exception $e) {
                     echo json_encode($e->getMessage());
                     exit;
@@ -554,7 +554,7 @@ class webMan extends Controller
                     if ($_POST['doing'] === 'getDetail' && isset($_POST['userid'])) {
                         try {
                             $data = $WorkerModel->getWorkerDetail($_POST['userid']);
-                        } 
+                        }
                         catch(Expection $e) {
                             echo json_encode($e->getMessage());
                             exit;
@@ -597,7 +597,7 @@ class webMan extends Controller
                         try {
                             $WorkerModel->updateWorker($data);
                             echo json_encode('success');
-                        } 
+                        }
                         catch (Exception $e) {
                             echo json_encode($e->getMessage());
                         }
@@ -642,7 +642,13 @@ class webMan extends Controller
                 $data['title'] = $article->title;
                 $data['content'] = $article->content;
 
-            } 
+            }
+            else if ($action == 'getEventList') {
+                $EventModel = $this->loadModel('eventmodel');
+                echo json_encode($EventModel->getEventList());
+                exit;
+
+            }
             else if ($action != 'NewPost') {
                 if (!$ClassModel->checkAuthority($_SESSION['level'], 'Messages-new'))
                     exit;
@@ -665,10 +671,12 @@ class webMan extends Controller
                 $postData['draft'] = $_POST['draft'];
                 $postData['author'] = $_SESSION['userid'];
                 $postData['time'] = date('Y-m-d H:i:s');
+                $postData['type'] = $_POST['type'];
+                $postData['eventid'] = $_POST['eventid'];
 
                 try {
                     $ArticleModel->post($postData);
-                } 
+                }
                 catch (Exception $e) {
                     echo json_encode('fail :'.$e->getMessage());
                     exit;
@@ -685,11 +693,13 @@ class webMan extends Controller
                 $postData['draft'] = $_POST['draft'];
                 $postData['author'] = $_SESSION['userid'];
                 $postData['time'] = date('Y-m-d H:i:s');
+                $postData['type'] = $_POST['type'];
+                $postData['eventid'] = $_POST['eventid'];
 
                 try {
                     $ArticleModel->updatePost($postData);
                     echo json_encode('success');
-                } 
+                }
                 catch (Exception $e) {
                     echo json_encode('fail :'.$e->getMessage());
                 }
@@ -704,23 +714,23 @@ class webMan extends Controller
 
                 //開始撈資料
                 try {
-                    $data = $ArticleModel->listPost($pageNumber, 30, 1, $_SESSION['level'], $_SESSION['userid']);
+                    $data = $ArticleModel->listPost($pageNumber, 30, 0, 1, $_SESSION['level'], $_SESSION['userid']);
                      //把編輯者名字名字拉回來
                     for($i = 0;$i < count($data);$i++) {
                         try {
                             $data[$i]->messages_author = $WorkerModel->getWorkerName($data[$i]->messages_author);
-                        } 
+                        }
                         catch (Exception $e) {
                             $data[$i]->messages_author = $e->getMessage();
                         }
                     }
                     echo json_encode($data);
-                } 
+                }
                 catch (Exception $e) {
                     echo json_encode($e->getMessage());
                 }
                 exit;
-            } 
+            }
             else {
                 $data['pages'] =  $ArticleModel->getPages(30);
                 $active = 'Messages';
@@ -740,7 +750,7 @@ class webMan extends Controller
             try {
                 $ArticleModel->deletePost($list);
                 echo json_encode('success');
-            } 
+            }
             catch (Exception $e) {
                 echo json_encode('fail'. $e->getMessage());
             }
@@ -757,7 +767,7 @@ class webMan extends Controller
             try {
                 $ArticleModel->draftPost($list);
                 echo json_encode('success');
-            } 
+            }
             catch (Exception $e) {
                 echo json_encode('fail'. $e->getMessage());
             }
@@ -774,7 +784,7 @@ class webMan extends Controller
             try {
                 $ArticleModel->publicPost($list);
                 echo json_encode('success');
-            } 
+            }
             catch (Exception $e) {
                 echo json_encode('fail'. $e->getMessage());
             }
@@ -821,7 +831,7 @@ class webMan extends Controller
                 //+到活動系統
                 try {
                     $insertExecute = $EventModel->addEvent($data);
-                } 
+                }
                 catch (Exception $e) {
                     echo json_encode($e->getMessage());
                     exit;

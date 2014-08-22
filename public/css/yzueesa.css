@@ -47,6 +47,15 @@
 
     }
 
+    iframe {
+        display:block;
+        width:100%;
+        border:none;
+        height:100%;
+        padding:0px;
+        margin:0px;
+        position:relative;
+    }/*for iframe hight:100%*/
 
 /*
  ------------- 麵包屑 override -----------------
@@ -355,6 +364,10 @@
     #event-content {
         width: 80%;
         float: right;
+    }
+
+    #event-content .panel {
+        margin-left: 25px;
     }
 
 /*
