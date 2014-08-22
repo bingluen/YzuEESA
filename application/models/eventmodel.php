@@ -97,5 +97,58 @@ class EventModel
         }
 
     }
+
+    function getEvent($id) {
+        try {
+            $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list` WHERE `event_id` = ?";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($id));
+            $result = $query->fetch();
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    function getEventList() {
+        try {
+            $sql = "SELECT `event_id` AS id, `event_name` AS name FROM `event_list` ORDER BY `event_id`";
+            $query = $this->db->prepare($sql);
+            $query->execute();
+            $result = $query->fetchAll();
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    function getEventMessages($id, $page = 0, $limit = 30) {
+        try {
+            $sql = "SELECT `messages_id` AS id, `messages_title` AS title, `messages_time` AS time FROM `messages` WHERE `messages_draft` = '0' AND `messages_type` = '1' AND `messages_eventid` = ? ORDER BY `messages_time` DESC LIMIT $page, $limit;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($id));
+            $result = $query->fetchAll();
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    function getMessagesPages($dpp, $eventid) {
+        try {
+            $sql = "SELECT (COUNT(*) DIV $dpp) AS pages, (COUNT(*) MOD $dpp) AS mode  FROM `messages` WHERE `messages_eventid` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($eventid));
+            $result = $query->fetch();
+            if($result->mode > 0)
+                return $result->pages+1;
+            else
+                return $result->pages;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+
 }
 ?>

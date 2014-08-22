@@ -11,15 +11,34 @@
                 echo $data['title'];
             ?>">
         </div>
+
+        <h4>活動公告</h4>
+        <div class="form-group">
+            <label class="toggle">
+              <input id="event-type" type="checkbox">
+              <span class="handle"></span>
+            </label>
+        </div>
+
+        <div class="form-group" id="eventList" style="display: none;">
+            <label for="event-id"> 活動名稱</label>
+            <select id="event-id" class="form-control">
+                <option value="0">請選擇</option>
+            </select>
+
+        </div>
+
         <textarea class="form-control" id="PostContent" style="width:100%">
         <?php
             if($data)
                 echo $data['content'];
         ?>
         </textarea>
+
         <?php if($data) { ?>
         <input type="hidden" id="post_id" value="<?=$data['post_id']?>">
         <?php } ?>
+
         <p class="text-center" style="margin-top: 30px;">
             <button type="button" class="btn btn-default" id="draft-btn">存為草稿</button>
             <button type="button" class="btn btn-info" id="post-btn">發   布</button>
@@ -29,6 +48,18 @@
 
 <script type="text/javascript" src="<?=URL?>public/js/tinymce/tinymce.min.js"></script>
 <script>
+var typecode = 0;
+$('#event-type').change(function() {
+    if($(this).is(':checked')) {
+        displayEventList();
+        $('#eventList').show();
+        typecode = 1;
+    } else {
+        $('#eventList').hide();
+        typecode = 0;
+    }
+});
+
 $('#close-alert').click(function() {
     $('#Alert-messages').hide();
 });
@@ -55,6 +86,26 @@ tinymce.init({
     ]
  });
 
+function displayEventList() {
+    $.ajax({
+        url: '<?php echo URL?>webMan/MessagesSystem/editor/getEventList',
+        dataType: 'json',
+        type: 'post',
+        data: {
+        },
+        success: function(response) {
+            for(var i in response) {
+                var str = '';
+                //str += '<span class="selecter-item" data-value="'+response[i]['id']+'">'+response[i]['name']+'</span>'
+                //$('#eventList .selecter-options').append(str);
+                //str = '';
+                str += '<option value="'+response[i]['id']+'">'+response[i]['name']+'</option>';
+                $('#event-id').append(str);
+            }
+        }
+    });
+}
+
 function goTo() {
     var url = window.location.toString();
     if(url.indexOf("editor/")!=-1)  {
@@ -77,7 +128,9 @@ $('#post-btn').click(function() {
             title: $('#title').val(),
             content: tinyMCE.activeEditor.getContent(),
             id: $('#post_id').val(),
-            draft: '0'
+            draft: '0',
+            eventid: $('#event-id').val(),
+            type: typecode
         },
         success: function(response) {
             if(response == 'success')
@@ -104,7 +157,9 @@ $('#draft-btn').click(function() {
             title: $('#title').val(),
             content: tinyMCE.activeEditor.getContent(),
             id: $('#post_id').val(),
-            draft: '1'
+            draft: '1',
+            eventid: $('#event-id').val(),
+            type: typecode
         },
         success: function(response) {
             if(response == 'success')
@@ -130,7 +185,9 @@ $('#post-btn').click(function() {
         data: {
             title: $('#title').val(),
             content: tinyMCE.activeEditor.getContent(),
-            draft: '0'
+            draft: '0',
+            eventid: $('#event-id').val(),
+            type: typecode
         },
         success: function(response) {
             alert('文章已發布');
@@ -154,7 +211,9 @@ $('#draft-btn').click(function() {
         data: {
             title: $('#title').val(),
             content: tinyMCE.activeEditor.getContent(),
-            draft: '1'
+            draft: '1',
+            eventid: $('#event-id').val(),
+            type: typecode
         },
         success: function(response) {
             alert('文章已存為草稿');

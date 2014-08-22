@@ -82,7 +82,55 @@ class Activities extends Controller
     }
 
     function Event($id) {
+        $EventModel = $this->loadModel('eventmodel');
 
+        //撈資料
+        $event = $EventModel->getEvent($id);
+        $catchData = $EventModel->catchEventDetail($event->url);
+
+        //取得今天日期
+        $today = time();
+
+        //取得活動結束日
+        preg_match('/^[0-9:\x2F :]+/', $catchData['end'], $eventEndDay);
+        $endDayTime = strtotime($eventEndDay[0]);
+
+        if($endDayTime >= $today) {
+                $data['fresh'] = true;
+            } else {
+                $data['fresh'] = false;
+            }
+                $data['id'] = $event->id;
+                $data['name'] = $event->name;
+                $data['url'] = $event->url;
+                //刪除簡介內的活動標誌圖片
+                $data['description'] = preg_replace('/[ \n]*<img src=".*" \/>/', ' ', $catchData['description']);
+                $data['img'] = $catchData['img'];
+                $data['location'] = $catchData['location'];
+                $data['people'] = $catchData['people'];
+                $data['start'] = $catchData['start'];
+                $data['end'] = $catchData['end'];
+                $data['googleCalendar'] = $catchData['googleCalendar'];
+                $data['iCal'] = $catchData['iCal'];
+
+        try {
+            $data['pages'] = $EventModel->getMessagesPages($id, 30);
+        } catch (Exception $e) {
+            $data['errorMessage'] = $e->getMessage();
+            $data['errorCode'] = $e->getCode();
+        }
+
+
+        $this->loadView('_templates/header');
+        $this->loadView('event/viewEvent', $data);
+        $this->loadView('_templates/footer');
+    }
+
+    function getEventMessages($id , $page = 0) {
+        $EventModel = $this->loadModel('eventmodel');
+        $Messages = $EventModel->getEventMessages($id, $page - 1);
+        echo json_encode($Messages);
+        exit;
     }
 }
 
