@@ -34,11 +34,21 @@ class Activities extends Controller
             }
         }
         $this->loadView('_templates/header');
-        $this->loadView('event/event', $data);
+        if(isset($data)) {
+            $this->loadView('event/event', $data);
+        } else {
+            $this->loadView('event/event');
+        }
         $this->loadView('_templates/footer');
     }
 
     function EventList($page = 0, $limit = 30) {
+
+        if(!is_numeric($page)) {
+            echo "Error";
+            exit;
+        }
+
         //loading model
         $EventModel = $this->loadModel('eventmodel');
 
@@ -77,12 +87,21 @@ class Activities extends Controller
             exit;
         }
         $this->loadView('_templates/header');
-        $this->loadView('event/eventList', $data);
+                if(isset($data)) {
+            $this->loadView('event/eventList', $data);
+        } else {
+            $this->loadView('event/eventList');
+        }
         $this->loadView('_templates/footer');
     }
 
-    function Event($id) {
+    function Event($id = 0) {
         $EventModel = $this->loadModel('eventmodel');
+
+        if(!is_numeric($id)) {
+            echo "Error";
+            exit;
+        }
 
         //撈資料
         $event = $EventModel->getEvent($id);
@@ -114,7 +133,7 @@ class Activities extends Controller
                 $data['iCal'] = $catchData['iCal'];
 
         try {
-            $data['pages'] = $EventModel->getMessagesPages($id, 30);
+            $data['pages'] = $EventModel->getMessagesPages(30, $id);
         } catch (Exception $e) {
             $data['errorMessage'] = $e->getMessage();
             $data['errorCode'] = $e->getCode();
@@ -128,8 +147,38 @@ class Activities extends Controller
 
     function getEventMessages($id , $page = 0) {
         $EventModel = $this->loadModel('eventmodel');
-        $Messages = $EventModel->getEventMessages($id, $page - 1);
-        echo json_encode($Messages);
+
+        if (is_numeric($id) && is_numeric($page)) {
+            try {
+                $Messages = $EventModel->getEventMessages($id, $page - 1);
+                echo json_encode($Messages);
+            } catch (Exception $e) {
+                echo json_encode("Error: ".$e->getMessage());
+            }
+        } else {
+            echo json_encode('error');
+        }
+        
+        exit;
+    }
+
+    function viewMessages($mid) {
+
+        $EventModel = $this->loadModel('eventmodel');
+        $WorkerModel = $this->loadModel('workermodel');
+
+        if (is_numeric($mid)) {
+            try {
+                $messages = $EventModel->getEventMessageContent($mid);
+                $messages->author = $WorkerModel->getWorkerName($messages->author);
+                echo json_encode($messages);
+            } catch (Exception $e) {
+                echo json_encode("Error: ".$e->getMessage());
+            }
+        } else {
+            echo json_encode('error');
+        }
+
         exit;
     }
 }

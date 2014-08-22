@@ -45,6 +45,10 @@
 
                     <div id="list">
                         <table class="table">
+                            <thead>
+                                <th>文章標題</th>
+                                <th>時間</th>
+                            </thead>
                             <tbody id="articleList">
                             </tbody>
                         </table>
@@ -63,9 +67,30 @@
         </div>
     </div>
 
+    <!-- Button trigger modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="event-m-title" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="event-m-title"></h4>
+          </div>
+                <div class="modal-body" id="event-m-content">
+                    
+                </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 </div>
 
 <script>
+
 var Pages = 1;
 function RenewArticleList(page) {
     $.ajax({
@@ -94,8 +119,8 @@ function displayArticleList(data) {
 
     for(var i = 0;i < data.length;i++) {
         var str = '';
-        str += '<tr>'
-        str += '<td><a href="<?=URL?>Messages/View/'+data[i]['id']+'">'+data[i]['title']+'</a></td>';
+        str += '<tr>';
+        str += '<td><a href="#" onclick="viewMessages('+data[i]['id']+')">'+data[i]['title']+'</a></td>';
         str += '<td>'+data[i]['time']+'</td>';
         str += '</tr>';
         $('#articleList').append(str);
@@ -143,4 +168,25 @@ $(document).ready(
         displayPagination(1);
         $('#error').hide();
 });
+
+function viewMessages(mid) {
+    $('#event-m-title').empty();
+    $('#event-m-content').empty();
+    $.ajax({
+        url: '<?=URL?>Activities/viewMessages/'+mid,
+        dataType: 'json',
+        type: 'post',
+        success: function (response) {
+            $('#event-m-title').append(response['title']);
+            var str = '';
+            str += '<div id="articleContent">';
+            str += response['content'];
+            str += '</div>';
+            str += '<div id="articleFooter" class="pull-right">';
+            str += '<i> <span class="glyphicon glyphicon-user"></span> '+response['author']+' 於 '+response['time']+'</i></div>';
+            $('#event-m-content').append(str);
+            $('#myModal').modal('show');
+        }
+    });
+}
 </script>

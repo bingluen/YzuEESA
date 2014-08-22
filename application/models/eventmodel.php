@@ -149,6 +149,17 @@ class EventModel
         }
     }
 
-
+    function getEventMessageContent($id) {
+        try {
+            $sql = "SELECT `messages_title` AS title, `messages_content` AS content, `messages_author` AS author, `messages_time` AS time FROM `messages` WHERE `messages_id` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($id));
+            $result = $query->fetch();
+            $result->content = html_entity_decode($result->content);
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
 }
 ?>

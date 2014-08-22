@@ -117,7 +117,7 @@ class ArticleModel
 
     function getPages($dpp) {
         try {
-            $sql = "SELECT (COUNT(*) DIV $dpp) AS pages, (COUNT(*) MOD $dpp) AS mode  FROM `messages`;";
+            $sql = "SELECT (COUNT(*) DIV $dpp) AS pages, (COUNT(*) MOD $dpp) AS mode  FROM `messages` WHERE `messages_eventid` = '0';";
             $query = $this->db->prepare($sql);
             $query->execute();
             $result = $query->fetch();
