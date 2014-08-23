@@ -44,7 +44,7 @@ class ArticleModel
 
     function getPost($id) {
         try {
-            $sql = "SELECT `messages_title` AS title, `messages_content` AS content FROM `messages` WHERE `messages_id` = ?;";
+            $sql = "SELECT `messages_title` AS title, `messages_content` AS content, `messages_type` AS type, `messages_eventid` AS eventid FROM `messages` WHERE `messages_id` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($id));
             $result = $query->fetch();
