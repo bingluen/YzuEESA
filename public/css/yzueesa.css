@@ -47,15 +47,9 @@
 
     }
 
-    iframe {
-        display:block;
-        width:100%;
-        border:none;
-        height:100%;
-        padding:0px;
-        margin:0px;
-        position:relative;
-    }/*for iframe hight:100%*/
+    .kktix {
+        height: 700px;
+    }
 
 /*
  ------------- 麵包屑 override -----------------
@@ -285,10 +279,6 @@
 
         #event-demo .caption img {
             max-width: 100%;
-        }
-
-        .frame {
-            overflow: hidden;
         }
 
         aside[id="event-demo-breadcrumbs"],
