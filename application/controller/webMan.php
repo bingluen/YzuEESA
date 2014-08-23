@@ -613,6 +613,23 @@ class webMan extends Controller
             $this->loadView('manager/worker/worker_man', $data);
             $this->loadView('_templates/footer_man');
         }
+
+        if ($page === 'Authority') {
+            if (!$ClassModel->checkAuthority($_SESSION['level'], 'Authority'))
+                exit;
+            //撈回權限分組表
+            try {
+                
+            } catch (Exception $e) {
+                
+            }
+            //呈現頁面
+            $active = 'Worker';
+            $this->loadView('_templates/header_man');
+            $this->loadView('manager/sidebar', $active);
+            $this->loadView('manager/worker/Authority', $data);
+            $this->loadView('_templates/footer_man');
+        }
     }
 
     public function MessagesSystem($page = 0, $action = 0) {
@@ -641,17 +658,19 @@ class webMan extends Controller
                 $data['post_id'] = $action;
                 $data['title'] = $article->title;
                 $data['content'] = $article->content;
+                $data['eventid'] = $article->eventid;
+                $data['type'] = $article->type;
 
             }
+            
             else if ($action == 'getEventList') {
                 $EventModel = $this->loadModel('eventmodel');
                 echo json_encode($EventModel->getEventList());
                 exit;
 
             }
+            
             else if ($action != 'NewPost') {
-                if (!$ClassModel->checkAuthority($_SESSION['level'], 'Messages-new'))
-                    exit;
                 header("Location: ". URL. "webMan/MessagesSystem/PostList");
             }
 
@@ -663,9 +682,9 @@ class webMan extends Controller
         }
 
         if ($page === 'post') {
+            if (!$ClassModel->checkAuthority($_SESSION['level'], 'Messages-Add', true))
+                exit;
             if ($action === 'new') {
-                if (!$ClassModel->checkAuthority($_SESSION['level'], 'Messages-new', true))
-                    exit;
                 $postData['title'] = $_POST['title'];
                 $postData['content'] = $_POST['content'];
                 $postData['draft'] = $_POST['draft'];
@@ -687,6 +706,7 @@ class webMan extends Controller
 
 
             if ($action === 'update') {
+                
                 $postData['post_id'] = $_POST['id'];
                 $postData['title'] = $_POST['title'];
                 $postData['content'] = $_POST['content'];
@@ -695,6 +715,14 @@ class webMan extends Controller
                 $postData['time'] = date('Y-m-d H:i:s');
                 $postData['type'] = $_POST['type'];
                 $postData['eventid'] = $_POST['eventid'];
+
+                if (!$ClassModel->checkAuthority($_SESSION['level'], 'Messages-edit', true)) {
+                    if($ArticleModel->getAuthor($postData['post_id']) != $_SESSION['userid']) {
+                        echo json_encode('沒有權限修改別人的文章');
+                        exit;
+                    }
+                }
+                    
 
                 try {
                     $ArticleModel->updatePost($postData);
@@ -743,8 +771,11 @@ class webMan extends Controller
 
         if ($page === 'delete') {
             foreach ($_POST['target'] as $target) {
-                if ($ArticleModel->getAuthor($target) == $_SESSION['userid'])
-                    $list[] = $target;
+                //除了特定群組，只能刪除自己的文章
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'Messages-delete', true)) {
+                    if ($ArticleModel->getAuthor($target) == $_SESSION['userid'])
+                        $list[] = $target;
+                }
             }
 
             try {
@@ -758,10 +789,13 @@ class webMan extends Controller
         }
 
         if ($page === 'draft') {
-
+            
             foreach ($_POST['target'] as $target) {
-                if ($ArticleModel->getAuthor($target) == $_SESSION['userid'])
-                    $list[] = $target;
+                //除了特定群組，只能把自己的文章設成草稿
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'Messages-draft', true)) {
+                    if ($ArticleModel->getAuthor($target) == $_SESSION['userid'])
+                        $list[] = $target;
+                }
             }
 
             try {
@@ -777,8 +811,11 @@ class webMan extends Controller
 
         if ($page === 'public') {
             foreach ($_POST['target'] as $target) {
-                if ($ArticleModel->getAuthor($target) == $_SESSION['userid'])
-                    $list[] = $target;
+                //除了特定群組，只能把自己的文章設成公開
+                if(!$ClassModel->checkAuthority($_SESSION['level'], 'Messages-public', true)) {
+                    if ($ArticleModel->getAuthor($target) == $_SESSION['userid'])
+                        $list[] = $target;
+                }
             }
 
             try {

@@ -19,7 +19,15 @@ class ClassModel
      */
 
     function listClass() {
-
+        try {
+            $sql = "SELECT * FROM `worker_class`;";
+            $query = $this->db->prepare($sql);
+            $query->execute();
+            $result = $query->fetchAll();
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     function checkAuthority($level, $model = 0, $action = false) {
@@ -58,7 +66,7 @@ class ClassModel
         return true;
     }
 
-        function getClassName($level) {
+    function getClassName($level) {
         try {
             $sql = "SELECT `class_name` AS class FROM `worker_class` WHERE `class_level` = ?;";
             $query = $this->db->prepare($sql);
