@@ -11,11 +11,10 @@
                 echo $data['title'];
             ?>">
         </div>
-
         <h4>活動公告</h4>
         <div class="form-group">
             <label class="toggle">
-              <input id="event-type" type="checkbox">
+              <input id="event-type" type="checkbox" <?php echo ($data['type'] == 1)? 'checked':''; ?>>
               <span class="handle"></span>
             </label>
         </div>
@@ -48,6 +47,12 @@
 
 <script type="text/javascript" src="<?=URL?>public/js/tinymce/tinymce.min.js"></script>
 <script>
+<?php if($data && $data['type'] == 1) { ?>
+$(document).ready(function() {
+    displayEventList();
+    $('#eventList').show();
+});
+<?php } ?>
 var typecode = 0;
 $('#event-type').change(function() {
     if($(this).is(':checked')) {
@@ -99,7 +104,15 @@ function displayEventList() {
                 //str += '<span class="selecter-item" data-value="'+response[i]['id']+'">'+response[i]['name']+'</span>'
                 //$('#eventList .selecter-options').append(str);
                 //str = '';
-                str += '<option value="'+response[i]['id']+'">'+response[i]['name']+'</option>';
+                <?php if($data && $data['type'] == 1) { ?>
+                    if(response[i]['id'] == <?=$data["eventid"]?>) {
+                        str += '<option value="'+response[i]['id']+'" selected>'+response[i]['name']+'</option>';
+                    } else {
+                        str += '<option value="'+response[i]['id']+'">'+response[i]['name']+'</option>';
+                    }
+                <?php } else { ?>
+                    str += '<option value="'+response[i]['id']+'">'+response[i]['name']+'</option>';
+                <?php } ?>
                 $('#event-id').append(str);
             }
         }
