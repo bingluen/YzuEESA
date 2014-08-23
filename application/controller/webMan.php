@@ -619,10 +619,12 @@ class webMan extends Controller
                 exit;
             //撈回權限分組表
             try {
-                
+                $data['classList'] = $ClassModel->listClass();
             } catch (Exception $e) {
-                
+                $data['errorMessages'] = $e->getMessage();
             }
+
+
             //呈現頁面
             $active = 'Worker';
             $this->loadView('_templates/header_man');
