@@ -2,7 +2,7 @@
     <ol class="breadcrumb breadcrumb-arrow">
         <li><a href="<?=URL?>"><i class="glyphicon glyphicon-home"></i> 首頁</a></li>
         <li><a href="<?=URL?>Activities/"><i class="glyphicon glyphicon-bullhorn"></i> 學會活動</a></li>
-        <li><a href="<?=URL?>Activities/EventList"><i class="glyphicon glyphicon-bullhorn"></i> 活動列表</a></li>
+        <li><a href="<?=URL?>Activities/EventList"><i class="glyphicon glyphicon-th-list"></i> 活動列表</a></li>
         <li class="active"><span> <?=$data['name']?></span></li>
     </ol>
     <div id="event-menu">
