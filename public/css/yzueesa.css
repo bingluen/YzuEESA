@@ -250,13 +250,13 @@
 -------------- Activities ---------------
 */
     #event-menu {
-        width: 20%;
+        width: 200px;
         float: left;
     }
     #event-menu .list-group {
         width: 95%;
         position: relative;
-        left: 5%;
+        left: 0%;
         right: 5%;
     }
 
