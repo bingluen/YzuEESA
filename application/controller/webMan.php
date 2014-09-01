@@ -153,15 +153,37 @@ class webMan extends Controller
                 // 預設列出所有的project
                 $data['project'] = $ProjectModel->getProject();
 
-                //把負責人名字拉回來
+                //把負責人和成員名字拉回來名字拉回來
                 for ($i = 0;$i < count($data['project']);$i++) {
+
+                    //負責人
                     try {
                         $data['project'][$i]->project_host = $WorkerModel->getWorkerName($data['project'][$i]->project_host);
                     }
                     catch (Exception $e) {
                         $data['project'][$i]->project_host = $e->getMessage();
                     }
+
+                    //成員
+                    $memberKey = explode(',', $data['project'][$i]->project_member);
+                    for($j = 0; $j < count($memberKey);$j++) {
+                        $memberKey[$j] = str_replace(' ', '', $memberKey[$j]);
+                    }
+
+                    if($memberKey[0] != '') {
+                         foreach ($memberKey as $key) {
+                            try {
+                                $member[] = $WorkerModel->getWorkerName($key);
+                            }
+                            catch (Exception $e) {
+                                $member[] = $e->getMessage();
+                            }
+                        }
+
+                        $data['project'][$i]->project_member = $member;
+                    }
                 }
+
 
                 //把分類名稱拉回來
 

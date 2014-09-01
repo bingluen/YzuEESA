@@ -9,6 +9,7 @@
                         <th>計畫 / 活動名稱</th>
                         <th>狀態</th>
                         <th>負責人 / 總召</th>
+                        <th>計畫成員</th>
                         <th>新增時間</th>
                     </tr>
                 </thead>
@@ -31,6 +32,7 @@
                         <td><?=$project->project_name;?></td>
                         <td><?=($project->project_status === 'T')? '進行中':'已結案';?></td>
                         <td><?=$project->project_host;?></td>
+                        <td><?php if(count($project->project_member) > 0 ) { foreach ($project->project_member as $member) { echo $member.'<br/>'; } }?></td>
                         <td><?=$project->project_time;?></td>
                     </tr>
                     <?php } ?>
