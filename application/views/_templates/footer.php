@@ -14,7 +14,7 @@
             
             <dl class="footer-nav">
                 <dt class="nav-title">ACTIVE</dt>
-                <dd class="nav-item"><a href="<?=URL?>Active">學會活動</a></dd>
+                <dd class="nav-item"><a href="<?=URL?>Activities">學會活動</a></dd>
             </dl>
             
             <dl class="footer-nav">
