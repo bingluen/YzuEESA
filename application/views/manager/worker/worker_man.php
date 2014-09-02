@@ -41,7 +41,7 @@
                     <td><?=$workerList->worker_level;?></td>
                     <td><?=$workerList->worker_name;?></td>
                     <td><?=$workerList->worker_username;?></td>
-                    <td><?=$workerList->worker_project;?></td>
+                    <td></td>
                     <td><?=$workerList->worker_lastlogin;?></td>
                     <td><button type="button" class="btn btn-default" id="worker-edit-btn-<?=$workerList->worker_id;?>">編輯</button></td>
                 </tr>
