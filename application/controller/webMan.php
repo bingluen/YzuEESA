@@ -1,3 +1,4 @@
+
 <?php
 @session_start();
 
@@ -606,32 +607,13 @@ class webMan extends Controller
                             'worker_username' => $data->worker_username,
                             'worker_level' => $data->worker_level);
 
-                        if ($data->worker_project != '')
-                        {
-                            //剖析project id
-                            $projectKey = explode(',', $data->worker_project);
-                            for($j = 0; $j < count($projectKey);$j++) {
-                                $projectKey[$j] = str_replace(' ', '', $projectKey[$j]);
-                            }
-
-                            $i = 0;
-                            foreach ($projectKey as $key) {
-                                if ($name = $ProjectModel->getProjectName($key)) {
-                                    $i++;
-                                    $detail['worker_project'][$i]['project_id'] = $key;
-                                    $detail['worker_project'][$i]['project_name'] = $name;
-                                }
-                            }
-                        }
-
                         echo json_encode($detail);
                     }
                     if ($_POST['doing'] === 'updateWorker' && isset($_POST['userid'])) {
                         $data = array(
                             'worker_id' => $_POST['userid'],
                             'worker_name' => $_POST['name'],
-                            'worker_level' => $_POST['level'],
-                            'worker_project' => $_POST['project']);
+                            'worker_level' => $_POST['level']);
                         if ($_POST['password'] != 'false')
                             $data['worker_password'] = $this->loadModel('hashmodel')->passwordHash($_POST['password']);
 
@@ -882,9 +864,6 @@ class webMan extends Controller
         $WorkerModel = $this->loadModel('workermodel');
 
         if ($page === 0) {
-
-            if (!$ClassModel->checkAuthority($_SESSION['level'], 'Event'))
-                exit;
             $active = 'Event';
             $this->loadView('_templates/header_man');
             $this->loadView('manager/sidebar', $active);
@@ -907,6 +886,7 @@ class webMan extends Controller
                 $data['name'] = $_POST['name'];
                 $data['path'] = $_POST['url'];
                 $data['host'] = $_SESSION['userid'];
+                $data['member'] = $_POST['member'];
 
                 //+到活動系統
                 try {

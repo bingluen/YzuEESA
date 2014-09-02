@@ -69,9 +69,9 @@ class EventModel
 
     function addEvent($data) {
         try {
-            $sql = "INSERT INTO `event_list` (event_name, event_path, event_host) VALUES(?, ?, ?);";
+            $sql = "INSERT INTO `event_list` (event_name, event_path, event_host, event_member) VALUES(?, ?, ?, ?);";
             $query = $this->db->prepare($sql);
-            $result = $query->execute(array($data['name'], $data['path'], $data['host']));
+            $result = $query->execute(array($data['name'], $data['path'], $data['host'], $data['member']));
         } catch(Exception $e) {
             throw new Exception($e->getMessage());
         }

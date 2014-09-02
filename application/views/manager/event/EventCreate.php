@@ -1,3 +1,12 @@
+<style type="text/css">
+.deleteMember {
+    padding: 0px;
+    padding-left: 5px;
+    cursor: pointer;
+    background: none repeat scroll 0px 0px transparent;
+    border: 0px none;
+};
+</style>
 <div class="tab-content panel">
         <h3>新增活動</h3>
         <h4>Step 1.先上kktix新增活動</h4>
@@ -7,6 +16,13 @@
         <div class="form-group">
             <label class="control-label" for="eventName">活動名稱</label>
             <input tpye="text" class="form-control" id="eventName" placeholder="活動名稱">
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="eventName">工作人員</label>
+            <div id="eventMember" style="font-size:18px; margin-bottom:10px;">
+            </div>
+            <input tpye="text" class="form-control" id="searchWorkerKey" placeholder="輸入關鍵字搜尋">
+            <span id="workerSearchResult"></span>
         </div>
         <div class="form-group has-feedback" id="path-form">
             <label class="control-label" for="eventPath">活動網址</label>
@@ -97,11 +113,20 @@ $('#preview-btn').click(function() {
 });
 
 $('#send-btn').click(function () {
+    $('input[name="eventMemberList"]').each(function(i) { select[i] = this.value; });
+    var member = ''
+    for (var i = 0; i < select.length; i++) {
+        if(i != 0) {
+            member += ', ';
+        }
+        member += select[i];
+    };
     $.ajax({
         url: '<?=URL?>webMan/Event/EventCreate/insertToDatabase',
         dataType: 'json',
         type: 'post',
         data: {
+            member: member,
             name: $('#eventName').val(),
             url: $('#eventPath').val()
         },
@@ -117,4 +142,89 @@ $('#send-btn').click(function () {
         }
     });
 });
+
+
+function displayWorker(workers) {
+    if(workers != '') {
+        for (var worker in workers) {
+            var str = '';
+            str += '<div style="display: inline-block;" class="label label-default" id="';
+            str += workers[worker]['id'];
+            str += '">';
+            str += workers[worker]['name'];
+            str += '<button type="button" class="deleteMember" onclick="deleteMember(';
+            str += workers[worker]['id'];
+            str += ')">&times;</button>';
+            str += '<input id="eventMemberList" name="eventMemberList" type="hidden" value="';
+            str += workers[worker]['id'];
+            str += '"></div>';
+            $('#eventMember').append(str);
+        }
+    }
+}
+
+function deleteMember(Member) {
+    $('div#'+Member).remove();
+}
+
+function addMember(id, name) {
+    $('#workerResult-'+id).remove();
+    var str = '';
+    str += '<div style="display: inline-block;" class="label label-default" id="';
+    str += id;
+    str += '">';
+    str += name;
+    str += '<button type="button" class="deleteMember" onclick="deleteMember(';
+    str += id;
+    str += ')">&times;</button>';
+    str += '<input id="eventMemberList" name="eventMemberList" type="hidden" value="';
+    str += id;
+    str += '"></div>';
+    $('#eventMember').append(str);
+}
+
+function displayResult(searchResult) {
+    var select = new Array();
+    $('input[name="eventMemberList"]').each(function(i) { select[i] = this.value; });
+    str = '';
+    for(var item in searchResult) {
+        var isAuth = false;
+        for(var worker in select) {
+            if(searchResult[item]['worker_id'] == select[worker]) {
+                isAuth = true;
+                break;
+            }
+        }
+        if(!isAuth) {
+            str += '<button id="workerResult-'+searchResult[item]['worker_id']+'" type="button" class="btn btn-primary" onclick="addMember(';
+            str += searchResult[item]['worker_id'];
+            str += ', \'';
+            str += searchResult[item]['worker_name'];
+            str += '\')">';
+            str += searchResult[item]['worker_name'];
+            str += '</button>';
+        }
+    }
+    if(str == '')
+        str += '沒有符合條件的工人';
+    $('#workerSearchResult').append(str);
+}
+
+$('#searchWorkerKey').keyup(
+    function() {
+        $('#workerSearchResult').empty();
+        if($('#searchWorkerKey').val() != '') {
+            $.ajax({
+                url: '<?=URL?>webMan/Worker/Worker/searchWorker',
+                dataType: 'json',
+                type: 'post',
+                data: {
+                    key: $('#searchWorkerKey').val()
+                },
+                success: function(response) {
+                    displayResult(response);
+                }
+            });
+        }
+    });
 </script>

@@ -84,45 +84,6 @@ class WorkerModel
         return $result->worker_name;
     }
 
-/*
-    function setWorkerProject($worker, $project) {
-        //先把工人原本負責的projct拉出來
-        try {
-            $sql = "SELECT `worker_project` AS auth FROM `worker` WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
-            $query = $this->db->prepare($sql);
-            $query->execute(array($worker, $worker, $worker));
-            $result = $query->fetchAll();
-        } catch(Exception $e) {
-               throw new Exception($e->getMessage());
-        }
-
-        if(count($result) === 0)
-            throw new Exception('沒有這個工人啦！', 911);
-
-        if(count($result) > 1)
-            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式指定", 912);
-
-        $auth = $result[0]->auth;
-
-        //修改權限
-        foreach ($project as $auth_key) {
-            if($auth != '')
-                $auth = $auth. ', ';
-            $auth = $auth.$auth_key;
-        }
-
-        //回存權限
-
-        try {
-            $sql = "UPDATE `worker` SET `worker_project` = ? WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
-            $query = $this->db->prepare($sql);
-            $query->execute(array($auth, $worker, $worker, $worker));
-        } catch(Exception $e) {
-               throw new Exception($e->getMessage());
-        }
-    }
-*/
-
     function getWorkerList() {
         try {
             $sql = "SELECT `worker_id`, `worker_level`, `worker_name`, `worker_username`, `worker_lastlogin` FROM `worker`;";

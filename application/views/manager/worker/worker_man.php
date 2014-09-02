@@ -225,16 +225,6 @@ $('#do-workerEdit').click(
             passwordChange = false;
         else
             passwordChange = $('#edit_worker_password').val();
-        //統整所屬計畫
-        var select = new Array();
-        $('input[name="workerEdit_project"]').each(function(i) { select[i] = this.value; });
-        var project = ''
-        for (var i = 0; i < select.length; i++) {
-            if(i != 0) {
-                project += ', ';
-            }
-            project += select[i];
-        };
         $.ajax({
             url: '<?=URL?>webMan/Worker/Worker/editWorker',
             dataType: 'json',
@@ -244,8 +234,7 @@ $('#do-workerEdit').click(
                 userid: $('#edit_worker_id').val(),
                 name: $('#edit_worker_name').val(),
                 password: passwordChange,
-                level: $('#edit_worker_level').val(),
-                project: project
+                level: $('#edit_worker_level').val()
             },
             success: function(response) {
                 if(response === 'success')
