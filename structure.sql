@@ -1,14 +1,20 @@
-﻿-- phpMyAdmin SQL Dump
+-- phpMyAdmin SQL Dump
 -- version 4.1.14.3
 -- http://www.phpmyadmin.net
 --
 -- 主機: localhost
--- 產生時間： 2014-08-23: 23:20:38
+-- 產生時間： 2014-09-03: 10:17:24
 -- 伺服器版本: 5.6.17
 -- PHP 版本： 5.5.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- 資料庫： `yzueesa`
@@ -46,6 +52,7 @@ CREATE TABLE IF NOT EXISTS `cf_project` (
   `project_name` varchar(255) NOT NULL,
   `project_status` char(1) NOT NULL DEFAULT 'T',
   `project_host` int(5) NOT NULL,
+  `project_member` text,
   `project_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`project_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
@@ -61,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `cf_project_category` (
   `category_name` varchar(25) NOT NULL,
   `category_color` varchar(7) NOT NULL,
   PRIMARY KEY (`category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -74,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `event_list` (
   `event_name` varchar(250) NOT NULL,
   `event_path` varchar(250) NOT NULL,
   `event_host` int(5) NOT NULL,
+  `event_member` text,
   PRIMARY KEY (`event_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
@@ -107,11 +115,10 @@ CREATE TABLE IF NOT EXISTS `worker` (
   `worker_name` varchar(255) NOT NULL,
   `worker_username` varchar(255) NOT NULL,
   `worker_password` char(32) NOT NULL,
-  `worker_project` text NOT NULL,
   `worker_lastlogin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `worker_lastIP` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`worker_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -127,4 +134,8 @@ CREATE TABLE IF NOT EXISTS `worker_class` (
   PRIMARY KEY (`class_id`),
   UNIQUE KEY `class_level` (`class_level`),
   KEY `class_name` (`class_name`,`class_level`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
