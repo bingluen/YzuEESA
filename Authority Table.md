@@ -7,8 +7,8 @@ CASHFLOW
 	project-insert		project新增
 	Items				申報項目檢視（管理頁）
 	Items-pass			審核通過/否決
-	AppItem				申報頁面
-	sendApp				送出申請
+	AppItem				申報頁面 (無視是否為project成員)
+	sendApp				送出申請 (無視是否為project成員)
 
 WORKER
 	

@@ -216,7 +216,13 @@ class ProjectModel
         } catch(Expection $e) {
             throw new Exception($e->getMessage());
         }
-        if(strpos($result->project_member, $userid))
+
+        $memberKey = explode(',', $result->project_member));
+        for($j = 0; $j < count($memberKey);$j++) {
+            $memberKey[$j] = str_replace(' ', '', $memberKey[$j]);
+        }
+
+        if(in_array($memberKey, $userid))
             return true;
         
         return false;

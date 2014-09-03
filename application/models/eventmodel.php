@@ -77,19 +77,24 @@ class EventModel
         }
     }
 
-    function listEvent($page = 0, $limit = 5, $position = 0, $level = 0, $user = 0) {
+    function listEvent($page = 0, $limit = 5, $position = false, $user = 0) {
         try {
-            if($position == 0) {
-                $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list` ORDER BY `event_id` DESC LIMIT $page, $limit;";
-            } else {
-                if($level > 900) {
-                    $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list` ORDER BY `event_id` DESC LIMIT $page, $limit;";
+            if($position) { //後台
+                if($user) {
+                    $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list` WHERE (`event_host` = ? OR `event_member` LIKE ?) ORDER BY `event_id`;";
+                    $query = $this->db->prepare($sql);
+                    $query->execute(array($user, "%$user%"));
                 } else {
-                    $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list` WHERE `event_host` = '$user' ORDER BY `event_id` DESC LIMIT $page, $limit;";
+                    $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list` ORDER BY `event_id`;";
+                    $query = $this->db->prepare($sql);
+                    $query->execute();
                 }
+            } else {
+                $sql = "SELECT `event_id` AS id, `event_name` AS name, `event_path` AS url, `event_host` AS host FROM `event_list` ORDER BY `event_id` DESC LIMIT $page, $limit;";
+                $query = $this->db->prepare($sql);
+                $query->execute();
+                
             }
-            $query = $this->db->prepare($sql);
-            $query->execute();
             $result = $query->fetchAll();
             return $result;
         } catch (Exception $e) {
@@ -110,11 +115,40 @@ class EventModel
         }
     }
 
-    function getEventList() {
+    function getEventMember($eventid) {
         try {
-            $sql = "SELECT `event_id` AS id, `event_name` AS name FROM `event_list` ORDER BY `event_id`";
+            $sql = "SELECT `event_member` AS host FROM `event_list` WHERE `event_id` = ?";
             $query = $this->db->prepare($sql);
-            $query->execute();
+            $query->execute(array($eventid));
+            $result = $query->fetch();
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    function isEventMebmer($eventid, $userid) {
+        $memberKey = explode(',', $this->getEventMember($postData['eventid']));
+        for($j = 0; $j < count($memberKey);$j++) {
+            $memberKey[$j] = str_replace(' ', '', $memberKey[$j]);
+        }
+        if(in_array($postData['author'], $memberKey)) {
+            return true;
+        }
+        return false;
+    }
+
+    function getEventList($user = false) {
+        try {
+            if($user && is_numeric($user)) {
+                $sql = "SELECT `event_id` AS id, `event_name` AS name FROM `event_list` WHERE (`event_host` = ? OR `event_member` LIKE ?) ORDER BY `event_id`";
+                $query = $this->db->prepare($sql);
+                $query->execute(array($user, "%$user%"));
+            } else if ($user === false) {
+                $sql = "SELECT `event_id` AS id, `event_name` AS name FROM `event_list` ORDER BY `event_id`";
+                $query = $this->db->prepare($sql);
+                $query->execute();
+            }
             $result = $query->fetchAll();
             return $result;
         } catch (Exception $e) {

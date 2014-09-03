@@ -668,6 +668,7 @@ class webMan extends Controller
         $ArticleModel = $this->loadModel('articlemodel');
         $WorkerModel = $this->loadModel('workermodel');
         $ClassModel = $this->loadModel('classmodel');
+        $EventModel = $this->loadModel('eventmodel');
 
 
         if ($page === 'editor') {
@@ -680,6 +681,11 @@ class webMan extends Controller
                 //開始撈資料
                 $article = $ArticleModel->getPost($action);
 
+                if(!$article) {
+                    echo "Error";
+                    exit;
+                }
+
                 $data['post_id'] = $action;
                 $data['title'] = $article->title;
                 $data['content'] = $article->content;
@@ -689,8 +695,10 @@ class webMan extends Controller
             }
             
             else if ($action == 'getEventList') {
-                $EventModel = $this->loadModel('eventmodel');
-                echo json_encode($EventModel->getEventList());
+                if($ClassModel->checkAuthority($_SESSION['level'], 'EventMessages', true))
+                    echo json_encode($EventModel->getEventList());
+                else
+                    echo json_encode($EventModel->getEventList($_SESSION['userid']));
                 exit;
 
             }
@@ -717,6 +725,16 @@ class webMan extends Controller
                 $postData['time'] = date('Y-m-d H:i:s');
                 $postData['type'] = $_POST['type'];
                 $postData['eventid'] = $_POST['eventid'];
+
+                //檢查活動文章權限
+                if($postData['type'] === '1') {
+                    if(!$ClassModel->checkAuthority($_SESSION['level'], 'EventMessages', true)) {
+                        if(!$EventModel->isEventMember($postData['eventid'], $postData['author'])) {
+                            echo json_encode('Auth failed');
+                            exit;
+                        }
+                    }
+                }
 
                 try {
                     $ArticleModel->post($postData);
@@ -903,6 +921,7 @@ class webMan extends Controller
                 $insertData['project_name'] = $_POST['name'];
                 $insertData['project_category'] = '2';
                 $insertData['project_time'] = date('Y-m-d H:i:s');
+                $insertData['project_member'] = $_POST['member'];
 
                 //新增project，並回傳project id值
                 $projectId = $ProjectModel->addProject($insertData);

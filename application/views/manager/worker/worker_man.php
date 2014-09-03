@@ -106,14 +106,14 @@
                     <input id="edit_worker_level" class="form-control" type="number">
                 </p>
 
-                <p>
+                <!--<p>
                     <label for="edit_worker_level" class="control-label">所屬計畫/活動</label>
                     <div id="workerEdit_project" style="font-size:18px;">
                     </div>
                     新增活動（按一下結果中的project/活動名稱來新增）
                     <input id="searchProjectKey" class="form-control" type="text" placeholder="輸入project/活動名稱進行搜尋">
                     <span id="projectSearchResult"></span>
-                </p>
+                </p>-->
 
                 <div class="alert alert-danger" id="workerEdit-error">
                     <button type="button" class="close" id="workerEdit-close_error_message">×</button>
@@ -128,6 +128,7 @@
 </div>
 
 <script type="text/javascript">
+/*
 function displayProject(projects) {
     if(projects != '') {
         for (var project in projects) {
@@ -208,7 +209,7 @@ $('#searchProjectKey').keyup(
             }
         });
     });
-
+*/
 $('#workerEdit-close_error_message').click(
     function() {
         $('#workerEdit-error').hide();
