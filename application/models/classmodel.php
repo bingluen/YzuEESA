@@ -57,8 +57,6 @@ class ClassModel
                 alert('授權失敗，操作未經授權');
                 history.back();
                 </script>";
-            } else {
-                echo json_encode('fail: Auth Error');
             }
             return false;
         }
@@ -75,7 +73,7 @@ class ClassModel
         } catch(Exception $e) {
                throw new Exception($e->getMessage());
         }
-
+        
         if(!$result)
             throw new Exception("this level isn't exists.", 980);
 

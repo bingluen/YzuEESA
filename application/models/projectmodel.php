@@ -39,8 +39,20 @@ class ProjectModel
         return $result;
     }
 
-    function updateProject($data) {
-        foreach ($data as $project) {
+    function updateProject($data, $batch = false) {
+
+        if($batch) {
+            foreach ($data as $project) {
+                $this->updateProjectRow($project);
+            }
+        } else {
+            $this->updateProjectRow($data);
+        }
+
+        return true;
+    }
+
+    function updateProjectRow($project) {
             $param = '';
             $param_val = '';
             if(isset($project['project_name'])) {
@@ -62,6 +74,13 @@ class ProjectModel
                 $param_val[] = $project['project_host'];
             }
 
+            if(isset($project['project_member'])) {
+                if($param != '')
+                    $param = $param. ',';
+                $param = $param.'`project_member` = ?';
+                $param_val[] = $project['project_member'];
+            }
+
             if(isset($project['project_category'])) {
                 $param = $param.'`project_category` = ?';
                 $param_val[] = $project['project_category'];
@@ -76,9 +95,6 @@ class ProjectModel
             } catch(Exception $e) {
                 throw new Exception($e->getMessage());
             }
-        }
-
-        return true;
     }
 
     function deleteProject($data) {
@@ -128,19 +144,35 @@ class ProjectModel
         return $execute_result;
     }
 
-    function getProject($status = 0, $key = 0) {
+    function listProject($status = 0, $userid = 0) {
         try {
             if($status === 0)
             {
                 $sql = "SELECT * FROM `cf_project`;";
                 $query = $this->db->prepare($sql);
                 $query->execute();
-            } else if ($status === 'active') {
-                $sql = "SELECT `project_name` AS name, `project_id` AS id FROM `cf_project` WHERE `project_status` = 'T' AND `project_name` LIKE ?;";
+            } else if ($status === 'active' && $userid == 0) {
+                $sql = "SELECT `project_name` AS name, `project_id` AS id FROM `cf_project` WHERE `project_status` = 'T';";
                 $query = $this->db->prepare($sql);
-                $query->execute(array("$key%"));
+                $query->execute();
+            } else if ($status === 'active' && $userid > 0) {
+                $sql = "SELECT `project_name` AS name, `project_id` AS id FROM `cf_project` WHERE `project_status` = 'T' AND (`project_member` LIKE ? OR `project_host` = ?);";
+                $query = $this->db->prepare($sql);
+                $query->execute(array("%$userid%", "$userid"));
             }
             $result = $query->fetchAll();
+        } catch(Expection $e) {
+            throw new Exception($e->getMessage());
+        }
+        return $result;
+    }
+
+    function getProject($id) {
+        try {
+            $sql = "SELECT * FROM `cf_project` WHERE `project_id` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($id));
+            $result = $query->fetch();
         } catch(Expection $e) {
             throw new Exception($e->getMessage());
         }
@@ -172,6 +204,27 @@ class ProjectModel
         }
         if($result->project_status == 'T')
             return true;
+        return false;
+    }
+
+    function isProjectMember($id, $userid) {
+        try {
+            $sql = "SELECT `project_member` FROM `cf_project` WHERE `project_id` = ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array($id));
+            $result = $query->fetch();
+        } catch(Expection $e) {
+            throw new Exception($e->getMessage());
+        }
+
+        $memberKey = explode(',', $result->project_member));
+        for($j = 0; $j < count($memberKey);$j++) {
+            $memberKey[$j] = str_replace(' ', '', $memberKey[$j]);
+        }
+
+        if(in_array($memberKey, $userid))
+            return true;
+        
         return false;
     }
 

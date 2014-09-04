@@ -1,3 +1,4 @@
+
 <?php
 @session_start();
 
@@ -22,7 +23,6 @@ class webMan extends Controller
         unset($_SESSION['user']);
         unset($_SESSION['userid']);
         unset($_SESSION['level']);
-        unset($_SESSION['user_project']);
         unset($_SESSION['user_ip']);
         unset($_SESSION['login_time']);
     }
@@ -151,17 +151,39 @@ class webMan extends Controller
                 exit;
             if ($action == 0) {
                 // 預設列出所有的project
-                $data['project'] = $ProjectModel->getProject();
+                $data['project'] = $ProjectModel->listProject();
 
-                //把負責人名字拉回來
+                //把負責人和成員名字拉回來名字拉回來
                 for ($i = 0;$i < count($data['project']);$i++) {
+
+                    //負責人
                     try {
                         $data['project'][$i]->project_host = $WorkerModel->getWorkerName($data['project'][$i]->project_host);
                     }
                     catch (Exception $e) {
                         $data['project'][$i]->project_host = $e->getMessage();
                     }
+
+                    //成員
+                    $memberKey = explode(',', $data['project'][$i]->project_member);
+                    for($j = 0; $j < count($memberKey);$j++) {
+                        $memberKey[$j] = str_replace(' ', '', $memberKey[$j]);
+                    }
+
+                    if($memberKey[0] != '') {
+                         foreach ($memberKey as $key) {
+                            try {
+                                $member[] = $WorkerModel->getWorkerName($key);
+                            }
+                            catch (Exception $e) {
+                                $member[] = $e->getMessage();
+                            }
+                        }
+
+                        $data['project'][$i]->project_member = $member;
+                    }
                 }
+
 
                 //把分類名稱拉回來
 
@@ -183,6 +205,50 @@ class webMan extends Controller
                 }
             }
 
+            if ($action === 'getDetail') {
+                if(is_numeric($_POST['id'])) {
+                    try {
+                        $detail = $ProjectModel->getProject($_POST['id']);
+                        //負責人
+                        $detail->project_host = $WorkerModel->getWorkerName($detail->project_host);
+                        //成員
+                        $memberKey = explode(',', $detail->project_member);
+                        for($j = 0; $j < count($memberKey);$j++) {
+                            $memberKey[$j] = str_replace(' ', '', $memberKey[$j]);
+                        }
+
+                        if($memberKey[0] != '') {
+                            $member = '';
+                             foreach ($memberKey as $key) {
+                                try {
+                                    $member[] = array('id' => $key, 'name' => $WorkerModel->getWorkerName($key));
+                                }
+                                catch (Exception $e) {
+                                    $member[] = $e->getMessage();
+                                }
+                            }
+                            $detail->project_member = $member;
+                        }
+                        echo json_encode($detail);
+                    } catch (Exception $e) {
+                        echo json_encode('Error');
+                    }
+                    exit;
+                }
+                echo json_encode('Illegal parameter');
+                exit;
+            }
+
+            if ($action === 'updateProjectMember') {
+                if (!$ClassModel->checkAuthority($_SESSION['level'], 'project-update', true))
+                    exit;
+                $updateData = array('project_id' => $_POST['target'], 'project_member' => $_POST['member']);
+                if ($ProjectModel->updateProject($updateData)) {
+                    echo json_encode('success');
+                    exit;
+                }
+            }
+
             if ($action === 'update') {
                 if (!$ClassModel->checkAuthority($_SESSION['level'], 'project-update', true))
                     exit;
@@ -191,7 +257,7 @@ class webMan extends Controller
                         'project_id' => $target,
                         'project_status' => $_POST['status']);
                 }
-                if ($ProjectModel->updateProject($update)) {
+                if ($ProjectModel->updateProject($update, true)) {
                     echo json_encode('success');
                     exit;
                 }
@@ -256,7 +322,7 @@ class webMan extends Controller
                 $projectId = $ProjectModel->addProject($insertData);
 
                 //增加該工人權限
-                $WorkerModel->setWorkerProject($insertData['project_host'], $projectId);
+                //$WorkerModel->setWorkerProject($insertData['project_host'], $projectId);
 
                 echo json_encode('success');
                 exit;
@@ -277,7 +343,7 @@ class webMan extends Controller
                 exit;
             if ($action == 0) {
                 //step1 先拉回project
-                $data['project'] = $ProjectModel->getProject();
+                $data['project'] = $ProjectModel->listProject();
                 //把負責人名字拉回來
                 for($i = 0;$i < count($data['project']);$i++) {
                     try {
@@ -345,9 +411,6 @@ class webMan extends Controller
         }
 
         if ($page === 'AppItem') {
-
-            if ($_SESSION['user_project'] == '' && !$ClassModel->checkAuthority($_SESSION['level'], 'AppItem'))
-                exit;
             if ($action == 0) {
                 //撈出自己申請的東西
                 try {
@@ -371,24 +434,20 @@ class webMan extends Controller
                 }
 
                 //撈出可以申請的Project 和 活動的名字
-                //拉回Project Name
-                $projectKey = explode(',', $_SESSION['user_project']);
-                for ($j = 0; $j < count($projectKey);$j++) {
-                    $projectKey[$j] = str_replace(' ', '', $projectKey[$j]);
+                if($ClassModel->checkAuthority($_SESSION['level'], 'AppItem', true)) {
+                    $projects = $ProjectModel->listProject('active');
+                } else {
+                    $projects = $ProjectModel->listProject('active', $_SESSION['userid']);
                 }
 
-                for($i = 0;$i < count($projectKey);$i++) {
-                    if ($name = $ProjectModel->getProjectName($projectKey[$i])) {
-                       $data['project'][$i]['name'] = $name;
-                       $data['project'][$i]['key'] = $projectKey[$i];
-                    }
+                foreach ($projects as $project) {
+                    $data['project'][] = array('name' => $project->name, 'key' => $project->id);
                 }
+
             }
 
             if ($action === 'sendApp') {
 
-                if ($_SESSION['user_project'] == '' && !$ClassModel->checkAuthority($_SESSION['level'], 'sendApp', true))
-                    exit;
                 //收post
                 $appData['applicant'] = $_SESSION['userid'];
                 $appData['time'] = date('Y-m-d H:i:s');
@@ -396,6 +455,13 @@ class webMan extends Controller
                 $appData['name'] = $_POST['name'];
                 $appData['cost'] = $_POST['cost'];
                 $appData['project'] = $_POST['project'];
+
+                //檢查是不是無視project Mebmer的權限
+                if ($_SESSION['user_project'] == '' && !$ClassModel->checkAuthority($_SESSION['level'], 'AppItem', true))
+                    //若不是，則檢查是否為成員
+                    if(!$ProjectModel->isProjectMember($appData['project'], $appData['applicant']))
+                        exit;
+
                 //先檢查是否已經結案
                 if (!$ProjectModel->ProjectIsActive($appData['project'])) {
                     echo json_encode('該Project/活動已經結案，不能在申報');
@@ -449,42 +515,18 @@ class webMan extends Controller
                     exit;
                 //列出工人
                 $data['workerList'] = $WorkerModel->getWorkerList();
-
-
-                for($i = 0;$i < count($data['workerList']);$i++) {
-
-
-                    //拉回Project Name
-                    $projectKey = explode(',', $data['workerList'][$i]->worker_project);
-                    for ($j = 0; $j < count($projectKey);$j++) {
-                      $projectKey[$j] = str_replace(' ', '', $projectKey[$j]);
-                    }
-
-                    $projectName = '';
-
-                    foreach ($projectKey as $key) {
-                        if ($name = $ProjectModel->getProjectName($key)) {
-                            if ($projectName != '')
-                            $projectName = $projectName . '<br/>';
-                            $projectName = $projectName.$name;
-                        }
-                    }
-
-                    //回填Project Name
-                    $data['workerList'][$i]->worker_project = $projectName;
-                }
             }
 
-            if ($action === 'searchProject') {
-                //撈回進行中的Project，供編輯時使用
+            if ($action === 'searchWorker') {
+                //撈Worker，給project編輯用
                 try {
-                    $searchProject = $ProjectModel->getProject('active', $_POST['key']);
+                    $searchWorker = $WorkerModel->searchWorker($_POST['key']);
                 }
                 catch (Exception $e) {
                     echo json_encode($e->getMessage());
                     exit;
                 }
-                    echo json_encode($searchProject);
+                    echo json_encode($searchWorker);
                     exit;
             }
 
@@ -565,32 +607,13 @@ class webMan extends Controller
                             'worker_username' => $data->worker_username,
                             'worker_level' => $data->worker_level);
 
-                        if ($data->worker_project != '')
-                        {
-                            //剖析project id
-                            $projectKey = explode(',', $data->worker_project);
-                            for($j = 0; $j < count($projectKey);$j++) {
-                                $projectKey[$j] = str_replace(' ', '', $projectKey[$j]);
-                            }
-
-                            $i = 0;
-                            foreach ($projectKey as $key) {
-                                if ($name = $ProjectModel->getProjectName($key)) {
-                                    $i++;
-                                    $detail['worker_project'][$i]['project_id'] = $key;
-                                    $detail['worker_project'][$i]['project_name'] = $name;
-                                }
-                            }
-                        }
-
                         echo json_encode($detail);
                     }
                     if ($_POST['doing'] === 'updateWorker' && isset($_POST['userid'])) {
                         $data = array(
                             'worker_id' => $_POST['userid'],
                             'worker_name' => $_POST['name'],
-                            'worker_level' => $_POST['level'],
-                            'worker_project' => $_POST['project']);
+                            'worker_level' => $_POST['level']);
                         if ($_POST['password'] != 'false')
                             $data['worker_password'] = $this->loadModel('hashmodel')->passwordHash($_POST['password']);
 
@@ -645,6 +668,7 @@ class webMan extends Controller
         $ArticleModel = $this->loadModel('articlemodel');
         $WorkerModel = $this->loadModel('workermodel');
         $ClassModel = $this->loadModel('classmodel');
+        $EventModel = $this->loadModel('eventmodel');
 
 
         if ($page === 'editor') {
@@ -657,6 +681,11 @@ class webMan extends Controller
                 //開始撈資料
                 $article = $ArticleModel->getPost($action);
 
+                if(!$article) {
+                    echo "Error";
+                    exit;
+                }
+
                 $data['post_id'] = $action;
                 $data['title'] = $article->title;
                 $data['content'] = $article->content;
@@ -666,8 +695,10 @@ class webMan extends Controller
             }
             
             else if ($action == 'getEventList') {
-                $EventModel = $this->loadModel('eventmodel');
-                echo json_encode($EventModel->getEventList());
+                if($ClassModel->checkAuthority($_SESSION['level'], 'EventMessages', true))
+                    echo json_encode($EventModel->getEventList());
+                else
+                    echo json_encode($EventModel->getEventList($_SESSION['userid']));
                 exit;
 
             }
@@ -694,6 +725,16 @@ class webMan extends Controller
                 $postData['time'] = date('Y-m-d H:i:s');
                 $postData['type'] = $_POST['type'];
                 $postData['eventid'] = $_POST['eventid'];
+
+                //檢查活動文章權限
+                if($postData['type'] === '1') {
+                    if(!$ClassModel->checkAuthority($_SESSION['level'], 'EventMessages', true)) {
+                        if(!$EventModel->isEventMember($postData['eventid'], $postData['author'])) {
+                            echo json_encode('Auth failed');
+                            exit;
+                        }
+                    }
+                }
 
                 try {
                     $ArticleModel->post($postData);
@@ -841,9 +882,6 @@ class webMan extends Controller
         $WorkerModel = $this->loadModel('workermodel');
 
         if ($page === 0) {
-
-            if (!$ClassModel->checkAuthority($_SESSION['level'], 'Event'))
-                exit;
             $active = 'Event';
             $this->loadView('_templates/header_man');
             $this->loadView('manager/sidebar', $active);
@@ -866,6 +904,7 @@ class webMan extends Controller
                 $data['name'] = $_POST['name'];
                 $data['path'] = $_POST['url'];
                 $data['host'] = $_SESSION['userid'];
+                $data['member'] = $_POST['member'];
 
                 //+到活動系統
                 try {
@@ -882,12 +921,13 @@ class webMan extends Controller
                 $insertData['project_name'] = $_POST['name'];
                 $insertData['project_category'] = '2';
                 $insertData['project_time'] = date('Y-m-d H:i:s');
+                $insertData['project_member'] = $_POST['member'];
 
                 //新增project，並回傳project id值
                 $projectId = $ProjectModel->addProject($insertData);
 
                 //增加該工人權限
-                $WorkerModel->setWorkerProject($insertData['project_host'], $projectId);
+                //$WorkerModel->setWorkerProject($insertData['project_host'], $projectId);
 
 
                 echo json_encode('success');

@@ -84,46 +84,9 @@ class WorkerModel
         return $result->worker_name;
     }
 
-    function setWorkerProject($worker, $project) {
-        //先把工人原本負責的projct拉出來
-        try {
-            $sql = "SELECT `worker_project` AS auth FROM `worker` WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
-            $query = $this->db->prepare($sql);
-            $query->execute(array($worker, $worker, $worker));
-            $result = $query->fetchAll();
-        } catch(Exception $e) {
-               throw new Exception($e->getMessage());
-        }
-
-        if(count($result) === 0)
-            throw new Exception('沒有這個工人啦！', 911);
-
-        if(count($result) > 1)
-            throw new Exception("好像有人同名同姓欸？請改用輸入帳號的方式指定", 912);
-
-        $auth = $result[0]->auth;
-
-        //修改權限
-        foreach ($project as $auth_key) {
-            if($auth != '')
-                $auth = $auth. ', ';
-            $auth = $auth.$auth_key;
-        }
-
-        //回存權限
-
-        try {
-            $sql = "UPDATE `worker` SET `worker_project` = ? WHERE `worker_name` = ? OR `worker_username` = ? OR `worker_id` = ?;";
-            $query = $this->db->prepare($sql);
-            $query->execute(array($auth, $worker, $worker, $worker));
-        } catch(Exception $e) {
-               throw new Exception($e->getMessage());
-        }
-    }
-
     function getWorkerList() {
         try {
-            $sql = "SELECT `worker_id`, `worker_level`, `worker_name`, `worker_username`, `worker_project`, `worker_lastlogin` FROM `worker`;";
+            $sql = "SELECT `worker_id`, `worker_level`, `worker_name`, `worker_username`, `worker_lastlogin` FROM `worker`;";
             $query = $this->db->prepare($sql);
             $query->execute();
             $result = $query->fetchAll();
@@ -131,6 +94,18 @@ class WorkerModel
             throw new Exception($e->getMessage());
         }
 
+        return $result;
+    }
+
+    function searchWorker($key) {
+        try {
+            $sql = "SELECT `worker_id`, `worker_name` FROM `worker` WHERE `worker_name` LIKE ?;";
+            $query = $this->db->prepare($sql);
+            $query->execute(array("%$key%"));
+            $result = $query->fetchAll();
+        } catch(Expection $e) {
+            throw new Exception($e->getMessage());
+        }
         return $result;
     }
 
@@ -254,13 +229,6 @@ class WorkerModel
             $param_val[] = $data['worker_password'];
         }
 
-        if(isset($data['worker_project'])) {
-            if($param != '')
-                $param = $param.', ';
-            $param = $param.'`worker_project` = ?';
-            $param_val[] = $data['worker_project'];
-        }
-
         if(isset($data['worker_lastlogin'])) {
             if($param != '')
                 $param = $param.', ';
@@ -315,7 +283,7 @@ class WorkerModel
 
     function getWorkerDetail($id) {
         try {
-            $sql = "SELECT `worker_level`, `worker_name`, `worker_username`, `worker_project` FROM `worker` WHERE `worker_id` = ?;";
+            $sql = "SELECT `worker_level`, `worker_name`, `worker_username` FROM `worker` WHERE `worker_id` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($id));
             $result = $query->fetch();
@@ -332,7 +300,7 @@ class WorkerModel
     function authUser($authData) {
         //拉出密碼來比對
         try {
-            $sql = "SELECT `worker_id`, `worker_password`, `worker_level`, `worker_project` FROM `worker` WHERE `worker_username` = ?;";
+            $sql = "SELECT `worker_id`, `worker_password`, `worker_level` FROM `worker` WHERE `worker_username` = ?;";
             $query = $this->db->prepare($sql);
             $query->execute(array($authData['user']));
             $result = $query->fetch();
@@ -349,7 +317,6 @@ class WorkerModel
             $_SESSION['user'] = $authData['user'];
             $_SESSION['userid'] = $result->worker_id;
             $_SESSION['level'] = $result->worker_level;
-            $_SESSION['user_project'] = $result->worker_project;
             $_SESSION['user_ip'] = $this->getIP();
             $_SESSION['login_time'] = date('Y-m-d H:i:s');
 

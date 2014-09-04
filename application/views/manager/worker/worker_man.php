@@ -41,7 +41,7 @@
                     <td><?=$workerList->worker_level;?></td>
                     <td><?=$workerList->worker_name;?></td>
                     <td><?=$workerList->worker_username;?></td>
-                    <td><?=$workerList->worker_project;?></td>
+                    <td></td>
                     <td><?=$workerList->worker_lastlogin;?></td>
                     <td><button type="button" class="btn btn-default" id="worker-edit-btn-<?=$workerList->worker_id;?>">編輯</button></td>
                 </tr>
@@ -106,14 +106,14 @@
                     <input id="edit_worker_level" class="form-control" type="number">
                 </p>
 
-                <p>
+                <!--<p>
                     <label for="edit_worker_level" class="control-label">所屬計畫/活動</label>
                     <div id="workerEdit_project" style="font-size:18px;">
                     </div>
                     新增活動（按一下結果中的project/活動名稱來新增）
                     <input id="searchProjectKey" class="form-control" type="text" placeholder="輸入project/活動名稱進行搜尋">
                     <span id="projectSearchResult"></span>
-                </p>
+                </p>-->
 
                 <div class="alert alert-danger" id="workerEdit-error">
                     <button type="button" class="close" id="workerEdit-close_error_message">×</button>
@@ -128,6 +128,7 @@
 </div>
 
 <script type="text/javascript">
+/*
 function displayProject(projects) {
     if(projects != '') {
         for (var project in projects) {
@@ -208,7 +209,7 @@ $('#searchProjectKey').keyup(
             }
         });
     });
-
+*/
 $('#workerEdit-close_error_message').click(
     function() {
         $('#workerEdit-error').hide();
@@ -225,16 +226,6 @@ $('#do-workerEdit').click(
             passwordChange = false;
         else
             passwordChange = $('#edit_worker_password').val();
-        //統整所屬計畫
-        var select = new Array();
-        $('input[name="workerEdit_project"]').each(function(i) { select[i] = this.value; });
-        var project = ''
-        for (var i = 0; i < select.length; i++) {
-            if(i != 0) {
-                project += ', ';
-            }
-            project += select[i];
-        };
         $.ajax({
             url: '<?=URL?>webMan/Worker/Worker/editWorker',
             dataType: 'json',
@@ -244,8 +235,7 @@ $('#do-workerEdit').click(
                 userid: $('#edit_worker_id').val(),
                 name: $('#edit_worker_name').val(),
                 password: passwordChange,
-                level: $('#edit_worker_level').val(),
-                project: project
+                level: $('#edit_worker_level').val()
             },
             success: function(response) {
                 if(response === 'success')

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主機: localhost
--- 產生時間： 2014-09-03: 10:17:24
+-- 產生時間： 2014-09-01: 12:29:58
 -- 伺服器版本: 5.6.17
 -- PHP 版本： 5.5.12
 
@@ -55,7 +55,14 @@ CREATE TABLE IF NOT EXISTS `cf_project` (
   `project_member` text,
   `project_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`project_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- 資料表的匯出資料 `cf_project`
+--
+
+INSERT INTO `cf_project` (`project_id`, `project_category`, `project_name`, `project_status`, `project_host`, `project_member`, `project_time`) VALUES
+(1, 2, '103學年元智電機系學會樂高機器人營', 'T', 1, NULL, '2014-08-22 09:42:32');
 
 -- --------------------------------------------------------
 
@@ -68,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `cf_project_category` (
   `category_name` varchar(25) NOT NULL,
   `category_color` varchar(7) NOT NULL,
   PRIMARY KEY (`category_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -84,6 +91,13 @@ CREATE TABLE IF NOT EXISTS `event_list` (
   `event_member` text,
   PRIMARY KEY (`event_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- 資料表的匯出資料 `event_list`
+--
+
+INSERT INTO `event_list` (`event_id`, `event_name`, `event_path`, `event_host`, `event_member`) VALUES
+(1, '103學年元智電機系學會樂高機器人營', '31bd954c', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -103,6 +117,13 @@ CREATE TABLE IF NOT EXISTS `messages` (
   PRIMARY KEY (`messages_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
+--
+-- 資料表的匯出資料 `messages`
+--
+
+INSERT INTO `messages` (`messages_id`, `messages_type`, `messages_eventid`, `messages_draft`, `messages_title`, `messages_content`, `messages_author`, `messages_time`) VALUES
+(2, 1, 1, 0, 'TEst', '&lt;p&gt;TEST&lt;/p&gt;', 1, '2014-08-22 10:48:20');
+
 -- --------------------------------------------------------
 
 --
@@ -115,10 +136,18 @@ CREATE TABLE IF NOT EXISTS `worker` (
   `worker_name` varchar(255) NOT NULL,
   `worker_username` varchar(255) NOT NULL,
   `worker_password` char(32) NOT NULL,
+  `worker_project` text NOT NULL,
   `worker_lastlogin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `worker_lastIP` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`worker_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- 資料表的匯出資料 `worker`
+--
+
+INSERT INTO `worker` (`worker_id`, `worker_level`, `worker_name`, `worker_username`, `worker_password`, `worker_project`, `worker_lastlogin`, `worker_lastIP`) VALUES
+(1, 999, '系統管理員', 'erickson', '33f56baeca95d3b0131858e0a5ac88f6', '1, 2, 3', '2014-09-01 04:03:38', '127.0.0.1');
 
 -- --------------------------------------------------------
 
@@ -134,7 +163,14 @@ CREATE TABLE IF NOT EXISTS `worker_class` (
   PRIMARY KEY (`class_id`),
   UNIQUE KEY `class_level` (`class_level`),
   KEY `class_name` (`class_name`,`class_level`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- 資料表的匯出資料 `worker_class`
+--
+
+INSERT INTO `worker_class` (`class_id`, `class_name`, `class_level`, `calss_authority`) VALUES
+(1, '系統管理員', 999, '');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

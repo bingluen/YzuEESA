@@ -7,8 +7,7 @@ CASHFLOW
 	project-insert		project新增
 	Items				申報項目檢視（管理頁）
 	Items-pass			審核通過/否決
-	AppItem				申報頁面
-	sendApp				送出申請
+	AppItem				申報項目 (無視是否為project成員)
 
 WORKER
 	
@@ -31,3 +30,4 @@ EVENT
 	
 	Event 				活動系統頁面
 	EventCreate 		增加活動
+	EventMessages		不是活動成員也可以發表活動公告
