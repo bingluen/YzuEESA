@@ -217,7 +217,7 @@ class ProjectModel
             throw new Exception($e->getMessage());
         }
 
-        $memberKey = explode(',', $result->project_member));
+        $memberKey = explode(',', $result->project_member);
         for($j = 0; $j < count($memberKey);$j++) {
             $memberKey[$j] = str_replace(' ', '', $memberKey[$j]);
         }
