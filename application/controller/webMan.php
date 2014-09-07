@@ -457,7 +457,7 @@ class webMan extends Controller
                 $appData['project'] = $_POST['project'];
 
                 //檢查是不是無視project Mebmer的權限
-                if ($_SESSION['user_project'] == '' && !$ClassModel->checkAuthority($_SESSION['level'], 'AppItem', true))
+                if (!$ClassModel->checkAuthority($_SESSION['level'], 'AppItem', true))
                     //若不是，則檢查是否為成員
                     if(!$ProjectModel->isProjectMember($appData['project'], $appData['applicant']))
                         exit;
