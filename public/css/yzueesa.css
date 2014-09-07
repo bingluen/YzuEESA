@@ -280,7 +280,7 @@
     }
 
     /*
-    ------------- index ---------------
+    ------------- activites home ---------------
     */
         #event-demo {
             width: 100%;
@@ -364,13 +364,28 @@
     /*
     -------------- List ---------------
     */
+
     #event-list {
-        width: 80%;
+        width: 100%;
         float: right;
+        margin: auto;
     }
 
-    #event-list .media-list{
-        margin-left: 25px;
+    @media screen and  (min-width: 768px) {
+        #event-list {
+            width: 550px;
+            float: right;
+        }
+        #event-list .media-list{
+            margin-left: 25px;
+        }
+    }
+
+    @media screen and  (min-width: 850px) {
+        #event-list {
+            width: 80%;
+            float: right;
+        }
     }
 
     .media img {
