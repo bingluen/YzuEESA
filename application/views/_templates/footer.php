@@ -3,29 +3,30 @@
         <div class="container">
             <div class="clearfix">
             
-            <div class="footer-logo">
-                <a href="#"><img src="<?=URL?>public/img/103logo-72dpi-100px.png">YzuEESA</a>
-            </div>
-            
-            <dl class="footer-nav">
-                <dt class="nav-title">ABOUT</dt>
-                <dd class="nav-item"><a href="<?=URL?>About">關於學會</a></dd>
-            </dl>
-            
-            <dl class="footer-nav">
-                <dt class="nav-title">ACTIVE</dt>
-                <dd class="nav-item"><a href="<?=URL?>Activities">學會活動</a></dd>
-            </dl>
-            
-            <dl class="footer-nav">
-                <dt class="nav-title">i STUDY</dt>
-                <dd class="nav-item"><a href="#">學習計劃</a></dd>
-            </dl>
-            
-            <dl class="footer-nav">
-                <dt class="nav-title">INFORMATION</dt>
-                <dd class="nav-item"><a href="#">Account</a></dd>
-            </dl>
+                <div class="footer-logo">
+                    <a href="#"><img src="<?=URL?>public/img/103logo-72dpi-100px.png">YzuEESA</a>
+                </div>
+                
+                <dl class="footer-nav">
+                    <dt class="nav-title">ABOUT</dt>
+                    <dd class="nav-item"><a href="<?=URL?>About">關於學會</a></dd>
+                </dl>
+                
+                <dl class="footer-nav">
+                    <dt class="nav-title">ACTIVE</dt>
+                    <dd class="nav-item"><a href="<?=URL?>Activities">熱門活動</a></dd>
+                    <dd class="nav-item"><a href="<?=URL?>Activities/EventList">活動列表</a></dd>
+                </dl>
+                
+                <dl class="footer-nav">
+                    <dt class="nav-title">i STUDY</dt>
+                    <dd class="nav-item"><a href="#">學習計劃</a></dd>
+                </dl>
+                
+                <dl class="footer-nav">
+                    <dt class="nav-title">INFORMATION</dt>
+                    <dd class="nav-item"><a href="<?=URL?>Information/Account">Account</a></dd>
+                </dl>
 
             </div>
             
