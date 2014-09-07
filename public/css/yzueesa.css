@@ -250,32 +250,65 @@
 -------------- Activities ---------------
 */
     #event-menu {
-        width: 200px;
+        width: 100%;
         float: left;
     }
+
     #event-menu .list-group {
         width: 95%;
         position: relative;
-        left: 0%;
-        right: 5%;
+        right: 2.5%;
+        left: 2.5%;
+    }
+
+    @media screen and (min-width: 768px) {
+        #event-menu {
+            width: 200px;
+            float: left;
+        }
+        #event-menu .list-group {
+            left: 0%;
+            right: 5%;
+        }
+    }
+
+    @media screen and (min-width: 850px) {
+        #event-menu {
+            width: 20%;
+            float: left;
+        }
     }
 
     /*
     ------------- index ---------------
     */
-
         #event-demo {
-            width: 80%;
+            width: 100%;
             float: right;
         }
 
+        @media screen and  (min-width: 768px) {
+            #event-demo {
+                width: 550px;
+                float: right;
+            }
+        }
+
+        @media screen and  (min-width: 850px) {
+            #event-demo {
+                width: 80%;
+                float: right;
+            }
+        }
+
         #event-demo .thumbnail {
-            width: 80%;
-            left: 10%;
-            right: 10%;
+            width: 95%;
             margin-bottom: 25px;
             margin-top: 5px;
+            left: 2.5%;
+            right: 2.5%;
         }
+
 
         #event-demo .caption img {
             max-width: 100%;
